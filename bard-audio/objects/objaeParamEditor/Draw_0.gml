@@ -1,13 +1,13 @@
 event_inherited();
 
-draw_text(l+8,t+2,string_Hash_to_newline(string(param)+": "+string(attribute)));
+draw_text(l+8,t+2,(string(param)+": "+string(attribute)));
 
 var gmax = ymax,
 	gmin = ymin;
 
 //draw region and guideliens
 draw_set_color(c_black);//draw_set_color(choice(c_black,objAudioEditor.color_fg,objAudioEditor.palette_light));
-draw_Rectangle(gl,gt,gr,gb,false);
+draw_rectangle(gl,gt,gr,gb,false);
 
 draw_set_color(objAudioEditor.color_fg);
 draw_line(gl,gt,gl,gb);
@@ -34,18 +34,18 @@ draw_set_halign(fa_center); draw_set_valign(fa_top);
 for(var i=0;i<=divs;i+=1){
     draw_set_alpha(1);
     var xx = lerp(gl,gr,i/divs);
-    draw_text(xx,gb+4,string_Hash_to_newline(string(lerp(xmin,xmax,i/divs))));
+    draw_text(xx,gb+4,(string(lerp(xmin,xmax,i/divs))));
     draw_set_alpha(.5);
     draw_line(xx,gt,xx,gb);
 }
 draw_set_alpha(1);
-draw_text(lerp(gr,gl,.5),gb+4+24+8,string_Hash_to_newline(string(param)));
+draw_text(lerp(gr,gl,.5),gb+4+24+8,(string(param)));
 
 if mouse_in_region(gl,gb,gr,b-32){
     draw_set_color(objAudioEditor.color_fg)
-    draw_Rectangle(gl,gb+4+24,gr,gb+4+24+8+24+8,false);
+    draw_rectangle(gl,gb+4+24,gr,gb+4+24+8+24+8,false);
     draw_set_color(objAudioEditor.color_bg);
-    draw_text(lerp(gr,gl,.5),gb+4+24+8,string_Hash_to_newline(string(param)));
+    draw_text(lerp(gr,gl,.5),gb+4+24+8,(string(param)));
     draw_set_color(objAudioEditor.color_fg2);
     var yy = gt;
     var xx = remap_value(audio_param_state(param),0,100,gl,gr);
@@ -100,12 +100,12 @@ if blend!=-1 and curves==-1{
             else{name = audio_get_name(cont);}
         draw_set_alpha(.25);
         draw_blendregion(left,y1,right,y2,cleft,cright,false);
-        //draw_Rectangle(left,y1,right,y2,false);
-        draw_Rectangle(cleft,y1,cright,y2,false);
+        //draw_rectangle(left,y1,right,y2,false);
+        draw_rectangle(cleft,y1,cright,y2,false);
         draw_set_alpha(1);
         draw_blendregion(left,y1,right,y2,cleft,cright,true);
-        //draw_Rectangle(left,y1,right,y2,true);
-        draw_text_ext(cleft+2,y1+2,string_Hash_to_newline(name),-1,cright-cleft-4);
+        //draw_rectangle(left,y1,right,y2,true);
+        draw_text_ext(cleft+2,y1+2,(name),-1,cright-cleft-4);
         }
     }
 }
@@ -120,7 +120,7 @@ if curves!=-1{
     var col = ds_list_find_value(objAudioEditor.editor_colors,0);//ds_list_find_index(curve_ind,k) mod ds_list_size(objAudioEditor.editor_colors));
     var k = curve_name;
 	draw_set_color(col);
-    draw_text(lerp(l,r,.5/*(j+1)/(cn+1)*/),t+28,string_Hash_to_newline(k));
+    draw_text(lerp(l,r,.5/*(j+1)/(cn+1)*/),t+28,(k));
     var cur = ds_map_find_value(curves,k);
     var pts = ds_map_find_value(cur,"points");
     var n = ds_list_size(pts),ppx = "", ppy = "";
@@ -165,9 +165,9 @@ if curves!=-1{
 draw_set_color(objAudioEditor.color_fg);
 //draw underside params
 draw_set_halign(fa_right);
-draw_text(l+text_w-4,b-24,string_Hash_to_newline("x"));
-draw_text(lerp(l,r,1/3)+text_w-4,b-24,string_Hash_to_newline("y"));
-draw_text(lerp(l,r,2/3)+text_w-4,b-24,string_Hash_to_newline("pow"));
+draw_text(l+text_w-4,b-24,("x"));
+draw_text(lerp(l,r,1/3)+text_w-4,b-24,("y"));
+draw_text(lerp(l,r,2/3)+text_w-4,b-24,("pow"));
 draw_set_halign(fa_left);
 
 if grabbed!=-1{

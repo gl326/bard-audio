@@ -153,12 +153,7 @@ function class_audio_instance(_container,_sound=-1,_loops=false,_gain=0,_pitch=0
 				//maybe someday we'll be able to set audio parameteres on an instance before it starts playing.
 		}
 		
-		var file_vol; 
-	    if audio_in_editor{
-	        file_vol = (ds_map_Find_value(global.audio_asset_vol,audio_get_name(file)))/100;
-	    }else{
-	        file_vol = (ds_map_Find_value(global.audio_asset_vol,file));
-	    }
+		var file_vol = audio_asset_gain(file); 
 		
 	    bus_vol = bus_gain(bus_id);
 	    var blend_vol = 1+blend;
@@ -231,10 +226,8 @@ function class_audio_instance(_container,_sound=-1,_loops=false,_gain=0,_pitch=0
 	static update_current_volume = function(parentVolume){
 		var snd = aud;
 		if sync{snd = file;}
-        var file_vol = (ds_map_Find_value(global.audio_asset_vol,file));
-                            if !audio_in_editor{
-								file_vol = (ds_map_Find_value(global.audio_asset_vol,audio_get_name(file)))/100;
-								}
+        var file_vol = audio_asset_gain(file); 
+
             current_vol = (vol+1)*(file_vol+1)*(bus_vol+1);
                             //ds_map_replace(s,"current_vol",ds_map_find_value(s,"current_vol")*(ng+1)/(bp+1)); //old (bad) way
 			var newFinalVol = lerp(0,clamp(current_vol,0,1),QuadInOut(parentVolume)*(1+blend));

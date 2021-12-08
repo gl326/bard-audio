@@ -5,9 +5,10 @@ enum CONTAINER_TYPE{
 	HLT,
 	MULTI
 }
-function class_audio_container() constructor{
-	name = "";
+function class_audio_container(_name = "", fromProject = false) constructor{
+	name = _name;
 	contents = []; //all the audio files and sub-containers that are contained within
+	contents_serialize = []; //same data as above, but made firnedly for serialize/deserialize
 	
 	type = CONTAINER_TYPE.CHOICE;
 	
@@ -59,7 +60,66 @@ function class_audio_container() constructor{
 	chosen = -1;
 	seq = false;
 	
+	from_project = fromProject;
+	
 	ds_map_add(global.audio_containers,name,self); //track me!
+	
+	editor_expand = false;
+	editor_deserialized = false;
+	editor_order = 0;
+	parent = "";
+	
+	#region Serialization
+    
+    ELEPHANT_SCHEMA
+    {
+        ELEPHANT_VERBOSE_EXCLUDE : [
+            "contents",
+			"editor_expand",
+			"editor_deserialized",
+			"editor_order",
+        ],
+    }
+    
+    ELEPHANT_POST_READ_METHOD
+    {
+		deserialize_contents();
+    }
+    
+    #endregion
+	
+	//turn the serialized contents into game data
+	static deserialize_contents = function(){
+		//check parent link
+		var parent_data = container_getdata(parent);
+		if is_undefined(parent_data) or array_find_index(parent_data.contents_serialize,name)==-1{
+			show_debug_message(concat("WARNING! container ",name," failed to link to its parent, ",parent,". moving to root folder"));
+			parent = "Sounds";
+			parent_data = container_getdata(parent);
+			array_push(parent_data.contents_serialize,name);
+			array_push(parent_data.contents,name);		
+		}
+		
+		var n = array_length(contents_serialize);
+		contents = array_create(n);
+		
+		var _i = 0;
+		repeat(n){
+			var item = contents_serialize[_i];
+			if string_char_at(item,1)=="$"{
+				item = asset_get_index(string_copy(item,2,string_length(item)-1));	
+				if item==-1{
+					//array_delete(contents_serialize,_i,1);
+					show_debug_message(concat("WARNING! ",contents_serialize[_i]," was listed as an asset in ",name," but no longer exists"));
+					//continue;	
+				}
+			}
+			contents[_i] = item;
+			_i++;	
+		}
+		
+		editor_deserialized = true;
+	}
 	
 	//look at parameters and update my values accordingly. 
 	//this only needs to be done when parameters update or when i play.

@@ -216,16 +216,35 @@ global.listener_y = 0;
 global.listener_z = 0;
 
 //data structures that hold referneces to important things
+
+//arrays of component classes and settings which we use for serialisation
+//this is all the data you manipulate in the audio editor
+enum bard_audio_class{
+	container,
+	parameter,
+	bus,
+	asset,
+	_num
+}
+global.bard_audio_data = [];
+repeat(bard_audio_class._num){
+	array_push(global.bard_audio_data,[]);	
+}
+
+//these ones are not serialized, but are tracked via array 
 global.audio_players = [];
+global.audio_playstacks = [];
+
+//for data lookup and tracking during gameplay
 global.audio_containers = ds_map_create(); //settings and contents of all containers
 global.audio_params = ds_map_create(); //parameters, hooks and default values
-global.audio_asset_vol = ds_map_create(); //volume settings for each sound asset
 global.audio_busses = ds_map_create(); //audio busses
-global.audio_asset_bus = ds_map_create(); //bus settings for each sound asset
+global.audio_assets = ds_map_create(); //settings for individual sound assets (bus, gain)
+//global.audio_asset_vol = ds_map_create(); //volume settings for each sound asset
+//global.audio_asset_bus = ds_map_create(); //bus settings for each sound asset
 global.audio_list_index = ds_map_create(); //for containers that need to remember wha sounds they've played
 global.audio_emitters = ds_map_create(); //for tracking emitters
 global.audio_param_copy_map = ds_map_create(); //this is a blank dummy map we use to copy data around when setting parameters
-global.audio_playstacks = [];
 
 //definitions for music keys and current musical key state
 global.music_keys = ds_map_create();

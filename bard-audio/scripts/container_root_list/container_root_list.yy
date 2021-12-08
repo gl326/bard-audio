@@ -2,8 +2,8 @@
   "isDnD": false,
   "isCompatibility": false,
   "parent": {
-    "name": "container",
-    "path": "folders/Scripts/audio_engine/audioeditor/container.yy",
+    "name": "containers",
+    "path": "folders/Scripts/new_engine/class_editors/containers.yy",
   },
   "resourceVersion": "1.0",
   "name": "container_root_list",

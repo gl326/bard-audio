@@ -31,18 +31,18 @@ function drawContainerList() {
 	        if fold{draw_set_color(color_fg);}
                 
 	        if editing == cid and fold==!editing_audio{
-	            draw_Rectangle(2,yy,(room_width/3)-8,yy+(24),false);
+	            draw_rectangle(2,yy,(room_width/3)-8,yy+(24),false);
 	            draw_set_color(color_bg2);
 	            blend = color_bg2;
 	        }
 	        /*if con==container{
-	            draw_Rectangle(8,(72)+24+(36*i),(room_width/3)-8,(72)+24+(36*i)+36,false);
+	            draw_rectangle(8,(72)+24+(36*i),(room_width/3)-8,(72)+24+(36*i)+36,false);
 	            d3d_set_fog(0,color_fg,0,0);
 	        }*/
-	        draw_text(xx,yy,string_Hash_to_newline(name)/*+" ("+string(con)+")"*/);
+	        draw_text(xx,yy,(name)/*+" ("+string(con)+")"*/);
 	        //if con==container{d3d_set_fog(true,color_fg,0,0);}
 	        if mouse_in_region(8,yy,(room_width/3)-8,yy+(24)){
-	            draw_Rectangle(2,yy,(room_width/3)-8,yy+(24),true);
+	            draw_rectangle(2,yy,(room_width/3)-8,yy+(24),true);
 	            if holding!=-1{ 
 	                if hold_hover_id!=expand_id{
 	                    if fold{hold_hover_id = expand_id;}
@@ -139,11 +139,11 @@ function drawContainerList() {
 	        var pl;
 	        if fold{pl = container_is_playing(cid);}
 	        else{pl = audio_is_playing(cid);}
-	        if pl{draw_sprite_ext(sprAudioButtons,1,xx+16+string_width(string_Hash_to_newline(name))+(16*fold),yy+12,1,1,0,blend,1);}
+	        if pl{draw_sprite_ext(sprAudioButtons,1,xx+16+string_width((name))+(16*fold),yy+12,1,1,0,blend,1);}
 	    }
 	    if fold{
 	        if ind>=container_scroll{
-	        draw_sprite_ext(sprAudioButtons,2+(open!=-1),xx+16+string_width(string_Hash_to_newline(name)),yy+12,1,1,0,blend,1);
+	        draw_sprite_ext(sprAudioButtons,2+(open!=-1),xx+16+string_width((name)),yy+12,1,1,0,blend,1);
 	        if ds_list_find_index(locked_containers,container_name(cid))!=-1{
 	            draw_sprite_ext(sprAudioButtons,4,xx-8,yy+12,1,1,0,blend,1);
 	            }

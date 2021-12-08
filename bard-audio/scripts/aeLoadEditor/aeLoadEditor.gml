@@ -4,7 +4,7 @@ function aeLoadEditor() {
 	var loaded_hier = false;
 	var filename = "audioEditor";
 	if argument_count>0{if argument[0]>=0{filename = "working\\backups\\audio\\audioEditor_"+string(argument[0]);}}
-	if file_Exists(filename){
+	if file_exists(filename){
 	    var file = file_text_open_read(filename);
 	    var str = file_text_read_string(file); file_text_readln(file);
 	    history_id = file_text_read_real(file); file_text_readln(file);
@@ -77,20 +77,6 @@ function aeLoadEditor() {
 	    }
 	}
 
-/*
-	if !loaded_hier and !loaded_search{
-	        loaded_search = true;
-	        var n = ds_map_size(global.audio_containers),k=ds_map_find_first(global.audio_containers);
-	        for(var i=0;i<n;i+=1){
-	            var cid = ds_map_find_value(global.audio_containers,k);
-	            if ds_list_find_index(locked_containers,container_name(cid))==-1{
-	                //if name=="act1_containers"{show_message("building myself!!");}
-	                ds_list_add(containers,string(cid));
-	            }
-	            k = ds_map_find_next(global.audio_containers,k);
-	        }
-	    }
-	*/
 	}
 
 

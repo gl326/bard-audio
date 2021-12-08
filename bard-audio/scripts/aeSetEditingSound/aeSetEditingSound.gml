@@ -54,7 +54,7 @@ function aeSetEditingSound() {
 	                        (ds_list_find_value(asset_buttons,i)).visible = true;
 	                    }
 	                    assetgainbut.param = audio_get_name(editing);
-	                    var val = (ds_map_Find_value(global.audio_asset_vol,audio_get_name(editing)))/100;
+	                    var val = (audio_asset_gain(editing))/100;
 	                    if val>-1{
 	                        assetgainbut.text = string(20*log10(val+1))
 	                    }else{

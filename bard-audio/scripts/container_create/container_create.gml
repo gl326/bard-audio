@@ -1,25 +1,16 @@
-/// @description container_create(name)
-/// @param name
-function container_create(argument0) {
-	var name = argument0;
+// Script assets have changed for v2.3.0 see
+// https://help.yoyogames.com/hc/en-us/articles/360005277377 for more information
+// create a new class and add it to the serialization array
+function container_create(name,fromProject=false){
 	if !ds_map_exists(global.audio_containers,name){
-	if string_number(name)!=name{
-	var nnew = ds_map_create();
-	ds_map_add(nnew,"name",argument0);
-	ds_map_add_list(nnew,"cont",ds_list_create());
-
-	ds_map_add_map(global.audio_containers,name,nnew);
-	return nnew;
+		var ret = new class_audio_container(name,fromProject);
+		array_push(
+			global.bard_audio_data[bard_audio_class.container], 
+			ret
+		);
+		return ret;
 	}else{
-	  show_message("A container name has to include letters");
-	    return -1;  
+		show_debug_message(concat("WARNING! tried to create container ",name,", but a container with that name already exists"));
+		return global.audio_containers[?name];
 	}
-	}
-	else{
-	    show_message("Warning! The container name "+name+" is used twice");
-	    return -1;
-	    }
-
-
-
 }

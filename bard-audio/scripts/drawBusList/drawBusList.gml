@@ -25,14 +25,14 @@ function drawBusList() {
     
 	    if ind>=bus_scroll{
 	        /*if editing == cid and fold==!editing_audio{
-	            draw_Rectangle(2,yy,(room_width/3)-8,yy+(24),false);
+	            draw_rectangle(2,yy,(room_width/3)-8,yy+(24),false);
 	            draw_set_color(color_bg2);
 	            blend = color_bg2;
 	        }*/
-	        draw_text(xx,yy,string_Hash_to_newline(line));
+	        draw_text(xx,yy,(line));
         
 	        if mouse_in_region(8,yy,(room_width/3)-8,yy+(24)){
-	            draw_Rectangle(2,yy,(room_width/3)-8,yy+(24),true);
+	            draw_rectangle(2,yy,(room_width/3)-8,yy+(24),true);
 	            if holding!=-1{ 
 	                if hold_hover_id!=bus{
 	                    hold_hover_id = bus;
@@ -120,7 +120,7 @@ function drawBusList() {
 	        }
 	    }
 	        if ind>=bus_scroll and ds_list_size(contlist)>0{
-	        draw_sprite_ext(sprAudioButtons,2+(open!=-1),xx+16+string_width(string_Hash_to_newline(string(line))),yy+12,1,1,0,blend,1);
+	        draw_sprite_ext(sprAudioButtons,2+(open!=-1),xx+16+string_width((string(line))),yy+12,1,1,0,blend,1);
 	        }
 	        if open!=-1{
 	            var hhh = drawBusList(contlist,xx+16,yy+24);

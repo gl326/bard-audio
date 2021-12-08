@@ -1,9 +1,9 @@
 if audio_loaded{
 var butt_h = 36,butt_g = 8,
-	vx = __view_get( e__VW.XView, 0 ),
-	vy=__view_get( e__VW.YView, 0 ),
-	vw=__view_get( e__VW.WView, 0 ),
-	vh=__view_get( e__VW.HView, 0 ),
+	vx = 0,
+	vy = 0,
+	vw = room_width,
+	vh = room_height,
 	vx2=vx+vw,
 	vy2=vy+vh;
 
@@ -14,7 +14,7 @@ draw_rectangle_colour(
     false
 );
 
-draw_set_font(ftDebug);
+draw_set_font(-1);
 draw_set_color(color_fg);
 
 draw_sprite(sprAudioButtons,0,16,24+36); //search
@@ -41,30 +41,30 @@ if editing!=-1{
         draw_set_color(color_fg2);
         draw_text_transformed(
             (room_width/3) + 8+96+8, 8,
-            string_Hash_to_newline(audio_get_name(editing)),
+            (audio_get_name(editing)),
             2,2,0
         );
         draw_set_color(color_fg);
-        draw_text((room_width/3)+(room_width*3/9)+8,8+48+8+butt_h+8,string_Hash_to_newline("GAIN"));
-        draw_text((room_width/3)+(room_width*4.5/9)+8,8+48+8+butt_h+8,string_Hash_to_newline("BUS"));
+        draw_text((room_width/3)+(room_width*3/9)+8,8+48+8+butt_h+8,("GAIN"));
+        draw_text((room_width/3)+(room_width*4.5/9)+8,8+48+8+butt_h+8,("BUS"));
         if ds_map_exists(global.audio_busses,assetbusbut.text){
-            draw_sprite(sprAudioButtons,7,(room_width/3)+(room_width*4.5/9)+8+string_width(string_Hash_to_newline("BUS"))+12,12+8+48+8+butt_h+8);
+            draw_sprite(sprAudioButtons,7,(room_width/3)+(room_width*4.5/9)+8+string_width(("BUS"))+12,12+8+48+8+butt_h+8);
             }
     }else{
     if ds_exists(editing,ds_type_map){
         draw_set_color(color_fg);
         draw_set_halign(fa_right);
         if container_type(editing)==2{
-            draw_text((room_width/3)+(room_width*2/9),(8*4)+(36*4)+4,string_Hash_to_newline("AMT"));
+            draw_text((room_width/3)+(room_width*2/9),(8*4)+(36*4)+4,("AMT"));
         }
-        draw_text((room_width/3)+(room_width*4.5/9),8,string_Hash_to_newline("BUS"));
+        draw_text((room_width/3)+(room_width*4.5/9),8,("BUS"));
         if ds_map_exists(global.audio_busses,busbut.text){
-            draw_sprite(sprAudioButtons,7,(room_width/3)+(room_width*4.5/9)-string_width(string_Hash_to_newline("BUS"))-12,8+12);
+            draw_sprite(sprAudioButtons,7,(room_width/3)+(room_width*4.5/9)-string_width(("BUS"))-12,8+12);
             }
         draw_set_halign(fa_left);
         draw_text_transformed(
             (room_width/3) + 8+96+8, 8,
-            string_Hash_to_newline(container_name(editing)),
+            (container_name(editing)),
             2,2,0
         );
         
@@ -74,17 +74,17 @@ if editing!=-1{
         for(var i=0;i<ds_list_size(headers);i+=1){
             var h = ds_list_find_value(headers,i);
             if ds_map_find_value(h,"obj").visible{
-                draw_text(ds_map_find_value(h,"x"),ds_map_find_value(h,"y"),string_Hash_to_newline(ds_map_find_value(h,"text")));
+                draw_text(ds_map_find_value(h,"x"),ds_map_find_value(h,"y"),(ds_map_find_value(h,"text")));
             }
         }
         
-        draw_text((room_width/3) + 8,room_height/4,string_Hash_to_newline("CONTENTS"));
+        draw_text((room_width/3) + 8,room_height/4,("CONTENTS"));
         draw_set_color(choice(c_black,color_bg2,palette_light));
         var l =(room_width/3) + 8,
             t=(room_height/4)+24,
             r=(room_width/3)+(room_width/3)-8,
             b=room_height-8;
-        draw_Rectangle(l,t,r,b,false);
+        draw_rectangle(l,t,r,b,false);
         var cont = container_contents(editing),cn = ds_list_size(cont),stopdrop = false;
         var locked = !(ds_list_find_index(locked_containers,container_name(editing))==-1);
         for(var i=0;i<cn;i+=1){
@@ -97,7 +97,7 @@ if editing!=-1{
                 draw_set_color(color_fg2)}
             var yy = t+(i*24);
             if mouse_in_region(l,yy,r,yy+24) and global.highlighted==noone{
-                draw_Rectangle(l,yy,r,yy+24,true);
+                draw_rectangle(l,yy,r,yy+24,true);
                 //if ds_list_find_index(locked_containers,container_name(editing))==-1
                 {
                     if mouse_clicked() and keyboard_check(vk_delete) and !locked{
@@ -160,11 +160,11 @@ if editing!=-1{
                 }
             }
             name = string_copy(name,1,min(string_length(name),80));
-            draw_text(l+8,yy,string_Hash_to_newline(name));
+            draw_text(l+8,yy,(name));
             var pl;
             if is_string(c){pl = container_is_playing(c);}
             else{pl = audio_is_playing(c);}
-            if pl{draw_sprite_ext(sprAudioButtons,1,l+8+string_width(string_Hash_to_newline(name)),yy+12,1,1,0,draw_get_color(),1);}
+            if pl{draw_sprite_ext(sprAudioButtons,1,l+8+string_width((name)),yy+12,1,1,0,draw_get_color(),1);}
         }
         if !stopdrop and !locked and !holding_param{ //dropped not in list
             if dropped!=-1 and mouse_in_region(l,t,r,b) and !holding_copy{
@@ -205,7 +205,7 @@ if holding!=-1{
         if holding_copy{name+="#COPYING"}
         else{if holding_move{name+="#MOVING"}
             else{name+="#REFERENCING";}}
-        draw_text(mouse_x,mouse_y,string_Hash_to_newline(name));
+        draw_text(mouse_x,mouse_y,(name));
     }
 }
 }else{
@@ -214,9 +214,9 @@ if holding!=-1{
     draw_set_halign(fa_left);
     draw_set_valign(fa_bottom);
 	if audio_load_progress<2{
-		draw_text_transformed(__view_get( e__VW.XView, 0 ),__view_get( e__VW.YView, 0 )+__view_get( e__VW.HView, 0 ),string_Hash_to_newline("Loading "+string(files_loaded)+" files..."),2,2,0);
+		draw_text_transformed(__view_get( e__VW.XView, 0 ),__view_get( e__VW.YView, 0 )+__view_get( e__VW.HView, 0 ),("Loading "+string(files_loaded)+" files..."),2,2,0);
 	}else{
-		draw_text_transformed(__view_get( e__VW.XView, 0 ),__view_get( e__VW.YView, 0 )+__view_get( e__VW.HView, 0 ),string_Hash_to_newline("Loading "+string(files_loaded)+" files + folders..."),2,2,0);
+		draw_text_transformed(__view_get( e__VW.XView, 0 ),__view_get( e__VW.YView, 0 )+__view_get( e__VW.HView, 0 ),("Loading "+string(files_loaded)+" files + folders..."),2,2,0);
 	}
 }
 

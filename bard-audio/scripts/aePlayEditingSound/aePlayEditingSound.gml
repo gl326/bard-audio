@@ -8,8 +8,8 @@ function aePlayEditingSound() {
 	        }
 	    else{
 	        var aud = audio_play_sound(editing,0,0);
-	        audio_sound_gain(aud,(1+(ds_map_Find_value(global.audio_asset_vol,audio_get_name(editing))/100))
-	            *(1+bus_gain(ds_map_Find_value(global.audio_asset_bus,audio_get_name(editing))))
+	        audio_sound_gain(aud,(1+(audio_asset_gain(editing)/100))
+	            *(1+bus_gain(audio_asset_bus(editing)))
 	            ,0);
 	        }
 	}else{

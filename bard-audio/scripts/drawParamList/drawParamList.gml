@@ -13,9 +13,9 @@ function drawParamList(argument0, argument1, argument2) {
 	        def=param_default(con),
 	        blend = color_fg;
     
-	    draw_text(xx,yy,string_Hash_to_newline(name+" ("+string(def)+")"));
+	    draw_text(xx,yy,(name+" ("+string(def)+")"));
 	    if mouse_in_region(8,yy,(room_width/3)-8,yy+(24)){
-	        draw_Rectangle(2,yy,(room_width/3)-8,yy+(24),true);
+	        draw_rectangle(2,yy,(room_width/3)-8,yy+(24),true);
 	        if mouse_clicked() and global.highlighted==noone{
 	            holding = con;
 	            grabbed = con;

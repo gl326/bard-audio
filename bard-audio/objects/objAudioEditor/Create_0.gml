@@ -48,18 +48,13 @@ drag_start = false;
 drag_x = -1; drag_y = -1;
 
 ///files
-    project_directory = get_project_directory();
-    
-    //swap out from the one from the_audio
-    ds_map_destroy(global.audio_containers);
-    global.audio_containers = ds_map_create();
+    project_file = get_project_file();
     
     //containers = ds_list_create(); //REAL = audio asset, STRING = id of subcontainer
-    locked_containers = ds_list_create(); //these containers are generated from project folders, so content changes wont save
-    loaded_search = false;
+	loaded_search = false;
+	containers_display = [];
     
     container_search = ds_list_create(); //current display list of container
-    container_expand = ds_list_create(); //which containers are expanded in the list
     editing_history = ds_list_create(); //list of visited containers
     history_id = 0;
     
@@ -81,25 +76,6 @@ drag_x = -1; drag_y = -1;
     project_keys = -1;
     project_struct = -1;
 
-    if file_exists("audioData_project"){
-        var file = file_text_open_read("audioData_project");
-            ds_map_destroy(global.audio_containers);
-			var nmap = file_text_read_string(file); 
-			file_text_readln(file);
-			var nmap_decode = json_decode(nmap);
-            global.audio_containers = nmap_decode; 
-            //ds_list_read(containers,file_text_read_string(file)); file_text_readln(file);
-            ds_list_read(locked_containers,file_text_read_string(file)); file_text_readln(file);
-			if !file_text_eof(file){
-				ds_map_read(audio_sound_groups,file_text_read_string(file)); file_text_readln(file);	
-			}
-        file_text_close(file);
+	audio_special_emitter = -1; //... for testing certain things
 	
-		event_user(3); //done!
-    }else{
-    audio_loaded = false;
-      //  project_keys = ds_map_create(); //maps game maker keys to asset values
-       project_struct = ds_map_create(); //audio folder struct just with keys, to be swapped with names 
-    }
-
-audio_special_emitter = -1; //... for testing certain things
+	event_user(3);

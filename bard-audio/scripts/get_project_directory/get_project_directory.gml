@@ -5,6 +5,32 @@ function get_project_directory()
 {
     if (debug_mode)
     {
+        _get_project();
+        return global.__project_directory;
+    }
+    else
+    {
+        return "";
+    }
+}
+
+function get_project_file()
+{
+    if (debug_mode)
+    {
+        _get_project();
+        return global.__project_path;
+    }
+    else
+    {
+        return "";
+    }
+}
+
+function _get_project()
+{
+    if (debug_mode)
+    {
         if (global.__project_directory == undefined)
         {
             var _save_project_path = false;
@@ -33,10 +59,5 @@ function get_project_directory()
             global.__project_directory = filename_dir(global.__project_path) + "\\";
         }
         
-        return global.__project_directory;
-    }
-    else
-    {
-        return "";
     }
 }

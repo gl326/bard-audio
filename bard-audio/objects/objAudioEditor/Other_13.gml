@@ -1,4 +1,5 @@
 /// @description finish setup after files are loaded
+/*
     ////////swap names with ids        
         var n = ds_map_size(global.audio_containers),
             k = ds_map_find_first(global.audio_containers);
@@ -43,6 +44,7 @@
 
 load_audioedit();
 aeCountReferences(1);
+*/
 
 
 tab = 0; //0 = containers, 1 = params
@@ -92,7 +94,7 @@ tab3.script = aeChangeTab; tab3.args[0] = 2;
 tab3.name = "Busses";
 
 containsearch = newHighlightable(objTextfield,32,(butt_g*1)+(butt_h*1),(room_width/3) - 8 - (128),(butt_g*1)+(butt_h*2));
-containsize = ds_list_size(container_root_list());
+//containsize = ds_list_size(container_root_list());
 
 abcbut = newHighlightable(objaeButton,(room_width/3) + 8 - (128),(butt_g*1)+(butt_h*1),(room_width/3) - 8,(butt_g*1)+(butt_h*2));
 abcbut.script = aeAlphabetical;
@@ -121,12 +123,12 @@ namebut.name = "RENAME";
 ds_list_add(container_buttons,namebut);
 
 assetgainbut = newHighlightable(objTextfield,(room_width/3)+(room_width*3/9)+8,8+48+8,(room_width/3)+(room_width*4.5/9)-8,8+48+butt_h+8);
-assetgainbut.editing = global.audio_asset_vol; assetgainbut.param = -1;
+//assetgainbut.editing = global.audio_asset_vol; assetgainbut.param = -1;
 assetgainbut.draggable = true; assetgainbut.dB = true; assetgainbut.plusmin = true;
 ds_list_add(asset_buttons,assetgainbut);
 
 assetbusbut = newHighlightable(objTextfield,(room_width/3)+(room_width*4.5/9)+8,8+48+8,(room_width/3)+(room_width*6/9)-8,8+48+butt_h+8);
-assetbusbut.editing = global.audio_asset_bus; assetbusbut.param = -1;
+//assetbusbut.editing = global.audio_asset_bus; assetbusbut.param = -1;
 assetbusbut.istext = true; assetbusbut.percent = false; assetbusbut.plusmin = false;
 ds_list_add(asset_buttons,assetbusbut);
 
