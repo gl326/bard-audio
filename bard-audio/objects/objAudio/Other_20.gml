@@ -32,7 +32,7 @@ load_audioedit();
         k = ds_map_find_next(global.audio_busses,k);
     }
     
-ds_map_copy(global.audio_bus_calculated,global.audio_busses);
+ds_map_copy(global.audio_bus_gaind,global.audio_busses);
 bus_recalculate("master");
 bus_recalculate("ui_setting");
 
@@ -45,7 +45,7 @@ for(var i=0;i<n;i+=1){
     audio_sound_gain(asset_get_index(k), 
         1
         +(ds_map_Find_value(global.audio_asset_vol,k)/100)
-        //+(bus_calculate(ds_map_Find_value(global.audio_asset_bus,k)))
+        //+(bus_gain(ds_map_Find_value(global.audio_asset_bus,k)))
         ,0);
     ds_map_add(nnew,asset_get_index(k),(ds_map_Find_value(global.audio_asset_vol,k)/100));
     }else{
@@ -66,7 +66,7 @@ for(var i=0;i<n;i+=1){
     audio_sound_gain(asset_get_index(k), 
         1
         +(ds_map_Find_value(global.audio_asset_vol,k)/100)
-        +(bus_calculate(ds_map_Find_value(global.audio_asset_bus,k)))
+        +(bus_gain(ds_map_Find_value(global.audio_asset_bus,k)))
         ,0);
     //show_message("set "+audio_get_name(k)+" to "+string(1+(ds_map_find_value(global.audio_asset_vol,k)/100)));
     }

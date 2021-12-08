@@ -125,39 +125,9 @@ if is_equal(music_current,-1) or fading_out{
 			music_volume = min(1,music_volume + (1/(room_speed*.75)));
 	}
 	
-	if music_transition>0{
-		if music_transition_state<100{
-			music_transition_state = min(100,music_transition_state + 100*(delta_time/(ftime*1000000)));
-			audio_param_set("music_transition",music_transition_state);
-		}
-	}else{
-		if music_transition_state>0{
-			music_transition_state = max(0,music_transition_state - 100/(room_speed*.75));
-			audio_param_set("music_transition",music_transition_state);
-		}
-	}
 }
 }
 
-if music_change!=""{
-	if ds_map_exists(the_audio.music_keys,music_change){
-		music_key = ds_map_find_value(the_audio.music_keys,music_change);
-	}else{
-		music_key = "cmaj";	
-	}
-		switch(music_key){
-			case "ebmaj":
-			case "ebmin":
-			case "bbmin":
-			case "bbmaj":
-				audio_param_set("jingle_key",100);
-			break;
-			default:
-				audio_param_set("jingle_key",0);
-			break;
-		}
-		audio_param_set("jingle_instrument",music_jingle_instrument(music_change));
-}
 
 music_cur_volume = music_volume;
 
@@ -240,17 +210,6 @@ if is_real(music_fade_to){
     bus_set("music_gameplay",(vol)*100)
 }
 
-if instance_exists(objMusic_temp_transition){
-	if music_temp_transition!=objMusic_temp_transition.param{
-		music_temp_transition = approach(music_temp_transition,objMusic_temp_transition.param,50/(room_speed*objMusic_temp_transition.time));	
-		audio_param_set("music_temp_transition",music_temp_transition);
-	}
-}else{
-	if music_temp_transition!=50{
-		music_temp_transition = approach(music_temp_transition,50,50/(room_speed*3));	
-		audio_param_set("music_temp_transition",music_temp_transition);
-	}
-}
 
 var vx = room_width/2,
 	vy = room_height/2,
@@ -264,13 +223,4 @@ with(the_scenemanager){
 //this puts it dead center in the screen, using game maker's compatibility view functions...
 //change this to whatever makes sense for you
 //the z position is set away from the screen, to simulate the player's distance from the screen
-global.listener_x = vx;//__view_get( e__VW.XView, 0 )+(__view_get( e__VW.WView, 0 )/2);
-global.listener_y = vy;//__view_get( e__VW.YView, 0 )+(__view_get( e__VW.HView, 0 )/2);
-//the z distance goes forward/back based on the view size relative to the default
-//so if you zoom out or in, the listener gets farther or closer... it feels good
-global.listener_z = clamp(
- 	(0 - (listener_distance*vw/default_view_width)),
-	-global.max_listener_distance,global.max_listener_distance);
-	
-
-audio_listener_position(global.listener_x,global.listener_y,global.listener_z);
+bard_audio_listener_update(vx,vy,0,vw/default_view_width);

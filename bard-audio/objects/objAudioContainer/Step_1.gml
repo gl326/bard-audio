@@ -365,7 +365,7 @@ if bn{
                 b = ds_map_Find_value(s,"bus");
             if ds_list_find_index(bus_update,b)!=-1{
                     //if is_equal(bus,b){
-                        var ng = bus_calculate(b),
+                        var ng = bus_gain(b),
                             bp = ds_map_Find_value(s,"bus_vol"),
                             snd = ds_map_find_value(s,"aud");
                     if ng!=bp{

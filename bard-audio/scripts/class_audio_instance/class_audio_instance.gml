@@ -22,6 +22,10 @@ function class_audio_instance(_container,_sound=-1,_loops=false,_gain=0,_pitch=0
 	
 	fadein = 0;
 	delayin = 0;
+	delayout = 0;
+	
+	playstart = current_time;
+	
 	
 	blend = 0;
 	
@@ -152,18 +156,6 @@ function class_audio_instance(_container,_sound=-1,_loops=false,_gain=0,_pitch=0
 		var file_vol; 
 	    if audio_in_editor{
 	        file_vol = (ds_map_Find_value(global.audio_asset_vol,audio_get_name(file)))/100;
-			
-			/* audio groups stuff......
-			if ds_map_exists(objAudioEditor.audio_sound_groups,file){
-				var agroup = ds_map_find_value(objAudioEditor.audio_sound_groups,file);
-				if is_real(agroup) and !audio_group_is_loaded(agroup){
-						with(the_audio){
-							ds_list_add(audio_loading,agroup);
-		                    loading_audio = true;	
-						}
-				}
-			}
-			*/
 	    }else{
 	        file_vol = (ds_map_Find_value(global.audio_asset_vol,file));
 	    }
@@ -233,6 +225,34 @@ function class_audio_instance(_container,_sound=-1,_loops=false,_gain=0,_pitch=0
 	    }
 		*/
 	}
+	}
+	
+	//using current state of my bus, file, container etc.... set the gain of my attached sound.
+	static update_current_volume = function(parentVolume){
+		var snd = aud;
+		if sync{snd = file;}
+        var file_vol = (ds_map_Find_value(global.audio_asset_vol,file));
+                            if !audio_in_editor{
+								file_vol = (ds_map_Find_value(global.audio_asset_vol,audio_get_name(file)))/100;
+								}
+            current_vol = (vol+1)*(file_vol+1)*(bus_vol+1);
+                            //ds_map_replace(s,"current_vol",ds_map_find_value(s,"current_vol")*(ng+1)/(bp+1)); //old (bad) way
+			var newFinalVol = lerp(0,clamp(current_vol,0,1),QuadInOut(parentVolume)*(1+blend));
+            audio_sound_gain(snd,newFinalVol,0);
+            
+	}
+	
+	static copy_from = function(naud){
+		loop	= naud.loop;
+		vol		= naud.vol;
+		pitch	= naud.pitch;
+		sync	= naud.sync;
+		threed	= naud.threed;
+		fadein	= naud.fadein;
+		delayin = naud.delayin;
+		blend	= naud.blend;
+		
+		//ds_map_copy_keys_excepting(aud,naud,"ind","aud","playstart","playid","delayout","current_vol","bus_vol");
 	}
 	
 	//might never be used

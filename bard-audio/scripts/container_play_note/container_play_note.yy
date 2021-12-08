@@ -2,8 +2,8 @@
   "isDnD": false,
   "isCompatibility": false,
   "parent": {
-    "name": "audio_gameplay",
-    "path": "folders/Scripts/audio_gameplay.yy",
+    "name": "containers",
+    "path": "folders/Scripts/new_gameplay/containers.yy",
   },
   "resourceVersion": "1.0",
   "name": "container_play_note",

@@ -2,7 +2,11 @@
 /// @param param id
 /// @param  container id
 /// @param  connected to
-function param_new_connection(argument0, argument1, argument2) {
+function param_new_connection(param,container,variable) {
+	global.audio_params[?param].hook_add(container,variable);
+	container_getdata(container).hook_add(param);
+
+	/*
 	var pid=argument0,cid=argument1,par=argument2,
 	    c_name = container_name(cid);
     
@@ -20,6 +24,7 @@ function param_new_connection(argument0, argument1, argument2) {
 	ds_map_add_map(map,par,nnew);
 
 	return nnew;
+	*/
 
 
 

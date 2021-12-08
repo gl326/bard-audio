@@ -7,13 +7,5 @@ if audio_loaded{
 	}
 }
 
-window_set_cursor(cr_default);
+//window_set_cursor(cr_default);
 audio_stop_all();
-bus_set("foley_gameplay",0);
-bus_set("sfx_gameplay",0);
-bus_set("music_gameplay",0);
-bus_set("vo_gameplay",0);
-//bus_set("singing_gameplay",0);
-//bus_set("ambience_gameplay",0);
-
-var test = false;

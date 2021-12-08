@@ -1,8 +1,9 @@
-/// @description doubleBeatEvent()
+/// @description beatEvent()
 function doubleBeatEvent() {
-
-	return the_audio.doublebeat_event; //returns 1 on the frame of a beat or half-beat
-
-
-
+	var player = container_player(music_playing());
+	if !is_undefined(player){
+		return player.doubleBeatEvent();
+	}else{
+		return false;	
+	}
 }

@@ -1,8 +1,9 @@
-/// @description measureEvent()
+//return true for one update cycle, if a new measure is starting during this frame
 function measureEvent() {
-
-	return the_audio.measure_event; //returns 1 on the frame of a beat
-
-
-
+	var player = container_player(music_playing());
+	if !is_undefined(player){
+		return player.measureEvent();
+	}else{
+		return false;	
+	}
 }

@@ -209,7 +209,7 @@ function container_sound_play() {
 	    }else{
 	        file_vol = (ds_map_Find_value(global.audio_asset_vol,file));
 	    }
-	    var bus_vol = bus_calculate(bus_id),
+	    var bus_vol = bus_gain(bus_id),
 	        blend_vol = 1+ds_map_Find_value(s,"blend");
 	    ds_map_Replace(s,"bus_vol",bus_vol);
         

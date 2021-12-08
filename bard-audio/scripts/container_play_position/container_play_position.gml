@@ -2,9 +2,10 @@
 /// @param container
 /// @param x
 /// @param y
-function container_play_position(argument0, argument1, argument2) {
-	var obj = instance_create_pooled(argument1,argument2,0,objLocationsound);
-	obj.container = argument0;
+function container_play_position(container,_x,_y,_z=0) {
+	var obj = instance_create_depth(_x,_y,_z,objLocationsound);
+	obj.container = container;
+	obj.z = _z;
 	with(obj){event_user(0);}
 	return obj;//.soundobj;
 

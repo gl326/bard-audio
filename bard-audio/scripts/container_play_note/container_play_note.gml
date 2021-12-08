@@ -1,10 +1,9 @@
 ///@param container
 ///@param noteId
-function container_play_note(argument0, argument1) {
-	var sobj = container_play(argument0); 
-
+function container_play_note(container, noteID) {
+	var sobj = container_play(container); 
 		sobj.live_update = false;
-		container_pitch_note(argument0,argument1,sobj.play_id);
+		container_pitch_note(container, noteID, sobj.play_id);
 	return sobj;
 
 	/*

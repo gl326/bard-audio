@@ -127,7 +127,6 @@ global.audio_asset_vol = ds_map_create(); //volume settings for each sound asset
 global.audio_busses = ds_map_create(); //audio busses
 global.audio_asset_bus = ds_map_create(); //bus settings for each sound asset
 global.audio_list_index = ds_map_create(); //for random containers
-global.audio_bus_calculated = ds_map_create();
 
 audio_loading = ds_list_create();
 audio_loading_flag = ds_list_create();

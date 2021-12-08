@@ -2,8 +2,10 @@
 /// @param param name
 /// @param  new number
 function audio_param_set(param, newv) {
-	var newv = min(100,max(0,newv)),
-		paramData = global.audio_params[?param],
+	newv = clamp(newv,0,100);
+	
+	if ds_map_exists(global.audio_params,param){
+	var paramData = global.audio_params[?param],
 	    oldv = paramData.val;
 	if newv!=oldv{
 	    paramData.val = newv;
@@ -14,7 +16,5 @@ function audio_param_set(param, newv) {
 			_i ++;
 		}
 	}
-
-
-
+	}
 }

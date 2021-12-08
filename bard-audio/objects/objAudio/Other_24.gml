@@ -7,6 +7,5 @@ ds_map_destroy(global.audio_busses);
 ds_map_destroy(global.audio_asset_bus);
 ds_map_destroy(global.audio_groups);
 ds_map_destroy(global.audio_list_index);
-ds_map_destroy(global.audio_bus_calculated);
 ds_map_destroy(global.audio_emitters)
 

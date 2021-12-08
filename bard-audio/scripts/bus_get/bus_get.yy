@@ -2,8 +2,8 @@
   "isDnD": false,
   "isCompatibility": false,
   "parent": {
-    "name": "audio_gameplay",
-    "path": "folders/Scripts/audio_gameplay.yy",
+    "name": "busses",
+    "path": "folders/Scripts/audio_engine/audioeditor/busses.yy",
   },
   "resourceVersion": "1.0",
   "name": "bus_get",

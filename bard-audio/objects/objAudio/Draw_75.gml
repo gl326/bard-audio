@@ -4,7 +4,8 @@
 var display_width = display_get_gui_width(),
 	display_height = display_get_gui_height(),
 	text_color = c_white,
-	text_bcolor = c_black;
+	text_bcolor = c_black,
+	debug_h = 0;
 
 if audio_debug_on{// and instance_exists(the_levelobj){
 draw_set_color(text_bcolor);
@@ -131,12 +132,4 @@ var sstr = "group: "+string(audio_loaded)+"#music: "+string(music_current)+"#sce
             draw_text(display_width-20,(20*(n+1)),
                 string_Hash_to_newline(sstr));
 draw_set_halign(fa_left);
-}
-
-draw_set_halign(fa_center);
-draw_set_color(c_blue);
-with(objAudiodebugnote){
-	for(var i=-1;i<=1;i+=.5){
-		draw_text_transformed(x+(i*3),y,my_text,3,3,0);	
-	}
 }

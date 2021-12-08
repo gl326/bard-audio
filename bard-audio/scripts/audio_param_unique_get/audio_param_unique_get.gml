@@ -2,18 +2,11 @@
 /// @param sound
 /// @param  id
 /// @param  new number
-function audio_param_unique_get(argument0, argument1) {
-	with(objAudioContainer){
-	    if container==argument0{
-	        if unique_param==-1{
-	            unique_param = ds_map_create();
-	        }
-	        return ds_map_Find_value(unique_param,argument1);
-	    }
+function audio_param_unique_get(container,param) {
+	var player = container_player(container);
+	if !is_undefined(player){
+		return ds_map_Find_value(player.unique_param,param);	
 	}
+
 	return noone;
-	//return ds_map_replace(globparam nameal.audio_state,argument0,min(100,max(0,argument1)));
-
-
-
 }

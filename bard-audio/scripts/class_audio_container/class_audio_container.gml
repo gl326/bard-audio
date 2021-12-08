@@ -13,7 +13,8 @@ function class_audio_container() constructor{
 	
 	music = false;
 	bpm = 0;
-	varybpm = false;
+	beats_per_measure = 4;
+//	varybpm = false;
 	beatstart = 0;
 	
 	loop = false;
@@ -58,6 +59,8 @@ function class_audio_container() constructor{
 	chosen = -1;
 	seq = false;
 	
+	ds_map_add(global.audio_containers,name,self); //track me!
+	
 	//look at parameters and update my values accordingly. 
 	//this only needs to be done when parameters update or when i play.
 	static update = function(){
@@ -67,13 +70,20 @@ function class_audio_container() constructor{
 				if global.audio_params[?parameters[_i]].set_container_values(self){
 					_i ++;
 				}else{
-					show_debug_message("warning! container "+string(name)+" referenced audio parameter "+string(parameters[_i])+" but the parameter didn't have any matching hooks");
+					//show_debug_message("warning! container "+string(name)+" referenced audio parameter "+string(parameters[_i])+" but the parameter didn't have any matching hooks");
 					array_delete(parameters,_i,1);	
 				}
 			}else{
-				show_debug_message("warning! container "+string(name)+" references nonexistent audio parameter "+string(parameters[_i]));	
+				//show_debug_message("warning! container "+string(name)+" references nonexistent audio parameter "+string(parameters[_i]));	
 				array_delete(parameters,_i,1);	
 			}
+		}
+	}
+	
+	//mark that we are hooked up to this parameter, now.
+	static hook_add = function(param){
+		if array_find_index(parameters,param)==-1{
+			array_push(parameters,param);	
 		}
 	}
 	
@@ -97,7 +107,7 @@ function class_audio_container() constructor{
 	static create_instances = function(option=false,list=[],inst=undefined,obj = container_player(self),_sync=false,deep=0){
 	var n = array_length(contents);
 	if deep<50 and n{ //if we got this deep, there was probably an infinite loop or something
-	update();
+	update(); //update my local variables based on parameter hooks
 	
 	var con = self,
 		container = self;
@@ -305,8 +315,8 @@ function class_audio_container() constructor{
 	            }
 	        }
     
-	    if !first{ds_map_replace(global.audio_list_index,con,ind+1);}
-	    else{ds_map_add(global.audio_list_index,con,ind+1);}
+	    if !first{ds_map_replace(global.audio_list_index,name,ind+1);}
+	    else{ds_map_add(global.audio_list_index,name,ind+1);}
 	}
 	inst.index = ind; 
 	inst.container = con;

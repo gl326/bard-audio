@@ -1,12 +1,7 @@
-function container_stop_instance(argument0, argument1) {
-	var con = argument0,
-		sid = argument1;
-	
+function container_stop_instance(container, sid) {
 	if sid!=-1{
-		container_stop(con,sid);	
+		container_stop(container,sid);	
 	}
 
 	return -1;
-
-
 }

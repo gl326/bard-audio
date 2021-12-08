@@ -3,6 +3,10 @@
 function container_player(_container,_mustExist=false){
 	_container = container_getdata(_container);
 	
+	if !is_struct(_container){
+		return undefined;	
+	}
+	
 	var _i = 0;
 	repeat(array_length(global.audio_players)){
 		if global.audio_players[_i].container==_container{

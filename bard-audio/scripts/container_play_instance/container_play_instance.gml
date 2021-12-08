@@ -1,12 +1,7 @@
-function container_play_instance(argument0, argument1) {
-	var con = argument0,
-		sid = argument1;
-	
+function container_play_instance(container, sid) {
 	if sid==-1{
-		return container_play(con).play_id;	
+		return container_play(container);	
 	}else{
 		return sid;
 	}
-
-
 }
