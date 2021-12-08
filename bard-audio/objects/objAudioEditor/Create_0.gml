@@ -48,7 +48,7 @@ drag_start = false;
 drag_x = -1; drag_y = -1;
 
 ///files
-    project_directory = global.project_directory;
+    project_directory = get_project_directory();
     
     //swap out from the one from the_audio
     ds_map_destroy(global.audio_containers);
@@ -81,8 +81,8 @@ drag_x = -1; drag_y = -1;
     project_keys = -1;
     project_struct = -1;
 
-    if file_Exists("audioData_project2"){
-        var file = file_text_open_read("audioData_project2");
+    if file_exists("audioData_project"){
+        var file = file_text_open_read("audioData_project");
             ds_map_destroy(global.audio_containers);
 			var nmap = file_text_read_string(file); 
 			file_text_readln(file);

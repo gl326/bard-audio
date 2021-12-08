@@ -160,15 +160,6 @@ if keyboard_check_pressed(vk_down) or mouse_wheel_down(){
 			show_debug_message("sounds exist in there...???");
 			
 		}
-	}else{
-		show_debug_message("project does not exist??");
-		//directory_create("C:/Users/banov/Documents/chicory/paintdog/sounds/__test_1");
-		var tstr = "C:/Users/banov/Documents/chicory/paintdog/sounds/__test_2";
-		//directory_create(tstr);
-		var tstr2 = "C:/Users/banov/Documents/chicory/paintdog/";
-		//directory_create(tstr2+"/__test_3");
-		show_debug_message("are these the same: "+string((project_directory==tstr2)));
-		//directory_create(project_directory+"sounds/__test_4");
 	}
     //get audio assets
 	show_debug_message("FIRST FILE "+foldern);
@@ -223,48 +214,6 @@ if keyboard_check_pressed(vk_down) or mouse_wheel_down(){
     }
     audio_load_progress = 2;
     break;
-    
-    case 1: ///////////////////////////////stage 2 (unused)
-    //get folder structure
-    var filen = file_find_first(project_directory+"views\\*",0);
-	show_debug_message("VIEW SEARCH! FIRST FILE "+project_directory+"views\\"+filen);
-    while(filen!=""){
-        if string_length(filen)>2{
-            var file = file_text_open_read(project_directory+"views\\"+filen),
-                filedata = "";
-            while(!file_text_eof(file)){
-                filedata+=file_text_read_string(file);
-                file_text_readln(file);
-            }
-			show_debug_message(filen+" data: "+filedata);
-            filedata = json_decode(filedata);
-            if filedata!=-1{
-                if ds_map_find_value(filedata,"filterType")=="GMSound"{
-                    var key = ds_map_find_value(filedata,"id");
-                    ds_map_add(project_keys,key,ds_map_find_value(filedata,"folderName"));
-					
-                    //copy content list
-                    var cont = ds_map_find_value(filedata,"children");
-                    var nlist;
-                    if ds_map_find_value(filedata,"localisedFolderName")=="ResourceTree_Sounds"{
-                        nlist = container_root_list();
-                    }else{
-                        nlist = ds_list_create();
-                        ds_map_add_list(project_struct,key,nlist);
-                    }
-                    for(var i=0;i<ds_list_size(cont);i+=1){
-                        ds_list_add(nlist,ds_list_find_value(cont,i));
-                    }
-                    files_loaded += 1;
-                }
-            }
-            file_text_close(file);
-            ds_map_destroy(filedata);
-        }
-        filen = file_find_next();
-        }
-        audio_load_progress = 2;
-    break;
 
     case 2: ///////////////////////////////stage 3
         //create containers from folder strcutres
@@ -286,22 +235,6 @@ if keyboard_check_pressed(vk_down) or mouse_wheel_down(){
 			}
             k = ds_map_find_next(project_struct,k);
         }
-        
-        //swap keys with names--names will become ids in event 3
-		/*
-		var cnn = ds_list_size(containers),
-			i = 0;
-        //for(var i=0;i<ds_list_size(containers);i+=1)
-		repeat(cnn){
-			var newind = ds_map_find_value(project_keys,ds_list_find_value(containers,i));
-			if !is_undefined(newind){
-				ds_list_replace(containers,i,newind);
-				i += 1;
-			}else{
-				ds_list_delete(containers,i);
-			}
-        }
-		*/
         
         audio_load_progress = 3;
     break;
@@ -346,7 +279,7 @@ if keyboard_check_pressed(vk_down) or mouse_wheel_down(){
 	
 	
 	
-	var file = file_text_open_write("audioData_project2");
+	var file = file_text_open_write("audioData_project");
             file_text_write_string(file,json_encode(global.audio_containers)); file_text_writeln(file);
             file_text_write_string(file,ds_list_write(locked_containers)); file_text_writeln(file);
 			file_text_write_string(file,ds_map_write(audio_sound_groups)); file_text_writeln(file);
