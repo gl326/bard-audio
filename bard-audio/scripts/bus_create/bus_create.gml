@@ -3,7 +3,12 @@
 //used by editor functions, not to be used during gameplay probably
 function bus_create(name,gain=0,parent=-1) {
 	if !ds_map_exists(global.audio_busses,name){
-	    return new class_audio_bus(name,gain,parent);
+		var ret = new class_audio_bus(name,gain,parent);
+		array_push(
+			global.bard_audio_data[bard_audio_class.bus], 
+			ret
+		);
+		return ret;
 	}
 	else{
 	    show_message("there's already a bus with this name!");

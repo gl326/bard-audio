@@ -1,6 +1,4 @@
-// Script assets have changed for v2.3.0 see
-// https://help.yoyogames.com/hc/en-us/articles/360005277377 for more information
-// create a new class and add it to the serialization array
+/// only for use inside the editor. there's no reason for containers to change during gameplay!
 function container_create(name,fromProject=false){
 	if !ds_map_exists(global.audio_containers,name){
 		var ret = new class_audio_container(name,fromProject);

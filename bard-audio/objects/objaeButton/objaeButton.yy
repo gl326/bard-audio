@@ -29,7 +29,7 @@
   "overriddenProperties": [],
   "parent": {
     "name": "audioeditor",
-    "path": "folders/Objects/audio_engine/audioeditor.yy",
+    "path": "folders/Objects/bard_audio_engine/audioeditor.yy",
   },
   "resourceVersion": "1.0",
   "name": "objaeButton",

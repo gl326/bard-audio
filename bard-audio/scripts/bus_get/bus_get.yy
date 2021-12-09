@@ -3,7 +3,7 @@
   "isCompatibility": false,
   "parent": {
     "name": "busses",
-    "path": "folders/Scripts/audio_engine/audioeditor/busses.yy",
+    "path": "folders/Libraries/Bard/engine/class_editors/busses.yy",
   },
   "resourceVersion": "1.0",
   "name": "bus_get",

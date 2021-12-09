@@ -3,7 +3,12 @@
 /// @param  default
 function param_create(name,defaultValue) {
 	if !ds_map_exists(global.audio_params,name){
-	    return new class_audio_parameter(name,defaultValue);
+		var ret = new class_audio_parameter(name,defaultValue);
+		array_push(
+			global.bard_audio_data[bard_audio_class.parameter], 
+			ret
+		);
+		return ret;
 	}
 	else{
 	    show_message("there's already a parmeter with this name!");

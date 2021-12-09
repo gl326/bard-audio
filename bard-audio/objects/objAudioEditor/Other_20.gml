@@ -170,7 +170,7 @@ exit;
 	                ds_list_add(nlist,ds_list_find_value(clist,i));
 	            }
 			}
-			if k=="Sounds"{
+			if k==ROOT_SOUND_FOLDER{
 				show_debug_message("================ROOT FOLDER CREATED================");
 			}
             k = ds_map_find_next(project_struct,k);

@@ -35,6 +35,6 @@ blend_param_highlight = "";
 blend_drag_x = -1;
 blend_dragging = -1;
 
-curve_list = ds_list_create();
-curve_ind = ds_list_create();
+//curve_list = ds_list_create();
+//curve_ind = ds_list_create();
 

@@ -3,17 +3,16 @@ function aeGainChildren() {
 	with(objAudioEditor){
 	var snd = -1,gain = 0;
 	if argument_count>0{snd = argument[0]; gain = argument[1];}
-	else{if !editing_audio{snd = editing; gain = container_attribute(snd,"gain");}}
+	else{if !editing_audio{snd = editing; gain = container_getdata(snd).gain;}}
 	if snd!=-1{
 	    var con = container_contents(snd);
-	    for(var i=0;i<ds_list_size(con);i+=1){
-	        var c = ds_list_find_value(con,i);
+	    for(var i=0;i<array_length(con);i+=1){
+	        var c = con[i];
 	        if is_string(c){
-	            c = real(c);
-	            ds_map_Replace(c,"gain",gain);
+	            container_getdata(snd).gain = gain;
 	            //aeBusChildren(c,bus);
 	        }else{
-	            ds_map_Replace(global.audio_asset_vol,audio_get_name(c),gain);
+				audio_asset_set_gain(c,gain);
 	        }
 	    }
 	}

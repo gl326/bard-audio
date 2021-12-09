@@ -3,7 +3,7 @@
   "isCompatibility": false,
   "parent": {
     "name": "params",
-    "path": "folders/Scripts/audio_engine/audioeditor/params.yy",
+    "path": "folders/Libraries/Bard/engine/class_editors/params.yy",
   },
   "resourceVersion": "1.0",
   "name": "param_name",

@@ -9,7 +9,7 @@ if !setup{ //get offset from children to me
     
     for(var i=0;i<ds_list_size(children);i+=1){
         var c = ds_list_find_value(children,i);
-        ds_list_add(child_points,point(c.l-l,c.t-t));
+        ds_list_add(child_points,{x:c.l-l,y:c.t-t});
     }
 }
 

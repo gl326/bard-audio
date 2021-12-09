@@ -9,12 +9,13 @@ if am_highlighted(){
         else{
         l = max(-(w/2),min(room_width-(w/2),mouse_x+tbar_grab_x)); t=max(0,min(room_height-24,mouse_y+tbar_grab_y));
         r = l+w; b = t+h;
+		
         for(var i=0;i<ds_list_size(children);i+=1){
         var c = ds_list_find_value(children,i);
         var p = ds_list_find_value(child_points,i);
             var cw=c.r-c.l,ch=c.b-c.t;
-            c.l = l+point_x(p);
-            c.t = t+point_y(p);
+            c.l = l+p.x;
+            c.t = t+p.y;
             c.r = c.l+cw; c.b=c.t+ch;
         }
         }

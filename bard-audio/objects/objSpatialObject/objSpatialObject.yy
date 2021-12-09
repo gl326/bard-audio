@@ -26,7 +26,7 @@
   "overriddenProperties": [],
   "parent": {
     "name": "gameplay",
-    "path": "folders/Objects/audio_engine/gameplay.yy",
+    "path": "folders/Objects/bard_audio_engine/gameplay.yy",
   },
   "resourceVersion": "1.0",
   "name": "objSpatialObject",

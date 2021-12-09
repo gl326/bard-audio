@@ -6,23 +6,7 @@ function aeDeleteBus() {
 	with(objAudioEditor){
 	    if ds_map_exists(global.audio_busses,name){
 	    if show_question("delete bus "+name+"?"){
-	    var con = ds_map_find_value(global.audio_busses,name);
-	    var l = ds_map_find_value(bushierarchy,name),n=ds_list_size(l);
-    
-	            for(var i=0;i<n;i+=1){
-	                if !aeDeleteBus(ds_list_find_value(l,0),1){
-	                    return 0;
-	                }
-	            }
-	            ds_list_destroy(l);
-	            ds_list_delete(bushierarchy,name);
-        
-	    var parlist = busses;
-	    if is_string(ds_map_find_value(con,"parent")){parlist = ds_map_find_value(bushierarchy,ds_map_find_value(con,"parent"));}
-	    ds_list_delete(parlist,ds_list_find_index(parlist,name));
-    
-	    ds_map_destroy(con);
-	    ds_map_delete(global.audio_busses,name);
+	    bus_destroy(name);
       
 	    with(objEditorpanel){
 	        if title==name{

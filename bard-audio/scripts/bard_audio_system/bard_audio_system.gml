@@ -5,6 +5,7 @@
 #macro DISABLE_SYNCGROUPS true //game maker has a 'sync group' feature but it had some weird issues on some platforms right when we were trying to ship wandersong so we rerouted all the logic to avoid using them
 	//this might be a decision we could go back on but in general the fewer different features we're relying on, the better. even at their best sync groups have a lot of weird/unpredictable/unique behavior that 
 	//forces you to treat them different from other ypes of playing sounds.
+#macro ROOT_SOUND_FOLDER "Sounds"
 
 //default values for spatial audio
 audio_listener_orientation(0,0,1,0,-1,0);

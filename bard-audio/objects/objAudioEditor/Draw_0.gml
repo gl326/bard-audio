@@ -129,7 +129,7 @@ if editing!=-1{
                         if is_string(clicked)==is_string(c) and c==clicked{
                             aeSetEditingSound(real(c),!is_string(c))
                         }else{
-                        clicked = real(c);
+							clicked = c;
                         }
                     }
                     if dropped!=-1 and !locked and !holding_param{

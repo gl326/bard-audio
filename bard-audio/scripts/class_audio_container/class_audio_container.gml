@@ -92,11 +92,13 @@ function class_audio_container(_name = "", fromProject = false) constructor{
 	//turn the serialized contents into game data
 	static deserialize_contents = function(){
 		//check parent link
-		if name!="Sounds"{ //this is the master container, so dont look at my parent
+		if name!=ROOT_SOUND_FOLDER{ //this is the master container, so dont look at my parent
 			var parent_data = container_getdata(parent);
 			if is_undefined(parent_data) or array_find_index(parent_data.contents_serialize,name)==-1{
-				show_debug_message(concat("WARNING! container ",name," failed to link to its parent, ",parent,". moving to root folder"));
-				parent = "Sounds";
+				if parent!=""{
+					show_debug_message(concat("WARNING! container ",name," failed to link to its parent, ",parent,". moving to root folder"));
+				}
+				parent = ROOT_SOUND_FOLDER;
 				parent_data = container_getdata(parent);
 				array_push(parent_data.contents_serialize,name);
 				array_push(parent_data.contents,name);		
@@ -149,6 +151,13 @@ function class_audio_container(_name = "", fromProject = false) constructor{
 	static hook_add = function(param){
 		if array_find_index(parameters,param)==-1{
 			array_push(parameters,param);	
+		}
+	}
+	
+	//delete a parameter connection
+	static hook_delete = function(param){
+		while(array_find_index(parameters,param)!=-1){
+			array_delete(parameters,array_find_index(parameters,param),1);	
 		}
 	}
 	

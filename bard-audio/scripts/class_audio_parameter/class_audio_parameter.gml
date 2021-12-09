@@ -67,7 +67,7 @@ function class_audio_parameter(_name="",_default=0) constructor{
 	}
 	
 	static hook_delete_variable = function(_container_name,_container_var_name){
-		var attrs = hooks.Get(_container_name),
+		var attrs = container_hook(_container_name),
 			_i = 0;
 		if !is_undefined(attrs){
 			repeat(array_length(attrs)){
@@ -80,13 +80,20 @@ function class_audio_parameter(_name="",_default=0) constructor{
 			}
 		}
 		
-		static hook_delete_container = function(_container){
-			if hooks.Exists(_container){
-				hooks.Delete(_container);
-			}
-		}
-		
 		return false; //failed to delete (DNE)
+	}
+	
+	static hook_delete_container = function(_container){
+		if hooks.Exists(_container){
+			hooks.Delete(_container);
+		}
+	}
+		
+	static hook_delete = function(_container,_container_var){
+		hook_delete_variable(_container.name,_container_var);
+		if !array_length(container_hook(_container)){
+			hook_delete_container(_container.name);	
+		}
 	}
 }
 
@@ -156,8 +163,8 @@ function class_audio_hook_curve() constructor{
 	                }
 	}
 	
-	static sort = function(){
-		if !sorted{
+	static sort = function(ignoreSorted=false){
+		if ignoreSorted or !sorted{
 			var prio = ds_priority_create(),_i,n = array_length(points);
 			_i=0;
 			repeat(n){
@@ -175,7 +182,9 @@ function class_audio_hook_curve() constructor{
 	
 	static point_add = function(_x=50,_y=50){
 		sorted = false;
-		array_push(points, new class_audio_hook_curve_point(_x,_y));
+		var np = new class_audio_hook_curve_point(_x,_y);
+		array_push(points, np);
+		return np;
 	}
 }
 

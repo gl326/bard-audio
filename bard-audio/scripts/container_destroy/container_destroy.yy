@@ -2,11 +2,11 @@
   "isDnD": false,
   "isCompatibility": false,
   "parent": {
-    "name": "point",
-    "path": "folders/Scripts/audio_engine/point.yy",
+    "name": "containers",
+    "path": "folders/Libraries/Bard/engine/class_editors/containers.yy",
   },
   "resourceVersion": "1.0",
-  "name": "point_normalize",
+  "name": "container_destroy",
   "tags": [],
   "resourceType": "GMScript",
 }
