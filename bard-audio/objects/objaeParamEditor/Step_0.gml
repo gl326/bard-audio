@@ -6,6 +6,8 @@ if !firstframe{
 		dB = true;
 		ymax = 25;	
 	}
+	
+/* old curve editing
 if curves!=-1 and blend_param_drag==""{
 if grabbed!=-1{ //dragging a point
     editing_point = grabbed;
@@ -13,7 +15,7 @@ if grabbed!=-1{ //dragging a point
         yf.editing = ds_list_find_value(points,grabbed);
         //pf.editing = grabbed;
     global.highlighted = -1; //NOT noone
-    if !mouse_held(){
+    if !mouse_check_button(mb_left){
         grabbed = -1; global.highlighted=noone;
         }
     else{
@@ -52,7 +54,6 @@ if grabbed!=-1{ //dragging a point
         
     }
 }else{
-/**/
     if mouse_in_region(gl-grab_range,gt-grab_range,gr+grab_range,gb+grab_range) and grabbed == -1{ //highlighting and click curves
     var stopdel = false;
      ///////set editing curve//////////
@@ -77,12 +78,8 @@ if grabbed!=-1{ //dragging a point
                 or point_distance(mouse_x,mouse_y,px,py)<=grab_range{
                     curve_highlight = cur;
                     attribute = k;
-                    if mouse_clicked(){
+                    if mouse_check_button_pressed(mb_left){
                         curve = cur; points = pts;
-                        /*if j>0{
-                            ds_list_delete(curve_list,j);
-                            ds_list_insert(curve_list,0,k);
-                        }*/
                         }
                     break;
                 }
@@ -106,7 +103,7 @@ if grabbed!=-1{ //dragging a point
                 pyy = remap_value(ds_map_find_value(pp,"y"),gmin,gmax,gb,gt);
             if point_distance(mouse_x,mouse_y,pxx,pyy)<=grab_range{
                 doit = false;
-                if mouse_clicked(){
+                if mouse_check_button_pressed(mb_left){
                     grabbed = i;
                     editing_point = i;
                     grab_x = pxx-mouse_x;
@@ -133,7 +130,7 @@ if grabbed!=-1{ //dragging a point
         }
         
         //////add new point/////////
-        if doit and mouse_clicked() and grabbed ==-1{
+        if doit and mouse_check_button_pressed(mb_left) and grabbed ==-1{
         var np =map_Create("x",xx,"y",yy,"p",0);
         if ins<ds_list_size(points){ds_list_insert_map(points,ins,np);}
         else{ds_list_add_map(points,np); ins = ds_list_size(points)-1;}
@@ -142,6 +139,7 @@ if grabbed!=-1{ //dragging a point
     }
 }   
 }
+*/
 
 if blend!=-1{
     blend_highlight = -1;
@@ -180,13 +178,13 @@ if blend!=-1{
                     if mouse_in_region(max(left,cleft-grab_range),y1,cleft+grab_range,y2){
                         blend_param_highlight = "cleft";
                     }
-                    if mouse_clicked() and blend_param_highlight!=""{
+                    if mouse_check_button_pressed(mb_left) and blend_param_highlight!=""{
                         blend_dragging = i;
                         blend_param_drag = blend_param_highlight;
                         blend_drag_x = remap_value(ds_map_find_value(bl,blend_param_drag),0,100,gl,gr)-mouse_x;
                     }
                 }else{
-                    if mouse_held(){
+                    if mouse_check_button(mb_left){
                     var px = ds_map_find_value(bl,blend_param_drag),
                         nx = remap_value(mouse_x+blend_drag_x,gl,gr,0,100),
                         cl=0,cr=100;

@@ -14,7 +14,7 @@
   "duration": 11.3835831,
   "parent": {
     "name": "chicory_bgm_main",
-    "path": "folders/Sounds/general/test_music/chicory_bgm/chicory_bgm_main.yy",
+    "path": "folders/Sounds/test_music/chicory_bgm/chicory_bgm_main.yy",
   },
   "resourceVersion": "1.0",
   "name": "chicory_meadows_bgm_head_105bpm_CMaj_16beats",

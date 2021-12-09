@@ -14,7 +14,7 @@
   "duration": 9.201519,
   "parent": {
     "name": "test_sfx",
-    "path": "folders/Sounds/general/test_sfx.yy",
+    "path": "folders/Sounds/test_sfx.yy",
   },
   "resourceVersion": "1.0",
   "name": "fart",

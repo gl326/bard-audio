@@ -14,7 +14,7 @@
   "duration": 7.890167,
   "parent": {
     "name": "test_sfx",
-    "path": "folders/Sounds/general/test_sfx.yy",
+    "path": "folders/Sounds/test_sfx.yy",
   },
   "resourceVersion": "1.0",
   "name": "texure_paint_loop",

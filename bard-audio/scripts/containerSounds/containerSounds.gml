@@ -30,7 +30,7 @@ function containerSounds() {
     
 	//sync
 	if !sync{
-	    sync = !global.DISABLE_SYNCGROUPS and ds_map_Find_value(con,"sync");
+	    sync = !DISABLE_SYNCGROUPS and ds_map_Find_value(con,"sync");
 	}
 	if sync {
 	    ds_map_Replace(sound,"sync",1);

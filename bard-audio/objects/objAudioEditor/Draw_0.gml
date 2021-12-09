@@ -1,4 +1,3 @@
-if audio_loaded{
 var butt_h = 36,butt_g = 8,
 	vx = 0,
 	vy = 0,
@@ -21,18 +20,19 @@ draw_sprite(sprAudioButtons,0,16,24+36); //search
 
 draw_line(room_width/3,0,room_width/3,room_height);
 draw_set_halign(fa_left);
+list_top_y = 24+72+36;
 
 switch(tab){
 case 2:
-drawBusList(bus_search,16,24+72+36);
+drawBusList(bus_search,16,list_top_y);
 break;
 
 case 1:
-drawParamList(param_search,16,24+72+36);
+drawParamList(param_search,16,list_top_y);
 break;
 
 default:
-drawContainerList(container_search,16,24+72+36);
+drawContainerList(container_search,16,list_top_y - (container_scroll*24));
 break;
 }
 
@@ -51,11 +51,15 @@ if editing!=-1{
             draw_sprite(sprAudioButtons,7,(room_width/3)+(room_width*4.5/9)+8+string_width(("BUS"))+12,12+8+48+8+butt_h+8);
             }
     }else{
-    if ds_exists(editing,ds_type_map){
+    //if ds_exists(editing,ds_type_map)
+	{
         draw_set_color(color_fg);
         draw_set_halign(fa_right);
         if container_type(editing)==2{
             draw_text((room_width/3)+(room_width*2/9),(8*4)+(36*4)+4,("AMT"));
+        }
+		if container_type(editing)==0{
+            draw_text((room_width/3)+(room_width*2.5/9),(8*4)+(36*4)+4,("CHOOSER"));
         }
         draw_text((room_width/3)+(room_width*4.5/9),8,("BUS"));
         if ds_map_exists(global.audio_busses,busbut.text){
@@ -85,31 +89,31 @@ if editing!=-1{
             r=(room_width/3)+(room_width/3)-8,
             b=room_height-8;
         draw_rectangle(l,t,r,b,false);
-        var cont = container_contents(editing),cn = ds_list_size(cont),stopdrop = false;
-        var locked = !(ds_list_find_index(locked_containers,container_name(editing))==-1);
+        var cont = container_contents(editing),cn = array_length(cont),stopdrop = false;
+        var locked = (editing.from_project);
         for(var i=0;i<cn;i+=1){
-            var c = ds_list_find_value(cont,i),name;
+            var c = cont[i],name;
             if is_string(c){
-                name = container_name(real(c));
+                name = c;
                 draw_set_color(color_fg);}
             else{
-                name = audio_get_name(c);
+                name = (c>=0)?audio_get_name(c):"<MISSING SOUND>";
                 draw_set_color(color_fg2)}
             var yy = t+(i*24);
             if mouse_in_region(l,yy,r,yy+24) and global.highlighted==noone{
                 draw_rectangle(l,yy,r,yy+24,true);
                 //if ds_list_find_index(locked_containers,container_name(editing))==-1
                 {
-                    if mouse_clicked() and keyboard_check(vk_delete) and !locked{
-                        ds_list_delete(cont,i);
+                    if mouse_check_button_pressed(mb_left) and keyboard_check(vk_delete) and !locked{
+                        array_delete(cont,i,1);
                         aeResetBlendMap(editing);
-                        aeCountReferences();
+                        //aeCountReferences();
                         //save_audioedit();
                         break;
                     }
-                    if mouse_clicked(){
+                    if mouse_check_button_pressed(mb_left){
                         if !locked{
-                        grabbed = real(c);
+                        grabbed = c;
                         holding_audio = !is_string(c);
                         if keyboard_check(vk_alt){
                                 holding_copy = true;
@@ -122,7 +126,7 @@ if editing!=-1{
                         }
                         hold_x=mouse_x; hold_y=mouse_y;
                         }
-                        if real(c)==clicked{
+                        if is_string(clicked)==is_string(c) and c==clicked{
                             aeSetEditingSound(real(c),!is_string(c))
                         }else{
                         clicked = real(c);
@@ -140,7 +144,7 @@ if editing!=-1{
                                     if cont==holding_list and i>holding_ind{i -= 1;}
                                     aeDeleteDropped();
                                 }
-                                ds_list_insert(cont,i,dropped);
+                                array_insert(cont,i,dropped);
                                 aeResetBlendMap(editing);
                                 //save_audioedit();
                                 }
@@ -149,7 +153,7 @@ if editing!=-1{
                                     if cont==holding_list and i>holding_ind{i -= 1;}
                                     aeDeleteDropped();
                                 }
-                                ds_list_insert(cont,i,string(dropped));
+                                array_insert(cont,i,string(dropped));
                                 aeResetBlendMap(editing);
                                 //save_audioedit();
                                 }}
@@ -172,7 +176,7 @@ if editing!=-1{
                         if holding_move{
                             aeDeleteDropped();
                         }
-                        ds_list_add(cont,dropped);
+                        array_push(cont,dropped);
                         aeResetBlendMap(editing);
                         //save_audioedit();
                         }
@@ -180,7 +184,7 @@ if editing!=-1{
                         if holding_move{
                             aeDeleteDropped();
                         }
-                        ds_list_add(cont,string(dropped));
+                        array_push(cont,string(dropped));
                         aeResetBlendMap(editing);
                         //save_audioedit();
                         }}
@@ -207,16 +211,5 @@ if holding!=-1{
             else{name+="#REFERENCING";}}
         draw_text(mouse_x,mouse_y,(name));
     }
-}
-}else{
-    draw_set_color(c_black);
-    draw_set_font(ftDebug);
-    draw_set_halign(fa_left);
-    draw_set_valign(fa_bottom);
-	if audio_load_progress<2{
-		draw_text_transformed(__view_get( e__VW.XView, 0 ),__view_get( e__VW.YView, 0 )+__view_get( e__VW.HView, 0 ),("Loading "+string(files_loaded)+" files..."),2,2,0);
-	}else{
-		draw_text_transformed(__view_get( e__VW.XView, 0 ),__view_get( e__VW.YView, 0 )+__view_get( e__VW.HView, 0 ),("Loading "+string(files_loaded)+" files + folders..."),2,2,0);
-	}
 }
 

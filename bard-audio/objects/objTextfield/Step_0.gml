@@ -7,9 +7,9 @@ if slider and !slide_setup{
 if (container_edit and !objAudioEditor.editing_audio and (editing!=objAudioEditor.editing or force_update)){
     editing = objAudioEditor.editing;
     force_update = 0;
-    if objAudioEditor.editing!=-1{
-        text = string(ds_map_Find_value(editing,param));
-        if is_string(ds_map_Find_value(editing,param)) and !istext{param_ref = text; draggable=false;}
+    if is_struct(objAudioEditor.editing){
+        text = string(variable_struct_get(editing,param));
+        if is_string(variable_struct_get(editing,param)) and !istext{param_ref = text; draggable=false;}
         else{
             param_ref = ""; draggable = true;
             if dB{
@@ -43,8 +43,8 @@ if objAudioEditor.dragging==id and editing>0{
         if editing!=-1 and (!objAudioEditor.editing_audio or !container_edit){
             var val = c_val;
             if dB{val = (power(10,(val)/(20))-1)*100;}
-            if ds_map_Find_value(editing,param)!=val{
-                ds_map_Replace(editing,param,val);
+            if variable_struct_get(editing,param)!=val{
+                variable_struct_set(editing,param,val);
             }
         }
         
@@ -65,11 +65,11 @@ if am_highlighted(){
         }
     }
     //alt click reset
-    if keyboard_check(vk_alt) and mouse_clicked() and mouse_in_region(l,t,r,b) and editing>0 and param_ref==""{
+    if keyboard_check(vk_alt) and mouse_check_button_pressed(mb_left) and mouse_in_region(l,t,r,b) and editing>0 and param_ref==""{
         text = "0";
-        ds_map_Replace(editing,param,0);
+        variable_struct_set(editing,param,0);
     }
-    if keyboard_check_pressed(vk_enter) or (mouse_clicked() and !mouse_in_region(l,t,r,b)){
+    if keyboard_check_pressed(vk_enter) or (mouse_check_button_pressed(mb_left) and !mouse_in_region(l,t,r,b)){
         global.highlighted = noone;
     }
     }else{
@@ -87,11 +87,13 @@ if am_highlighted(){
                                     param),
                                     "points");//yep
                                     */
-        cur.curves = ds_map_find_value(
+
+        cur.curves = global.audio_params[?param_ref].container_variable_hook(editing,param).curve;
+		/*ds_map_find_value(
                                 ds_map_find_value(
                                     global.audio_params,
                                     param_ref),
-                                    container_name(editing));
+                                    container_name(editing));*/
 		cur.curve_name = param;//param_ref;
         cur.attribute = param;
         cur.param = param_ref;
@@ -105,11 +107,11 @@ if am_highlighted(){
             if !istext{
             var val = real(text);
             if dB{val = (power(10,(val)/(20))-1)*100;}
-            if ds_map_Find_value(editing,param)!=val{
-                ds_map_Replace(editing,param,val);
+            if variable_struct_get(editing,param)!=val{
+                variable_struct_set(editing,param,val);
             }}else{
-            if !is_equal(ds_map_Find_value(editing,param),string(text)){
-                ds_map_Replace(editing,param,string(text));
+            if !is_equal(variable_struct_get(editing,param),string(text)){
+                variable_struct_set(editing,param,string(text));
             }
             }
         }else{
@@ -137,7 +139,7 @@ if param_ref!="" and mouse_in_region(l,t,r,b) and mouse_check_button_pressed(mb_
     param_ref = "";
     text = "0";
     if editing>0{
-		ds_map_Replace(editing,param,0);
+		variable_struct_set(editing,param,0);
 		}
     global.highlighted = id;
     draggable = true;
@@ -145,26 +147,26 @@ if param_ref!="" and mouse_in_region(l,t,r,b) and mouse_check_button_pressed(mb_
 
 if slider and param_ref=="" and editing!=-1 and !objAudioEditor.editing_audio{
     var slide_x;
-	if is_real(ds_map_Find_value(editing,param)){
+	if is_real(variable_struct_get(editing,param)){
     if dB{
         slide_x = 
             lerp(slide_l,slide_r,
-            clamp(InvQuadInOut((ds_map_Find_value(editing,param)-slider_min)/(slider_max-slider_min)),0,1)
+            clamp(InvQuadInOut((variable_struct_get(editing,param)-slider_min)/(slider_max-slider_min)),0,1)
             );
     }else{
     slide_x = 
         lerp(slide_l,slide_r,
-        clamp((ds_map_Find_value(editing,param)-slider_min)/(slider_max-slider_min),0,1)
+        clamp((variable_struct_get(editing,param)-slider_min)/(slider_max-slider_min),0,1)
         );
     }
     
     if !slider_select{
-        if mouse_clicked() and mouse_in_region(slide_x-butt_w,t,slide_x+butt_w,b) and global.highlighted==noone{
+        if mouse_check_button_pressed(mb_left) and mouse_in_region(slide_x-butt_w,t,slide_x+butt_w,b) and global.highlighted==noone{
             slider_select = true;
             slide_select_x = mouse_x-slide_x;
         }
     }else{
-        if !mouse_held(){
+        if !mouse_check_button(mb_left){
             slider_select = false;
         }else{
             var amt = clamp((mouse_x-slide_select_x-slide_l)/(slide_r-slide_l),0,1),
@@ -185,8 +187,8 @@ if slider and param_ref=="" and editing!=-1 and !objAudioEditor.editing_audio{
             if editing!=-1 and (!objAudioEditor.editing_audio or !container_edit){
                 var val = c_val;
                 //if dB{val = (power(10,(val)/(20))-1)*100;}
-                if ds_map_Find_value(editing,param)!=val{
-                    ds_map_Replace(editing,param,val);
+                if variable_struct_get(editing,param)!=val{
+                    variable_struct_set(editing,param,val);
                 }
             }
         }

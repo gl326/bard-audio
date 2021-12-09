@@ -10,7 +10,7 @@ function aeRenameEditingSound() {
 	        if val!=""{
 	            var oldname = container_name(editing);
 	            ds_map_delete(global.audio_containers,oldname);
-	            ds_map_replace(editing,"name",val);
+	            variable_struct_set(editing,"name",val);
 	            ds_map_add_map(global.audio_containers,container_name(editing),editing);
 	            for(var p=0;p<ds_list_size(params);p+=1){
 	                var par = ds_list_find_value(params,p);

@@ -4,6 +4,6 @@ function music_bpm() {
 	if !is_undefined(player){
 		return player.get_bpm();
 	}else{
-		return false;	
+		return 120;	
 	}
 }

@@ -46,7 +46,7 @@ function drawBusList() {
 	                    }
 	                }
 	            }
-	            if mouse_clicked() and global.highlighted==noone{
+	            if mouse_check_button_pressed(mb_left) and global.highlighted==noone{
 	                grabbed = con;
 	                holding_bus = true;
 	                if keyboard_check(vk_alt){holding_copy = true;}

@@ -32,16 +32,16 @@ if slider and param_ref=="" and editing!=-1 and !objAudioEditor.editing_audio{
     draw_rectangle(slide_l,lerp(t,b,.4),slide_r,lerp(t,b,.6),false);
     
     var slide_x;
-	if is_real(ds_map_Find_value(editing,param)){
+	if is_real(variable_struct_get(editing,param)){
 	    if dB{
 	        slide_x = 
 	            lerp(slide_l,slide_r,
-	            clamp(InvQuadInOut((ds_map_Find_value(editing,param)-slider_min)/(slider_max-slider_min)),0,1)
+	            clamp(InvQuadInOut((variable_struct_get(editing,param)-slider_min)/(slider_max-slider_min)),0,1)
 	            );
 	    }else{
 	    slide_x = 
 	        lerp(slide_l,slide_r,
-	        clamp((ds_map_Find_value(editing,param)-slider_min)/(slider_max-slider_min),0,1)
+	        clamp((variable_struct_get(editing,param)-slider_min)/(slider_max-slider_min),0,1)
 	        );
 	    }
 	    draw_set_color(objAudioEditor.color_fg2);

@@ -15,8 +15,8 @@ if am_highlighted(){
 }
 
 if script==aeToggleSoundAttribute{
-    if objAudioEditor.editing!=-1 and !objAudioEditor.editing_audio{
-        lit = ds_map_find_value(objAudioEditor.editing,args[0]);
+    if is_struct(objAudioEditor.editing){
+        lit = variable_struct_get(objAudioEditor.editing,args[0]);
     }
 }
 

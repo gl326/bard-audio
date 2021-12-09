@@ -11,7 +11,7 @@ function class_audio_parameter(_name="",_default=0) constructor{
 	ds_map_add(global.audio_params,name,self); //track me!
 	
 	static set_container_values = function(_container){
-		var attrs = hooks.Get(_container.name),
+		var attrs = container_hook(_container),
 			ret = false;
 		if !is_undefined(attrs){
 			var _i = 0;
@@ -26,6 +26,14 @@ function class_audio_parameter(_name="",_default=0) constructor{
 	}
 	
 	//hook editing functions - slow, should only happen in the audio editor.
+	static container_variable_hook = function(_container,_container_var){
+		return hook_find_variable(container_hook(_container),_container_var);
+	}
+	
+	static container_hook = function(_container){
+		return hooks.Get(_container.name);
+	}
+	
 	static hook_add = function(_container,_container_var){
 		var _container_name = _container.name;
 		if array_find_index(_container.parameters,name)==-1{
@@ -35,8 +43,8 @@ function class_audio_parameter(_name="",_default=0) constructor{
 		if !hooks.Exists(_container_name){
 			hooks.Add(_container_name,[]);
 		}
-		var attrs = hooks.Get(_container_name),
-			hook = hook_find_variable(attrs,_container_var);
+		var //attrs = container_hook(_container),
+			hook = container_variable_hook(_container,_container_var);
 
 		if is_undefined(hook){
 			hook = new class_audio_hook(_container_var);

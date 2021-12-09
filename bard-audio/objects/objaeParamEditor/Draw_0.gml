@@ -55,30 +55,29 @@ if mouse_in_region(gl,gb,gr,b-32){
     }
     draw_line(xx,yy,xx,gb+4+24+8);
     draw_line(lerp(gr,gl,.5),gb+4+24+8,xx,gb+4+24+8);
-    if mouse_held(){
+    if mouse_check_button(mb_left){
         //ds_map_Replace(global.audio_state,param,remap_value(mouse_x,gl,gr,0,100));
         audio_param_set(param,remap_value(mouse_x,gl,gr,0,100));
     }
 }
 //draw blend regions
-if blend!=-1 and curves==-1{
+if is_array(blend) and !is_struct(curves){
     var cn = 0;
-    if curves!=-1{cn = ds_list_size(curve_list);}
-    var n = ds_list_size(blend),
+    var n = array_length(blend),
         yt = gmax*min(1,n/4);
     draw_set_halign(fa_left);
     for(var i=0;i<n;i+=1){
         var col = ds_list_find_value(objAudioEditor.editor_colors,(cn+i) mod ds_list_size(objAudioEditor.editor_colors)),
-            bl = ds_list_find_value(blend,i),
+            bl = blend[i],
             yy = yt- choice(((i mod 4)*50),(i mod 8)*25,n>4), 
             y1 = remap_value(yy,-gmax,gmax,gb,gt),
             y2 = remap_value(yy-50,-gmax,gmax,gb,gt),
             
-            left = remap_value(ds_map_find_value(bl,"left"),0,100,gl,gr),
-            right = remap_value(ds_map_find_value(bl,"right"),0,100,gl,gr),
-            cleft = remap_value(ds_map_find_value(bl,"cleft"),0,100,gl,gr),
-            cright = remap_value(ds_map_find_value(bl,"cright"),0,100,gl,gr),
-            cont = ds_list_find_value(container_contents(objAudioEditor.editing),i),
+            left = remap_value(bl.left,0,100,gl,gr),
+            right = remap_value(bl.right,0,100,gl,gr),
+            cleft = remap_value(bl.cleft,0,100,gl,gr),
+            cright = remap_value(bl.cright,0,100,gl,gr),
+            cont = container_contents(objAudioEditor.editing)[i],
             name="";
         if is_real(cont) or is_string(cont){
         if blend_highlight==i{
@@ -96,7 +95,7 @@ if blend!=-1 and curves==-1{
             }
             }
             else{draw_set_color(col);}
-            if is_string(cont){name = container_name(real(cont));}
+            if is_string(cont){name = cont;}
             else{name = audio_get_name(cont);}
         draw_set_alpha(.25);
         draw_blendregion(left,y1,right,y2,cleft,cright,false);
@@ -112,6 +111,64 @@ if blend!=-1 and curves==-1{
 
 draw_set_halign(fa_center);
 //draw points and lineS
+if is_struct(curves){
+	var col = ds_list_find_value(objAudioEditor.editor_colors,0);
+	var k = curve_name;
+	draw_set_color(col);
+    draw_text(lerp(l,r,.5/*(j+1)/(cn+1)*/),t+28,(k));
+	var _i = 0,
+		pts = curves.points,
+		pts_n = array_length(pts),
+		ppx = "", ppy = "";
+	repeat(pts_n){
+		var p = pts[_i],
+            px = p.x,
+            py = p.y,
+			xx = lerp(gr,gl,(xmax-px)/(xmax-xmin)),
+            yy = lerp(gt,gb,(ymax-py)/(ymax-ymin));
+			
+		draw_set_color(objAudioEditor.color_fg);
+        if grabbed==_i{
+            draw_circle(xx,yy,grab_range,false);
+        }else{
+            if editing_point==_i{
+                draw_circle(xx,yy,grab_range,true);
+            }
+        }
+		
+		draw_set_color(col);
+		draw_circle(xx,yy,8,false);
+        if _i==0{draw_line_width(gl,yy,xx,yy,4);}
+        if _i==pts_n-1{draw_line_width(gr,yy,xx,yy,4);}
+        if !is_string(ppx){
+            draw_line_width(ppx,ppy,xx,yy,4);
+            if debug_mode{
+                draw_set_color(c_white);
+                draw_arrow(ppx,ppy,xx,yy,8);
+            }
+        }
+        
+        if grabbed==-1{
+	        if point_distance(mouse_x,mouse_y,xx,yy)<grab_range{
+	            draw_dotted_circle(xx,yy,grab_range+1);
+	        }
+        }
+        ppx = xx; ppy = yy;
+		
+		_i ++;
+	}
+	
+	draw_set_color(objAudioEditor.color_fg);
+	
+	//draw underside params
+	draw_set_halign(fa_right);
+	draw_text(l+text_w-4,b-24,("x"));
+	draw_text(lerp(l,r,1/2)+text_w-4,b-24,("y"));
+	//draw_text(lerp(l,r,2/3)+text_w-4,b-24,("pow"));
+	draw_set_halign(fa_left);
+}
+exit; ////////////////////////
+
 if curves!=-1{
 //var cn = ds_list_size(curve_list);
 //var stopdel = false;
@@ -162,13 +219,7 @@ if curves!=-1{
     }
 //}
 
-draw_set_color(objAudioEditor.color_fg);
-//draw underside params
-draw_set_halign(fa_right);
-draw_text(l+text_w-4,b-24,("x"));
-draw_text(lerp(l,r,1/3)+text_w-4,b-24,("y"));
-draw_text(lerp(l,r,2/3)+text_w-4,b-24,("pow"));
-draw_set_halign(fa_left);
+
 
 if grabbed!=-1{
     //debug

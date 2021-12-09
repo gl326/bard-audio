@@ -52,9 +52,8 @@ drag_x = -1; drag_y = -1;
     
     //containers = ds_list_create(); //REAL = audio asset, STRING = id of subcontainer
 	loaded_search = false;
-	containers_display = [];
     
-    container_search = ds_list_create(); //current display list of container
+    container_search = [];//ds_list_create(); //current display list of container
     editing_history = ds_list_create(); //list of visited containers
     history_id = 0;
     

@@ -3,13 +3,13 @@ function aeDefaultGainRand() {
 	with(objAudioEditor){
 	if editing!=-1{
 	if !editing_audio{
-	    if ds_map_Find_value(editing,"volmin")==0
-	    and ds_map_Find_value(editing,"volmax")==0{
-	        ds_map_Replace(editing,"volmin",-20);
-	        ds_map_Replace(editing,"volmax",20);
+	    if variable_struct_get(editing,"volmin")==0
+	    and variable_struct_get(editing,"volmax")==0{
+	        variable_struct_set(editing,"volmin",-20);
+	        variable_struct_set(editing,"volmax",20);
 	    }else{
-	        ds_map_Replace(editing,"volmin",0);
-	        ds_map_Replace(editing,"volmax",0);
+	        variable_struct_set(editing,"volmin",0);
+	        variable_struct_set(editing,"volmax",0);
 	    }
 	    with(objTextfield){force_update = 1;}
 	}

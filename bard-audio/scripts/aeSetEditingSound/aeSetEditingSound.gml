@@ -5,6 +5,9 @@
 function aeSetEditingSound() {
 	var cid=argument[0],aud=argument[1],clearhist = true, ret = true;
 	if argument_count>=3{clearhist = !argument[2];}
+	if is_string(cid){
+		cid = container_getdata(cid);	
+	}
 	with(objAudioEditor){
 	    holding =-1;
 	    if editing!=-1{
@@ -25,17 +28,7 @@ function aeSetEditingSound() {
 	    }
 	    }
 	    var old_edita = editing_audio;
-	                editing_audio = aud;
-	                if !editing_audio{
-	                    if !ds_exists(cid, ds_type_map){
-	                        show_message("this container's data doesn't exist for some reason!");
-	                        //go back
-	                        cid = editing;
-	                        editing_audio = old_edita;
-	                        return false;
-	                        }
-	                }
-                
+	                editing_audio = aud;                
 	                editing = cid;
                 
 	                if !editing_audio{
@@ -62,7 +55,7 @@ function aeSetEditingSound() {
 	                    }
                     
 	                    assetbusbut.param = audio_get_name(editing);
-	                    assetbusbut.text = string(ds_map_Find_value(global.audio_asset_bus,audio_get_name(editing)));
+	                    assetbusbut.text = audio_asset_bus(editing);
 	                }
                 
 	}

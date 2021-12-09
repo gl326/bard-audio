@@ -21,6 +21,7 @@ function class_audio_instance(_container,_sound=-1,_loops=false,_gain=0,_pitch=0
 	threed = false;
 	
 	fadein = 0;
+	fadeout = 0;
 	delayin = 0;
 	delayout = 0;
 	
@@ -29,7 +30,7 @@ function class_audio_instance(_container,_sound=-1,_loops=false,_gain=0,_pitch=0
 	
 	blend = 0;
 	
-	bus = ds_map_Find_value(global.audio_asset_bus,file);
+	bus = audio_asset_bus(file);
 	bus_vol = 0;
 	owner = -1;
 	

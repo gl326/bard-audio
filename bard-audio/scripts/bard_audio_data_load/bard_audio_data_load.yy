@@ -2,11 +2,11 @@
   "isDnD": false,
   "isCompatibility": false,
   "parent": {
-    "name": "audioeditor",
-    "path": "folders/Scripts/audio_engine/audioeditor.yy",
+    "name": "files",
+    "path": "folders/Libraries/Bard/engine/files.yy",
   },
   "resourceVersion": "1.0",
-  "name": "containersDSmark",
+  "name": "bard_audio_data_load",
   "tags": [],
   "resourceType": "GMScript",
 }

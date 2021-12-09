@@ -7,5 +7,5 @@ function container_play(_container,_option = false,_playedBy = undefined){
 			_playedBy = id;	
 		}
 	}
-	return container_player(_container,true).play(_option,_playedBy).play_id;
+	return container_player(_container,true).play(_option,_playedBy).playid;
 }

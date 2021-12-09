@@ -1,11 +1,11 @@
 if am_highlighted(){
  depth = minHighlightableDepth()-1;
  /////////////dragging//////////
- if (mouse_held() and mouse_in_region(l,t,r,t+24)) or (tbar_grab_x!=-1 or tbar_grab_y!=-1){
+ if (mouse_check_button(mb_left) and mouse_in_region(l,t,r,t+24)) or (tbar_grab_x!=-1 or tbar_grab_y!=-1){
     if tbar_grab_x==-1 or tbar_grab_y==-1{
         tbar_grab_x = l-mouse_x; tbar_grab_y=t-mouse_y;
     }else{
-        if !mouse_held(){tbar_grab_x=-1; tbar_grab_y=-1;}
+        if !mouse_check_button(mb_left){tbar_grab_x=-1; tbar_grab_y=-1;}
         else{
         l = max(-(w/2),min(room_width-(w/2),mouse_x+tbar_grab_x)); t=max(0,min(room_height-24,mouse_y+tbar_grab_y));
         r = l+w; b = t+h;

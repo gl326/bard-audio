@@ -36,7 +36,7 @@ owner = noone;
 
 simple_sound = true; //when true, each sound "instance" is just one audio file so we can update params faster
 
-play_id = -1; //each time we are played, this increments so the sounds playing together have the same id
+playid = -1; //each time we are played, this increments so the sounds playing together have the same id
 am_playing = false;
 
 //track events
@@ -53,14 +53,6 @@ measures = floor(beats/beats_per_measure);
 time_in_beats = 0;
 
 spec_snd = (container.specmax>0 or container.specmin>0);
-		
-		///////not sure this is necessary//////
-	    if container.music{
-	        music = true;
-			group_track_pos = 0;
-			the_audio.measure = 0;
-	    }else{music = false;}
-		////////
 
 space_rand = false;
 
@@ -162,6 +154,7 @@ static unpause = function(){
 }
 
 static play = function(option=false,_playedBy=noone){
+	playid += 1;
 	seed = random_get_seed();
 	am_playing = true;
 	if !is_struct(_playedBy) and _playedBy!=noone{owner = _playedBy;}
@@ -169,7 +162,7 @@ static play = function(option=false,_playedBy=noone){
 	var playlist = container.create_instances(option);
 
 	if sync{
-		if !global.DISABLE_SYNCGROUPS{
+		if !DISABLE_SYNCGROUPS{
 			group = audio_create_sync_group(group_loop);
 		}else{
 			fake_sync = true;
@@ -184,7 +177,7 @@ static play = function(option=false,_playedBy=noone){
 		play_instance(playlist[i],option);
 		i ++;
 	}
-	auto_play = (con.type==CONTAINER_TYPE.CHOICE and con.contin);
+	auto_play = (container.type==CONTAINER_TYPE.CHOICE and container.contin);
 	
 	if group!=-1 and group_delay{
 	    audio_start_sync_group(group);
@@ -416,7 +409,7 @@ static update_amplaying = function(){
 	}
 
 	var i = 0;
-	repeat(n){
+	repeat(_n){
 		var s = playing[i];
 		if !playing[i].isPlaying() and !((group_playing or group_delay) and s.sync){
 			var idd = s.playid;
@@ -430,14 +423,14 @@ static update_amplaying = function(){
 			}
 		
 			s.destroy(self);
-			n -= 1;
+			_n -= 1;
 		
 	        if auto_play and (index<array_length(container.contents) or container.loop){
 	            if !spec_snd{
 	                play(true);
 	            }
 	        }else{
-	            if n+n2<=0 and !group_playing and !group_delay// and spec_time<=0
+	            if _n+n2<=0 and !group_playing and !group_delay// and spec_time<=0
 				{
 					am_playing = false;
 					///#music_state
@@ -602,11 +595,7 @@ static update_delayin = function(){
 	            }
 	        }else{
 				s.play(self);
-				///music stuff....
-				if music{
-					group_track_pos = 0;	
-				}
-				//////
+
 				if spec_snd{
 					//play me again!
 					var my_id = s.playid,
@@ -790,19 +779,15 @@ static stop = function(sid=-1,option=false){
 	        
 			am_playing = !stopped;
 	    //}
-	    if type==0{
+	    if container.type==CONTAINER_TYPE.CHOICE{
 	        if container.contin{
 	            index = 0;
 	            auto_play = false;
 	        }
 	    }
-	    if type==1 and !option{ //looop tail
+	    if container.type==CONTAINER_TYPE.HLT and !option{ //looop tail
 	        play(1);
 	    }
-		
-		//music state stuff......
-	   //if music or bpm>0{the_audio.container_has_beat = false;}//give control back to the_audio
-
 	return 1;
 }
 

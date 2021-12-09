@@ -11,8 +11,7 @@ function class_audio_container(_name = "", fromProject = false) constructor{
 	contents_serialize = []; //same data as above, but made firnedly for serialize/deserialize
 	
 	type = CONTAINER_TYPE.CHOICE;
-	
-	music = false;
+
 	bpm = 0;
 	beats_per_measure = 4;
 //	varybpm = false;
@@ -45,13 +44,15 @@ function class_audio_container(_name = "", fromProject = false) constructor{
 	sync = false;
 	
 	gain = 0;
-	pitch = 100;
+	pitch = 0;
+	bus = "";
 	
 	randstart = 0;
 	starttime = 0;
 	
 	vibration = false; //if true, this plays a second instance that vibrates a ps5 controller :o
 	
+	blend_on = false;
 	blend_map = [];
 	blend = 0;
 	
@@ -91,13 +92,17 @@ function class_audio_container(_name = "", fromProject = false) constructor{
 	//turn the serialized contents into game data
 	static deserialize_contents = function(){
 		//check parent link
-		var parent_data = container_getdata(parent);
-		if is_undefined(parent_data) or array_find_index(parent_data.contents_serialize,name)==-1{
-			show_debug_message(concat("WARNING! container ",name," failed to link to its parent, ",parent,". moving to root folder"));
-			parent = "Sounds";
-			parent_data = container_getdata(parent);
-			array_push(parent_data.contents_serialize,name);
-			array_push(parent_data.contents,name);		
+		if name!="Sounds"{ //this is the master container, so dont look at my parent
+			var parent_data = container_getdata(parent);
+			if is_undefined(parent_data) or array_find_index(parent_data.contents_serialize,name)==-1{
+				show_debug_message(concat("WARNING! container ",name," failed to link to its parent, ",parent,". moving to root folder"));
+				parent = "Sounds";
+				parent_data = container_getdata(parent);
+				array_push(parent_data.contents_serialize,name);
+				array_push(parent_data.contents,name);		
+			}
+		}else{
+			parent = "";	
 		}
 		
 		var n = array_length(contents_serialize);
@@ -192,7 +197,7 @@ function class_audio_container(_name = "", fromProject = false) constructor{
     
 	//sync
 	if !_sync{
-		_sync = !global.DISABLE_SYNCGROUPS and sync;
+		_sync = !DISABLE_SYNCGROUPS and sync;
 	}
 	
 	if sync {
@@ -281,25 +286,27 @@ function class_audio_container(_name = "", fromProject = false) constructor{
 			i ++;
 	    }
     
-	    i=0;
-	    repeat(min(n,array_length(blend_map))){
-	        var newsound = newlist[i];
-	            //var nvol = ds_map_Find_value(newsound,"vol");
-	            var ble = blend_map[i],
-	                bl = ble.left,
-	                br = ble.right,
-	                bcl = ble.cleft,
-	                bcr = ble.cright,
-	                adj = 1;
-	            if blend<bl or blend>br{
-					adj = 0;
-				}else{
-	                if blend<bcl{if bcl>bl{adj = QuadInOut(lerp(1,0,(bcl-blend)/(bcl-bl)));}}
-	                else{if blend>bcr and br>bcr{adj = QuadInOut(lerp(0,1,(br-blend)/(br-bcr)));}}
-	            } 
-				newsound.blend = lerp(-1,newsound.blend,adj);
+		if blend_on{
+		    i=0;
+		    repeat(min(n,array_length(blend_map))){
+		        var newsound = newlist[i];
+		            //var nvol = ds_map_Find_value(newsound,"vol");
+		            var ble = blend_map[i],
+		                bl = ble.left,
+		                br = ble.right,
+		                bcl = ble.cleft,
+		                bcr = ble.cright,
+		                adj = 1;
+		            if blend<bl or blend>br{
+						adj = 0;
+					}else{
+		                if blend<bcl{if bcl>bl{adj = QuadInOut(lerp(1,0,(bcl-blend)/(bcl-bl)));}}
+		                else{if blend>bcr and br>bcr{adj = QuadInOut(lerp(0,1,(br-blend)/(br-bcr)));}}
+		            } 
+					newsound.blend = lerp(-1,newsound.blend,adj);
 	            
-				i++;
+					i++;
+			}
 		}
 	    
 		i = 1;
@@ -368,7 +375,7 @@ function class_audio_container(_name = "", fromProject = false) constructor{
 	    else{ind = 0;}
 	    if !seq and ind==0{
 	        var lp = contents[n-1]; //last played
-			array_sort(contents,function(){choose(-1,1);}); //array_shuffle(contents);
+			array_shuffle(contents);
 	        if !first and n>1 and lp==contents[0]{
 	                array_delete(contents,0,1);
 	                array_push(contents,lp);
@@ -428,7 +435,7 @@ function class_audio_container(_name = "", fromProject = false) constructor{
 
 function class_audio_container_blendmap() constructor{
 	left = 0;
-	right = 1;
+	right = 100;
 	cleft = 0;
-	cright = 1;
+	cright = 100;
 }

@@ -20,7 +20,7 @@ saved_fx += (0-saved_fx)*.06;
 
 if dragging!=noone{
 if !drag_start and point_distance(drag_x,drag_y,mouse_x,mouse_y)>10{drag_start = true;}
-if !mouse_held(){dragging = noone; drag_start = false;}
+if !mouse_check_button(mb_left){dragging = noone; drag_start = false;}
 }
 
 if clicked!=-1{
@@ -31,6 +31,7 @@ if clicked!=-1{
     }
 }
 
+container_search = container_root_list();
 /* search update...
 search_update -=1;
 if search_update<=0{
@@ -151,3 +152,4 @@ if keyboard_check_pressed(vk_down) or mouse_wheel_down(){
     }
 }
 
+bard_audio_update();

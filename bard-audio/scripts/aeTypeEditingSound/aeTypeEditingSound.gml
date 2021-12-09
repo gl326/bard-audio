@@ -8,7 +8,7 @@ function aeTypeEditingSound(argument0) {
 	        if script==aeTypeEditingSound{lit=(argument0==args[0]);}
 	    }
 	    (other.id).lit = true;
-	    ds_map_Replace(editing,"type",argument0);
+	    editing.type = argument0;
     
 	    var l = -1;
 	    switch(argument0){

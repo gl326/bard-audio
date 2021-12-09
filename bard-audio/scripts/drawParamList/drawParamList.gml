@@ -16,7 +16,7 @@ function drawParamList(argument0, argument1, argument2) {
 	    draw_text(xx,yy,(name+" ("+string(def)+")"));
 	    if mouse_in_region(8,yy,(room_width/3)-8,yy+(24)){
 	        draw_rectangle(2,yy,(room_width/3)-8,yy+(24),true);
-	        if mouse_clicked() and global.highlighted==noone{
+	        if mouse_check_button_pressed(mb_left) and global.highlighted==noone{
 	            holding = con;
 	            grabbed = con;
 	            holding_audio = false;
@@ -38,7 +38,7 @@ function drawParamList(argument0, argument1, argument2) {
 	                }
 	            else{clicked = con;}
 	        }
-	        if mouse_clicked() and keyboard_check(vk_delete){
+	        if mouse_check_button_pressed(mb_left) and keyboard_check(vk_delete){
 	            if show_question("delete the parameter "+name+"?"){
 	                ////destroy all references
 	                var k = ds_map_find_first(con), ps = ds_map_size(con);

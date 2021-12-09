@@ -2,11 +2,11 @@
   "isDnD": false,
   "isCompatibility": false,
   "parent": {
-    "name": "Gumshoe",
-    "path": "folders/Libraries/Gumshoe.yy",
+    "name": "general",
+    "path": "folders/Scripts/general.yy",
   },
   "resourceVersion": "1.0",
-  "name": "gumshoe",
+  "name": "array_shuffle",
   "tags": [],
   "resourceType": "GMScript",
 }

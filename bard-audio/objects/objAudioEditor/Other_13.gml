@@ -166,11 +166,16 @@ for(var i=0;i<=2;i+=1){
     ds_list_add(container_buttons,but);
 }
 
-seqbut = newHighlightable(objaeButton,(room_width/3)+8,(butt_g*4)+(butt_h*4),(room_width/3)+(room_width/3)-8,(8*4)+(butt_h*5));
+seqbut = newHighlightable(objaeButton,(room_width/3)+8,(butt_g*4)+(butt_h*4),(room_width/3)+(room_width/9)+(room_width/18)-8,(8*4)+(butt_h*5));
 seqbut.name = "SEQUENCE";
     seqbut.script = aeToggleSoundAttribute;
     seqbut.args[0] = "seq";
     ds_list_add(choice_buttons,seqbut);
+	
+choosebut = newHighlightable(objTextfield,(room_width/3)+(room_width*2.5/9)+8,(butt_g*4)+(butt_h*4),(room_width/3)+(room_width/3)-8,(8*4)+(butt_h*5));
+choosebut.container_edit=true; choosebut.param="choose";
+choosebut.percent=false; choosebut.plusmin = false;
+ds_list_add(choice_buttons,choosebut);
     
 blendabut = newHighlightable(objTextfield,(room_width/3)+(room_width*2/9)+8,(butt_g*4)+(butt_h*4),(room_width/3)+(room_width/3)-8,(8*4)+(butt_h*5));
 blendabut.container_edit = true; blendabut.param = "blend";
@@ -203,12 +208,14 @@ ds_list_add(loop_buttons,beatstartbut);
 ds_list_add(choice_buttons,beatstartbut);
 bpmbut.r = lerp(bpmbut.l,bpmbut.r,.5);
 
+/*
 musicbut = newStackedHighlightable(objaeButton,3);
 musicbut.script = aeToggleSoundAttribute; musicbut.name="MUSIC";
 musicbut.args[0] = "music";
 ds_list_add(multi_buttons,musicbut);
 ds_list_add(loop_buttons,musicbut);
 ds_list_add(choice_buttons,musicbut);
+*/
 
 syncbut = newStackedHighlightable(objaeButton,3);
 syncbut.script = aeToggleSoundAttribute; syncbut.name="SYNC";
@@ -217,12 +224,14 @@ ds_list_add(multi_buttons,syncbut);
 ds_list_add(loop_buttons,syncbut);
 ds_list_add(choice_buttons,syncbut);
 
+/*
 varybut = newStackedHighlightable(objaeButton,3);
 varybut.script = aeToggleSoundAttribute; varybut.name="VARYING";
 varybut.args[0] = "varybpm";
 ds_list_add(multi_buttons,varybut);
 ds_list_add(loop_buttons,varybut);
 ds_list_add(choice_buttons,varybut);
+*/
 
 loopbut = newStackedHighlightable(objaeButton,3);
 loopbut.script = aeToggleSoundAttribute; loopbut.name="LOOP";
@@ -246,11 +255,11 @@ var b = newStackedHighlightable(objTextfield,3,-1,"fadein");
 	
 /////start time
 var 
-b = newStackedHighlightable(objaeButton,1,-1);
+b = newStackedHighlightable(objaeButton,3,-1);
 b.script = aeToggleSoundAttribute; b.name="RAND start"; b.args[0] = "randstart";
 ds_list_add(container_buttons,b);
 	
-b = newStackedHighlightable(objTextfield,1,-1,"start time");
+b = newStackedHighlightable(objTextfield,3,-1,"start time");
 b.container_edit=true; b.param="starttime";
 b.percent=false; b.plusmin = false;
 ds_list_add(container_buttons,b);
@@ -275,11 +284,6 @@ specminbut = newStackedHighlightable(objTextfield,2,-1,"spec min");
 specminbut.container_edit=true; specminbut.param="specmin";
 specminbut.percent=false; specminbut.plusmin = false;
 ds_list_add(choice_buttons,specminbut);
-
-choosebut = newStackedHighlightable(objTextfield,2,-1,"choice param");
-choosebut.container_edit=true; choosebut.param="choose";
-choosebut.percent=false; choosebut.plusmin = false;
-ds_list_add(choice_buttons,choosebut);
 
 //////////////////LOOP STACK
 column[0] = 0; column[1] = 0; column[2] = 0;

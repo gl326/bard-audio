@@ -32,6 +32,7 @@ slider_select = 0;
 slide_select_x = 0;
 
 slide_l = 0;
-slide_r = 0;
+//slide_r = 0;
+slide_r = (room_width*11/12)-28;
 slide_setup = false;
 butt_w = 20;

@@ -2,8 +2,8 @@
   "isDnD": false,
   "isCompatibility": false,
   "parent": {
-    "name": "audioeditor",
-    "path": "folders/Scripts/audio_engine/audioeditor.yy",
+    "name": "functions",
+    "path": "folders/Libraries/Bard/engine/editor/functions.yy",
   },
   "resourceVersion": "1.0",
   "name": "aeGainChildren",
