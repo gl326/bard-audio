@@ -25,7 +25,7 @@ function drawContainerList(list,xx,yy,parent=undefined) {
 				var _name = "";
 				if is_real(item){
 					draw_set_color(color_fg2);	
-					_name = (item>=0)? audio_get_name(item): "<MISSING SOUND>";
+					_name = (item>=0)? audio_asset_name(item): "<MISSING SOUND>";
 				}else{
 					fold = true;
 					data = container_getdata(item);
@@ -110,6 +110,7 @@ function drawContainerList(list,xx,yy,parent=undefined) {
 		                                        aeDeleteDropped();
 		                                    }
 		                                    array_insert(list,_i,dropped);
+											array_insert(parent.contents_serialize,_i,container_content_serialize(dropped));
 		                                    dropped = -1;
 		                                    //save_audioedit();
 		                                    }
@@ -124,10 +125,12 @@ function drawContainerList(list,xx,yy,parent=undefined) {
                                             
 		                                        if fold{
 													array_push(data.contents,dropped);
+													array_push(data.contents_serialize,container_content_serialize(dropped));
 		                                            aeResetBlendMap(item);
 		                                            }
 		                                        else{
 		                                            array_insert(list,_i,dropped);
+													array_insert(parent.contents_serialize,_i,container_content_serialize(dropped));
 		                                            aeResetBlendMap(parent);   
 		                                            }
                                         
@@ -176,7 +179,7 @@ function drawContainerList(list,xx,yy,parent=undefined) {
 	        open = ds_list_find_index(container_expand,expand_id);
 	        name = ds_map_find_value(cid,"name");
 	    }else{
-	        name = audio_get_name(con);
+	        name = audio_asset_name(con);
 	    }
     
 	    if ind>=container_scroll{
@@ -220,6 +223,7 @@ function drawContainerList(list,xx,yy,parent=undefined) {
 	                        and containsearch.text==""{
 	                        holding_move = true;
 	                        holding_list = list;
+							holding_parent = parent;
 	                        if list == container_search{holding_list = container_root_list();}
 	                        holding_ind = i;
 	                    }

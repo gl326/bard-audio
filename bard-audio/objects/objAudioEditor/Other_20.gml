@@ -1,4 +1,5 @@
-/// @description RELOAD FROM PROJECT
+/// @description RELOAD ALL FILES
+#region project
 var project_data = json_parse(file_read_string(project_file)); //get data from project
 var _i = 0,
 	resources = project_data.resources,
@@ -81,6 +82,11 @@ repeat(resource_n){
 	}
 	_i ++;	
 }
+#endregion
+
+#region external
+
+#endregion
 
 //unpack all the contents
 _i = 0;

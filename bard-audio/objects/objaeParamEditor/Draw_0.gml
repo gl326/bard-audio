@@ -96,7 +96,7 @@ if is_array(blend) and !is_struct(curves){
             }
             else{draw_set_color(col);}
             if is_string(cont){name = cont;}
-            else{name = audio_get_name(cont);}
+            else{name = audio_asset_name(cont);}
         draw_set_alpha(.25);
         draw_blendregion(left,y1,right,y2,cleft,cright,false);
         //draw_rectangle(left,y1,right,y2,false);

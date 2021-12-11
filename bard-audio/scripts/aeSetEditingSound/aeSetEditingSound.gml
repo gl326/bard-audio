@@ -46,7 +46,7 @@ function aeSetEditingSound() {
 	                    for(var i=0;i<ds_list_size(asset_buttons);i+=1){
 	                        (ds_list_find_value(asset_buttons,i)).visible = true;
 	                    }
-	                    assetgainbut.param = audio_get_name(editing);
+	                    assetgainbut.param = audio_asset_name(editing);
 	                    var val = (audio_asset_gain(editing))/100;
 	                    if val>-1{
 	                        assetgainbut.text = string(20*log10(val+1))
@@ -54,7 +54,7 @@ function aeSetEditingSound() {
 	                        assetgainbut.text = "-144";
 	                    }
                     
-	                    assetbusbut.param = audio_get_name(editing);
+	                    assetbusbut.param = audio_asset_name(editing);
 	                    assetbusbut.text = audio_asset_bus(editing);
 	                }
                 

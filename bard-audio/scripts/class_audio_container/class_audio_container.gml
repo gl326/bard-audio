@@ -113,8 +113,15 @@ function class_audio_container(_name = "", fromProject = false) constructor{
 		var _i = 0;
 		repeat(n){
 			var item = contents_serialize[_i];
-			if string_char_at(item,1)=="$"{
+			if string_char_at(item,1)=="$"{ //asset
 				item = asset_get_index(string_copy(item,2,string_length(item)-1));	
+				if item==-1{
+					//array_delete(contents_serialize,_i,1);
+					show_debug_message(concat("WARNING! ",contents_serialize[_i]," was listed as an asset in ",name," but no longer exists"));
+					//continue;	
+				}
+			}else if string_char_at(item,1)=="%"{ //external file
+				item = audio_asset_index(string_copy(item,2,string_length(item)-1));	
 				if item==-1{
 					//array_delete(contents_serialize,_i,1);
 					show_debug_message(concat("WARNING! ",contents_serialize[_i]," was listed as an asset in ",name," but no longer exists"));
@@ -459,6 +466,33 @@ function class_audio_container(_name = "", fromProject = false) constructor{
 		while(_i<b_n){
 			array_delete(blend_map,_i,1);
 			_i ++;	
+		}
+	}
+	
+	//load/unload external assets
+	static load = function(){
+		var _i = 0;
+		repeat(array_length(contents)){
+			var item = contents[_i];
+			if is_string(item){
+				container_getdata(item).load();	
+			}else{
+				audio_asset_load(item);
+			}
+			_i ++;
+		}
+	}
+	
+	static unload = function(){
+		var _i = 0;
+		repeat(array_length(contents)){
+			var item = contents[_i];
+			if is_string(item){
+				container_getdata(item).unload();	
+			}else{
+				audio_asset_unload(item);
+			}
+			_i ++;
 		}
 	}
 }

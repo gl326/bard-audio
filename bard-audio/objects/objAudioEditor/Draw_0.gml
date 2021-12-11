@@ -43,7 +43,7 @@ if editing!=-1{
         draw_set_color(color_fg2);
         draw_text_transformed(
             (room_width/3) + 8+96+8, 8,
-            (audio_get_name(editing)),
+            (audio_asset_name(editing)),
             2,2,0
         );
         draw_set_color(color_fg);
@@ -99,7 +99,7 @@ if editing!=-1{
                 name = c;
                 draw_set_color(color_fg);}
             else{
-                name = (c>=0)?audio_get_name(c):"<MISSING SOUND>";
+                name = (c>=0)?audio_asset_name(c):"<MISSING SOUND>";
                 draw_set_color(color_fg2)}
             var yy = t+(i*24);
             if mouse_in_region(l,yy,r,yy+24) and global.highlighted==noone{
@@ -124,6 +124,7 @@ if editing!=-1{
                             holding_move = true;
                             holding_ind = i;
                             holding_list = cont;
+							holding_parent = editing;
                             }
                         }
                         hold_x=mouse_x; hold_y=mouse_y;
@@ -147,6 +148,7 @@ if editing!=-1{
                                     aeDeleteDropped();
                                 }
                                 array_insert(cont,i,dropped);
+								array_insert(editing.contents_serialize,i,container_content_serialize(dropped));
                                 aeResetBlendMap(editing);
                                 //save_audioedit();
                                 }
@@ -156,6 +158,7 @@ if editing!=-1{
                                     aeDeleteDropped();
                                 }
                                 array_insert(cont,i,string(dropped));
+								array_insert(editing.contents_serialize,i,container_content_serialize(dropped));
                                 aeResetBlendMap(editing);
                                 //save_audioedit();
                                 }}
@@ -179,6 +182,7 @@ if editing!=-1{
                             aeDeleteDropped();
                         }
                         array_push(cont,dropped);
+						array_push(editing.contents_serialize,container_content_serialize(dropped));
                         aeResetBlendMap(editing);
                         //save_audioedit();
                         }
@@ -187,6 +191,7 @@ if editing!=-1{
                             aeDeleteDropped();
                         }
                         array_push(cont,string(dropped));
+						array_push(editing.contents_serialize,container_content_serialize(dropped));
                         aeResetBlendMap(editing);
                         //save_audioedit();
                         }}
@@ -202,7 +207,7 @@ if holding!=-1{
     var name;
         if holding_audio{
             draw_set_color(color_fg2);
-            name = audio_get_name(holding);
+            name = audio_asset_name(holding);
             }
         else{
             draw_set_color(color_fg);

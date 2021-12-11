@@ -7,6 +7,13 @@ function bard_audio_data_load(){
         if (file_exists(_path))
         {
             global.bard_audio_data = ElephantFromJSON(json_parse(file_read_string(_path)));
+			
+			var _data = global.bard_audio_data[bard_audio_class.container],
+				_i = 0;
+			repeat(array_length(_data)){
+				_data[_i].deserialize_contents();
+				_i ++;
+			}
         }
         
         

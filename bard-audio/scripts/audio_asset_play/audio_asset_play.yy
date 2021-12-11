@@ -2,11 +2,11 @@
   "isDnD": false,
   "isCompatibility": false,
   "parent": {
-    "name": "audioeditor",
-    "path": "folders/Scripts/audio_engine/audioeditor.yy",
+    "name": "assets",
+    "path": "folders/Libraries/Bard/engine/class_editors/assets.yy",
   },
   "resourceVersion": "1.0",
-  "name": "deleteFromContainerList",
+  "name": "audio_asset_play",
   "tags": [],
   "resourceType": "GMScript",
 }

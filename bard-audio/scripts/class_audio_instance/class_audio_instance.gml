@@ -170,9 +170,9 @@ function class_audio_instance(_container,_sound=-1,_loops=false,_gain=0,_pitch=0
 
 	    if !sync{
 			if !threed{
-	            aud_playing = audio_play_sound(file,0,looping);
+	            aud_playing = audio_asset_play(file,0,looping);
 	        }else{
-	            aud_playing = audio_play_sound_on(player.emitter,file,looping,0);
+	            aud_playing = audio_asset_play_on(player.emitter,file,looping,0);
 	        }
 	    }else{
 	        aud_playing = audio_play_in_sync_group(player.group,file);

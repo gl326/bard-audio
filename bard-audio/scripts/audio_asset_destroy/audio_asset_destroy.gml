@@ -7,6 +7,6 @@ function audio_asset_destroy(assetIndex){
 		array_delete(serial, array_find_index(serial,class), 1);
 		ds_map_delete(global.audio_assets,assetIndex);
 		
-		show_debug_message(concat("deleted data for audio asset ",assetIndex," (",audio_get_name(assetIndex),")"));
+		show_debug_message(concat("deleted data for audio asset ",assetIndex," (",audio_asset_name(assetIndex),")"));
 	}
 }

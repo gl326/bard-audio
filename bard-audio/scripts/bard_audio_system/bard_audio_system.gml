@@ -106,7 +106,7 @@ function bard_audio_debug_gui(){
 	                aud = s.aud,
 	                file = s.file,
 	                yyy=0,
-	                str = audio_get_name(file)+": gain "+string(audio_sound_get_gain(aud))+" pitch "+string(audio_sound_get_pitch(aud));//+" pos "+string(audio_sound_get_track_position(aud));
+	                str = audio_asset_name(file)+": gain "+string(audio_sound_get_gain(aud))+" pitch "+string(audio_sound_get_pitch(aud));//+" pos "+string(audio_sound_get_track_position(aud));
 	                str+="[input gain: "+string(s.current_vol)+"]"
 	                if s.blend!=0{str+="[blend: "+string(s.blend)+"]";}
 	                str+=" bus "+string(s.bus)+" "+string(s.bus_vol);
@@ -139,7 +139,7 @@ function bard_audio_debug_gui(){
 	                var del = (s.delayin+(s.playstart/1000)-(current_time/1000)),
 	                    sync = s.sync and group!=-1,
 	                    file = s.file,
-	                    str = audio_get_name(file)+": "+string(del);
+	                    str = audio_asset_name(file)+": "+string(del);
 	                    if sync{str += " (sync)";}
 	                    draw_set_color(text_bcolor);
 	                    draw_text(80,yy+4,str);
@@ -249,6 +249,7 @@ global.audio_assets = ds_map_create(); //settings for individual sound assets (b
 global.audio_list_index = ds_map_create(); //for containers that need to remember wha sounds they've played
 global.audio_emitters = ds_map_create(); //for tracking emitters
 global.audio_param_copy_map = ds_map_create(); //this is a blank dummy map we use to copy data around when setting parameters
+global.audio_external_assets = ds_map_create(); //map external asset paths to indexes
 
 //definitions for music keys and current musical key state
 global.music_keys = ds_map_create();
