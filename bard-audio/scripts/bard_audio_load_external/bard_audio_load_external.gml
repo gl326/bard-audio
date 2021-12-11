@@ -1,4 +1,4 @@
-// 
+// the basic structure here is ripped right outta juju's Gumshoe library for browsing files
 function bard_audio_load_external(_directory,_parent=undefined){
     var _directories = [],
 		_directory_containers = [];

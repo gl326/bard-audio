@@ -99,7 +99,7 @@ function class_audio_container(_name = "", fromProject = false) constructor{
 					show_debug_message(concat("WARNING! container ",name," failed to link to its parent, ",parent,". moving to root folder"));
 				}
 				parent = ROOT_SOUND_FOLDER;
-				parent_data = container_getdata(parent);
+				parent_data = container_getdata(parent,true,true);
 				array_push(parent_data.contents_serialize,name);
 				array_push(parent_data.contents,name);		
 			}
@@ -146,7 +146,7 @@ function class_audio_container(_name = "", fromProject = false) constructor{
 			"parent",);
 			
 		//copy parameter hooks
-		var entries = copyData.params;
+		var entries = copyData.parameters;
 		var _i = 0;
 		repeat(array_length(entries)){
 			global.audio_params[?entries[_i]].container_hook_copy(copyData,self);

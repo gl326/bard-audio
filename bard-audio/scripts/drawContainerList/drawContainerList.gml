@@ -109,8 +109,8 @@ function drawContainerList(list,xx,yy,parent=undefined) {
 												}
 		                                        aeDeleteDropped();
 		                                    }
-		                                    array_insert(list,_i,dropped);
-											array_insert(parent.contents_serialize,_i,container_content_serialize(dropped));
+		                                    array_push(data.contents,dropped);
+											array_push(data.contents_serialize,container_content_serialize(dropped));
 		                                    dropped = -1;
 		                                    //save_audioedit();
 		                                    }

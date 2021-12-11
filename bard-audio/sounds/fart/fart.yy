@@ -7,8 +7,8 @@
   "type": 0,
   "bitDepth": 1,
   "audioGroupId": {
-    "name": "audiogroup_default",
-    "path": "audiogroups/audiogroup_default",
+    "name": "audiogroup_test",
+    "path": "audiogroups/audiogroup_test",
   },
   "soundFile": "fart.wav",
   "duration": 9.201519,

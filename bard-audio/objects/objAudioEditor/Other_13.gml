@@ -174,7 +174,7 @@ seqbut.name = "SEQUENCE";
     ds_list_add(choice_buttons,seqbut);
 	
 choosebut = newHighlightable(objTextfield,(room_width/3)+(room_width*2.5/9)+8,(butt_g*4)+(butt_h*4),(room_width/3)+(room_width/3)-8,(8*4)+(butt_h*5));
-choosebut.container_edit=true; choosebut.param="choose";
+choosebut.container_edit=true; choosebut.param="chosen";
 choosebut.percent=false; choosebut.plusmin = false;
 ds_list_add(choice_buttons,choosebut);
     

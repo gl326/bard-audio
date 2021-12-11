@@ -187,6 +187,7 @@
     {"id":{"name":"aeLoadEditor","path":"scripts/aeLoadEditor/aeLoadEditor.yy",},"order":20,},
     {"id":{"name":"bard_audio_data_load","path":"scripts/bard_audio_data_load/bard_audio_data_load.yy",},"order":1,},
     {"id":{"name":"container_name","path":"scripts/container_name/container_name.yy",},"order":2,},
+    {"id":{"name":"GregephantToJSON","path":"scripts/GregephantToJSON/GregephantToJSON.yy",},"order":10,},
     {"id":{"name":"container_pause","path":"scripts/container_pause/container_pause.yy",},"order":9,},
     {"id":{"name":"chicory_meadows_bgm_loop_105bpm_CMaj","path":"sounds/chicory_meadows_bgm_loop_105bpm_CMaj/chicory_meadows_bgm_loop_105bpm_CMaj.yy",},"order":1,},
     {"id":{"name":"container_stop","path":"scripts/container_stop/container_stop.yy",},"order":8,},
@@ -341,12 +342,14 @@
   ],
   "AudioGroups": [
     {"targets":-1,"resourceVersion":"1.3","name":"audiogroup_default","resourceType":"GMAudioGroup",},
+    {"targets":-1,"resourceVersion":"1.3","name":"audiogroup_test","resourceType":"GMAudioGroup",},
   ],
   "TextureGroups": [
     {"isScaled":true,"autocrop":true,"border":2,"mipsToGenerate":0,"groupParent":null,"targets":-1,"resourceVersion":"1.3","name":"Default","resourceType":"GMTextureGroup",},
   ],
   "IncludedFiles": [
     {"CopyToMask":-1,"filePath":"datafiles/audio/test_external","resourceVersion":"1.0","name":"noisy_pop.wav","resourceType":"GMIncludedFile",},
+    {"CopyToMask":-1,"filePath":"datafiles","resourceVersion":"1.0","name":"audio_data.json","resourceType":"GMIncludedFile",},
   ],
   "MetaData": {
     "IDEVersion": "2.3.5.589",

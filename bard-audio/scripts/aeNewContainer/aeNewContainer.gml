@@ -4,8 +4,8 @@ function aeNewContainer() {
 	if val!=""{
 	    var nnew = container_create(val,false);
 	    if nnew{
-			container_getdata(val).deserialize_contents();
-	        editing = val;
+			editing = container_getdata(val);
+			editing.deserialize_contents();
 	        editing_audio = false;
 			aeBrowserUpdate();
 	        }

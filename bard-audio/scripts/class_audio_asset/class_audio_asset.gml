@@ -10,11 +10,14 @@ function class_audio_asset(_name="",_external=false) constructor{
 	bus = "";
 	editor_order = 0;
 	
-	//////loaded state for external audio
+	//////loaded state for external/grouped audio
 	loaded = false;
 	loaded_audio = -1;
 	loaded_buffer = -1;
 	streamed = false;
+	
+	is_grouped = false;
+	audio_group = ""; //if we're an internal file in an audio group, track that here
 	
 	ELEPHANT_SCHEMA
     {
@@ -35,6 +38,7 @@ function class_audio_asset(_name="",_external=false) constructor{
 		if !external{
 			path = "";
 			index = asset_get_index(name);
+			is_grouped = (audio_group!="");
 		}else{
 			path = name;
 			name = filename_name(path);
@@ -63,7 +67,11 @@ function class_audio_asset(_name="",_external=false) constructor{
 	
 	static play = function(prio,looping){
 		if !external{
-			return audio_play_sound(index,prio,looping);	
+			if !is_grouped or load(){
+				return audio_play_sound(index,prio,looping);	
+			}else{
+				return -1;	
+			}
 		}else{
 			load();
 			return audio_play_sound(loaded_audio,prio,looping);
@@ -72,7 +80,11 @@ function class_audio_asset(_name="",_external=false) constructor{
 	
 	static play_on = function(emitterID,looping,prio){
 		if !external{
-			return audio_play_sound_on(emitterID,index,looping,prio);	
+			if !is_grouped or load(){
+				return audio_play_sound_on(emitterID,index,looping,prio);	
+			}else{
+				return -1; //couldnt play, triggered an async load
+			}
 		}else{
 			load();
 			return audio_play_sound_on(emitterID,loaded_audio,looping,prio);	
@@ -102,6 +114,8 @@ function class_audio_asset(_name="",_external=false) constructor{
 			
 			loaded = true;	
 		}
+		
+		return true;
 	}
 	
 	static unload = function(){
@@ -117,5 +131,7 @@ function class_audio_asset(_name="",_external=false) constructor{
 			
 			loaded = false;	
 		}
+		
+		return true;
 	}
 }
