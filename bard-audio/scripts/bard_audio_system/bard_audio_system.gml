@@ -6,7 +6,7 @@
 	//this might be a decision we could go back on but in general the fewer different features we're relying on, the better. even at their best sync groups have a lot of weird/unpredictable/unique behavior that 
 	//forces you to treat them different from other ypes of playing sounds.
 #macro ROOT_SOUND_FOLDER "Sounds" //root folder for all audio inside the game maker project
-#macro EXTERN_SOUND_FOLDER "audio" //folder for all external audio files, should be located in your project datafiles
+#macro EXTERN_SOUND_FOLDER "audio/" //folder for all external audio files, should be located in your project datafiles
 
 //default values for spatial audio
 audio_listener_orientation(0,0,1,0,-1,0);
@@ -267,6 +267,3 @@ global.external_audio_index = 1000000;
 //and all the global beatevent() scripts reference this music player
 global.music_player = new class_audio_playstack(4); //2 second gap between songs ending/starting
 global.ambience_player = new class_audio_playstack(4);
-
-////load external data
-bard_audio_data_load();

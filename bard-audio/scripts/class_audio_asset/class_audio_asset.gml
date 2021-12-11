@@ -93,7 +93,11 @@ function class_audio_asset(_name="",_external=false) constructor{
 				loaded_audio = audio_create_stream(path);
 			}else{
 				loaded_buffer = buffer_load(path);
-				loaded_audio = __audioExtWavBufferToAudio(loaded_buffer);
+				var _newBuff = buffer_create(buffer_get_size(loaded_buffer), buffer_fixed, 1);
+				buffer_copy(loaded_buffer, 0, buffer_get_size(loaded_buffer), _newBuff, 0);
+				loaded_audio = __audioExtWavBufferToAudio(_newBuff);
+				buffer_delete(loaded_buffer);
+				loaded_buffer = _newBuff;
 			}
 			
 			loaded = true;	

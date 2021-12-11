@@ -85,7 +85,7 @@ repeat(resource_n){
 #endregion
 
 #region external
-
+	bard_audio_load_external(EXTERN_SOUND_FOLDER);
 #endregion
 
 //unpack all the contents
