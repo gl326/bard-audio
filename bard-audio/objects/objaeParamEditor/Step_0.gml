@@ -23,7 +23,7 @@ if is_struct(curves) and blend_param_drag==""{
 	    else{
 	        var p = points[grabbed],
 	            xx = clamp(remap_value(mouse_x+grab_x,gl,gr,0,100),0,100),
-	            yy = clamp(remap_value(mouse_y+grab_y,gt,gb,gmax,gmin),0,100);
+	            yy = clamp(remap_value(mouse_y+grab_y,gt,gb,gmax,gmin),-100,100);
 	        p.x = xx;
 	        p.y = yy;
 	        xf.text = string(xx);
@@ -60,10 +60,10 @@ if is_struct(curves) and blend_param_drag==""{
 	                if point_in_triangle(mouse_x,mouse_y,ppx+lx,ppy+ly,ppx-lx,ppy-ly,px+lx,py+ly)
 	                or point_in_triangle(mouse_x,mouse_y,px+lx,py+ly,px-lx,py-ly,ppx-lx,ppy-ly)
 	                or point_distance(mouse_x,mouse_y,px,py)<=grab_range{
-	                    curve_highlight = cur;
+	                    //curve_highlight = cur;
 	                    attribute = curve_name;
 	                    if mouse_check_button_pressed(mb_left){
-	                        curve = cur; 
+	                        //curve = cur; 
 							points = pts;
 	                        }
 	                    break;
@@ -95,7 +95,7 @@ if is_struct(curves) and blend_param_drag==""{
 	                    grab_y = pyy-mouse_y;
 	                    xf.editing = pp;
 	                    yf.editing = pp;
-	                    pf.editing = pp;
+	                    //pf.editing = pp;
 	                }else{
 	                if mouse_check_button_pressed(mb_right) and array_length(pts)>1 and !stopdel{
 	                    doit = false;
@@ -105,7 +105,7 @@ if is_struct(curves) and blend_param_drag==""{
 	                        editing_point = -1;
 	                        xf.editing = -1;
 	                        yf.editing = -1;
-	                        pf.editing = -1;
+	                       // pf.editing = -1;
 	                    }
 	                }}
 	            break;

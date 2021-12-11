@@ -34,6 +34,15 @@ function class_audio_parameter(_name="",_default=0) constructor{
 		return hooks.Get(_container.name);
 	}
 	
+	static container_hook_copy = function(_containerFrom,_containerTo){
+		hook_delete_container(_containerTo.name);
+		if hooks.Exists(_containerFrom){
+			return hooks.Add(_containerTo.name,ElephantDuplicate(container_hook(_containerFrom)));
+		}else{
+			return false;	
+		}
+	}
+	
 	static hook_add = function(_container,_container_var){
 		var _container_name = _container.name;
 		if array_find_index(_container.parameters,name)==-1{
@@ -48,7 +57,7 @@ function class_audio_parameter(_name="",_default=0) constructor{
 
 		if is_undefined(hook){
 			hook = new class_audio_hook(_container_var);
-			array_push(attrs,hook);
+			array_push(container_hook(_container),hook);
 		}
 		return hook;
 	}
@@ -98,7 +107,7 @@ function class_audio_parameter(_name="",_default=0) constructor{
 }
 
 function class_audio_hook(_variableName) constructor{
-	variable = _variable;
+	variable = _variableName;
 	curve = new class_audio_hook_curve();
 	
 	static eval = function(state){
@@ -109,7 +118,7 @@ function class_audio_hook(_variableName) constructor{
 function class_audio_hook_curve() constructor{
 	points = [
 		new class_audio_hook_curve_point(0,0),
-		new class_audio_hook_curve_point(0,100)
+		new class_audio_hook_curve_point(100,100)
 	];
 	sorted = true;
 	
@@ -171,6 +180,7 @@ function class_audio_hook_curve() constructor{
 				ds_priority_add(prio,points[_i],points[_i].x);
 				_i ++;	
 			}
+			_i = 0;
 			repeat(n){
 				points[_i] = ds_priority_delete_min(prio);
 				_i ++;	

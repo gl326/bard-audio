@@ -18,6 +18,7 @@ function param_destroy(name) {
 				_i ++;
 			}
 			
+			aeBrowserUpdate();
 			///ok done
 			return 1;
 		}

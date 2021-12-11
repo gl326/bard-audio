@@ -7,6 +7,7 @@ function aeNewContainer() {
 			container_getdata(val).deserialize_contents();
 	        editing = val;
 	        editing_audio = false;
+			aeBrowserUpdate();
 	        }
 	}
 	}

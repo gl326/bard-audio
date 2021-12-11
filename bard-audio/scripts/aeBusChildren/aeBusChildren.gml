@@ -1,5 +1,5 @@
 /// @description aeBusChildren()
-function aeBusChildren(snd=editing, bus = container_bus(editing)) {
+function aeBusChildren(snd=objAudioEditor.editing, bus = container_bus(objAudioEditor.editing)) {
 	with(objAudioEditor){
 	if is_string(snd){
 	    var con = container_contents(snd);

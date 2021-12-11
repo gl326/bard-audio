@@ -3,7 +3,7 @@ function aeChangeTab(argument0) {
 	with(objAudioEditor){
 	    tab = argument0;
 	    search_update = -1;
-	    containsize = -1;
+	    aeBrowserUpdate();
 	    switch(tab){
 	    case 2:
 	        containbut.script = aeNewBus;

@@ -22,17 +22,19 @@ draw_line(room_width/3,0,room_width/3,room_height);
 draw_set_halign(fa_left);
 list_top_y = 24+72+36;
 
+var yy = list_top_y - (browser_scroll[tab]*24);
+
 switch(tab){
 case 2:
-drawBusList(bus_search,16,list_top_y);
+	drawBusList(browser,16,yy);
 break;
 
 case 1:
-drawParamList(param_search,16,list_top_y);
+	drawParamList(browser,16,yy);
 break;
 
 default:
-drawContainerList(container_search,16,list_top_y - (container_scroll*24));
+	drawContainerList(browser,16,yy);
 break;
 }
 
@@ -127,7 +129,7 @@ if editing!=-1{
                         hold_x=mouse_x; hold_y=mouse_y;
                         }
                         if is_string(clicked)==is_string(c) and c==clicked{
-                            aeSetEditingSound(real(c),!is_string(c))
+                            aeSetEditingSound(c,!is_string(c))
                         }else{
 							clicked = c;
                         }
@@ -204,11 +206,11 @@ if holding!=-1{
             }
         else{
             draw_set_color(color_fg);
-            name = container_name(real(holding));
+            name = holding;
             }
-        if holding_copy{name+="#COPYING"}
-        else{if holding_move{name+="#MOVING"}
-            else{name+="#REFERENCING";}}
+        if holding_copy{name+=":COPYING"}
+        else{if holding_move{name+=":MOVING"}
+            else{name+=":REFERENCING";}}
         draw_text(mouse_x,mouse_y,(name));
     }
 }

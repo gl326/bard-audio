@@ -1,10 +1,11 @@
 /// @description aeEditParamDefault(id)
 /// @param id
-function aeEditParamDefault(argument0) {
-	var con = argument0,name = param_name(con),def = param_default(con);
+function aeEditParamDefault(class) {
+	var name = param_name(class),def = param_default(class);
 	var val = get_string("enter new default for "+name+"?",string(def));
 	                    if string_number(val)==val and val!=""{
-	                        ds_map_replace(con,"default",real(val));
+	                        class.default_value = real(val);
+							class.val = class.default_value;
 	                    }
 
 

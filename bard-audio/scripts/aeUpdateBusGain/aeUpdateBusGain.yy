@@ -2,11 +2,11 @@
   "isDnD": false,
   "isCompatibility": false,
   "parent": {
-    "name": "browser",
-    "path": "folders/Libraries/Bard/engine/editor/browser.yy",
+    "name": "functions",
+    "path": "folders/Libraries/Bard/engine/editor/functions.yy",
   },
   "resourceVersion": "1.0",
-  "name": "drawParamList",
+  "name": "aeUpdateBusGain",
   "tags": [],
   "resourceType": "GMScript",
 }

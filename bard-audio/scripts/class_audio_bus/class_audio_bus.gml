@@ -7,6 +7,8 @@ function class_audio_bus(_name="",_gain=0,_parent=undefined) constructor{
 	parent = _parent;
 	calc = 0;
 	
+	editor_expand = false;
+	
 	children = [];
 	
 	ds_map_add(global.audio_busses,name,self); //track me!
@@ -17,6 +19,14 @@ function class_audio_bus(_name="",_gain=0,_parent=undefined) constructor{
 			array_push(parent.children,self);	
 		}
 	}
+	
+	ELEPHANT_SCHEMA
+    {
+        ELEPHANT_VERBOSE_EXCLUDE : [
+			"editor_expand",
+        ],
+    }
+    
 	
 	static recalculate = function(_calc = 0, calced=[]){
 		array_push(calced,name);
@@ -47,5 +57,13 @@ function class_audio_bus(_name="",_gain=0,_parent=undefined) constructor{
 	            }
 	        } 
 			
+	}
+	
+	static copy_from_bus = function(bus_name){
+		var copy_data = global.audio_busses[?bus_name];
+		if is_struct(copy_data){
+			default_gain = copy_data.default_gain;
+			gain = copy_data.default_gain;
+		}
 	}
 }

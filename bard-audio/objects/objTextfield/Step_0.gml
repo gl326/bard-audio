@@ -9,7 +9,8 @@ if (container_edit and !objAudioEditor.editing_audio and (editing!=objAudioEdito
     force_update = 0;
     if is_struct(objAudioEditor.editing){
         text = string(variable_struct_get(editing,param));
-        if is_string(variable_struct_get(editing,param)) and !istext{param_ref = text; draggable=false;}
+		var param_str = editing.variable_has_hook(param);
+        if param_str!=""{param_ref = param_str; draggable=false;}
         else{
             param_ref = ""; draggable = true;
             if dB{
@@ -97,6 +98,7 @@ if am_highlighted(){
 		cur.curve_name = param;//param_ref;
         cur.attribute = param;
         cur.param = param_ref;
+		cur.editing = editing;
         global.highlighted = cur;
     }
 }else{
@@ -198,6 +200,10 @@ if slider and param_ref=="" and editing!=-1 and !objAudioEditor.editing_audio{
     }
 	}
 }
+}
+
+if !is_undefined(update_func){
+	update_func(editing);
 }
 
 /* */

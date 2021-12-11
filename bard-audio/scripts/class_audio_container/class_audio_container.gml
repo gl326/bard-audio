@@ -128,6 +128,25 @@ function class_audio_container(_name = "", fromProject = false) constructor{
 		editor_deserialized = true;
 	}
 	
+	static copy_from_container = function(copyFrom){
+		var copyData = container_getdata(copyFrom);
+		struct_inherit_values(self,copyData,
+			"name",
+			"contents",
+			"contents_serialize",
+			"editor_expand",
+			"editor_order",
+			"parent",);
+			
+		//copy parameter hooks
+		var entries = copyData.params;
+		var _i = 0;
+		repeat(array_length(entries)){
+			global.audio_params[?entries[_i]].container_hook_copy(copyData,self);
+			_i ++;	
+		}
+	}
+	
 	//look at parameters and update my values accordingly. 
 	//this only needs to be done when parameters update or when i play.
 	static update = function(){
@@ -145,6 +164,10 @@ function class_audio_container(_name = "", fromProject = false) constructor{
 				array_delete(parameters,_i,1);	
 			}
 		}
+	}
+	
+	static param_eval = function(_variableName,_param){
+		return param_getdata(_param).container_variable_hook(self,_variableName).eval(audio_param_state(_param));
 	}
 	
 	//mark that we are hooked up to this parameter, now.

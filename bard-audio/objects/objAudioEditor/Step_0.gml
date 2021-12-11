@@ -31,90 +31,70 @@ if clicked!=-1{
     }
 }
 
-container_search = container_root_list();
-/* search update...
+/* search update...*/
 search_update -=1;
 if search_update<=0{
     search_update = search_freq;
-    var ds = container_root_list(); if tab==1{ds=params;} if tab==2{ds=busses;}
-    if containsearch.text!=search_t or containsize!=ds_list_size(ds) or rebuild_bussearch{
-        rebuild_bussearch = false;
-        containsize = ds_list_size(ds);
+    //var ds = container_root_list(); if tab==1{ds=params;} if tab==2{ds=busses;}
+    if is_undefined(search_t) or string_lower(containsearch.text)!=search_t{
+		if !is_undefined(search_t){
+			aeBrowserScrollReset();	
+		}
         search_t = string_lower(containsearch.text);
-        
-        if tab==0{
-        container_scroll = 0;
-        if search_t!=""{
-            ds_list_clear(container_search);
-            containerSearch(container_root_list(),search_t);
-        }else{
-			if !ds_map_exists(global.audio_containers,"Sounds"){
-				container_create("Sounds");
-			}
-				ds_list_copy(container_search,container_root_list());
-        }
-            if alphabetical{
-                var alist = ds_list_create();
-                for(var i=0;i<ds_list_size(container_search);i+=1){
-                    var con = ds_list_find_value(container_search,i),
-						name,
-						sub = is_string(con);
-                    if !sub{
-                        name = audio_get_name(con);
-                    }else{
-                        name = ds_map_find_value(real(con),"name");
-                    }
-                    ds_list_add(alist,name);
-                }
-                ds_list_sort(alist,1);
-                ds_list_clear(container_search);
-                for(var i=0;i<ds_list_size(alist);i+=1){
-                    var name = ds_list_find_value(alist,i);
-                    if asset_get_index(name)!=-1{ds_list_add(container_search,asset_get_index(name));}
-                    else{
-						var subcont = ds_map_find_value(global.audio_containers,name);
-						if !is_undefined(subcont){
-							ds_list_add(container_search,string(subcont));}
+		
+		browser = [];
+		
+		var text = search_t;
+			if text==""{
+				//empty search
+				switch(tab){
+					case 0:
+						var source = container_root_list();
+						array_copy(browser,0,source,0,array_length(source));
+					break;
+					case 1:
+						var source = global.bard_audio_data[bard_audio_class.parameter];
+						array_copy(browser,0,source,0,array_length(source));
+					break;
+					case 2:
+						var source = global.bard_audio_data[bard_audio_class.bus];
+						var _i = 0;
+						repeat(array_length(source)){
+							var bus = source[_i];
+							if is_undefined(bus.parent){
+								array_push(browser,bus);
+							}
+							_i++;	
 						}
-                }
-                ds_list_destroy(alist);
-            }
-        }
-        if tab==1{
-        param_scroll = 0;
-        if search_t!=""{
-            ds_list_clear(param_search);
-            paramSearch(params,search_t);
-        }else{
-            ds_list_copy(param_search,params);
-        }
-            if alphabetical{
-                var alist = ds_list_create();
-                for(var i=0;i<ds_list_size(param_search);i+=1){
-                    ds_list_add(alist,param_name(ds_list_find_value(param_search,i)));   
-                }
-                ds_list_sort(alist,1);
-                ds_list_clear(param_search);
-                for(var i=0;i<ds_list_size(alist);i+=1){
-                    ds_list_add(param_search,ds_map_find_value(global.audio_params,ds_list_find_value(alist,i)));
-                }
-                ds_list_destroy(alist);
-            }
-        }
+					break;
+				}
+			}else{
+				//search by name
+				var source;	
+				switch(tab){
+					case 0: source = global.bard_audio_data[bard_audio_class.container]; break;
+					case 1: source = global.bard_audio_data[bard_audio_class.parameter]; break;
+					case 2: source = global.bard_audio_data[bard_audio_class.bus]; break;
+				}
+				var _i = 0;
+						repeat(array_length(source)){
+							var class = source[_i];
+							if string_pos(text,string_lower(class.name)){
+								array_push(browser,class);
+							}
+							_i++;	
+						}
+			}
+			
+		if alphabetical{
+			array_sort(browser,1);
+		}
+			
+		}
         
-        if tab==2{
-        bus_scroll = 0;
-        if search_t!=""{
-            //ds_list_clear(bus_search);
-            ds_list_clear(bus_expand);
-            busSearch();
-        }else{
-            ds_list_copy(bus_search,busses);
-        }
-        }
     }
 }
-*/
+
 
 if dropped!=-1{
     holding_param = false;
@@ -139,17 +119,19 @@ if point_distance(mouse_x,mouse_y,hold_x,hold_y)>10 and grabbed!=-1{
     }
 
 if keyboard_check_pressed(vk_up) or mouse_wheel_up(){
-    switch(tab){
-    case 1: param_scroll = max(0,param_scroll-3); break;
-    default: container_scroll = max(0,container_scroll-3); break;
-    }
+	browser_scroll[tab] = max(0,browser_scroll[tab]-3);
+    //switch(tab){
+    //case 1: param_scroll = max(0,param_scroll-3); break;
+    //default: container_scroll = max(0,container_scroll-3); break;
+    //}
     }
 if keyboard_check_pressed(vk_down) or mouse_wheel_down(){
-    switch(tab){
-    case 1: param_scroll = min(max(0,ds_list_size(param_search)-3),param_scroll+3); break;
-    default: container_scroll = min(container_scroll+3); break;
-    }
-    }
+	browser_scroll[tab] = min(max(0,array_length(browser)-10),browser_scroll[tab]+3);
+    //switch(tab){
+    //case 1: param_scroll = min(max(0,ds_list_size(param_search)-3),param_scroll+3); break;
+    //default: container_scroll = min(container_scroll+3); break;
+    //}
+    //}
 }
 
 bard_audio_update();

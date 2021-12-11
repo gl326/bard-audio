@@ -521,7 +521,8 @@ static update_params = function(){
                     if aud.sync{snd = file;}
 					
 					if !is_undefined(snd){
-							snd.update_current_volume(volume);
+							aud.update_current_volume(volume);
+							aud.update_current_pitch();
 					}
                 }
             }

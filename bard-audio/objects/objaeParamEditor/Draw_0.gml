@@ -41,7 +41,7 @@ for(var i=0;i<=divs;i+=1){
 draw_set_alpha(1);
 draw_text(lerp(gr,gl,.5),gb+4+24+8,(string(param)));
 
-if mouse_in_region(gl,gb,gr,b-32){
+if mouse_in_region(gl,gb,gr,b-32) and param!=""{
     draw_set_color(objAudioEditor.color_fg)
     draw_rectangle(gl,gb+4+24,gr,gb+4+24+8+24+8,false);
     draw_set_color(objAudioEditor.color_bg);
@@ -50,7 +50,7 @@ if mouse_in_region(gl,gb,gr,b-32){
     var yy = gt;
     var xx = remap_value(audio_param_state(param),0,100,gl,gr);
     if curves!=-1{
-        yy = remap_value(curve_eval(curve,audio_param_state(param)),gmin,gmax,gb,gt);
+        yy = remap_value(editing.param_eval(attribute,param),gmin,gmax,gb,gt);
         draw_circle(xx,yy,8,1);
     }
     draw_line(xx,yy,xx,gb+4+24+8);

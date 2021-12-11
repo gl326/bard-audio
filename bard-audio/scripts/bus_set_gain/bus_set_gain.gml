@@ -8,7 +8,7 @@ function bus_set_gain(bus_name,setFromNegativeOneHundredtoZero) {
 		    cv.gain = setFromNegativeOneHundredtoZero;
 		    var calc = 0;
 		    if cv.parent!=undefined{
-		        calc = cv.parent.calc;
+		        calc = bus_getdata(cv.parent).calc;
 		    }
 		    cv.recalculate(calc);
 		}

@@ -8,8 +8,12 @@ function aeDestroyContainer(argument0) {
 	            if editing==del{
 	                editing = -1;
 	            }
-	        }   
+	        } 
+			
+		aeBrowserUpdate();
+		return true;
+	}else{
+		return false;
 	}
-
 
 }

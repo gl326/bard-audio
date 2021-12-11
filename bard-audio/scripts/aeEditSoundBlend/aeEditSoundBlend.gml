@@ -11,17 +11,8 @@ function aeEditSoundBlend() {
 	    ////////////////////open curve editor////////////////////////
 	        var cw = 800,ch=600,mx = max(cw/2,min(room_width-(cw/2),mouse_x)),my = max(ch/2,min(room_height-(ch/2),mouse_y));
 	        var cur = newHighlightable(objaeParamEditor,mx-(cw/2),my-(ch/2),mx+(cw/2),my+(ch/2));
-	        var param_ref = variable_struct_get(editing,"blend");
-	        if is_string(param_ref){
-			/*
-	        cur.curves = ds_map_find_value(
-	                                ds_map_find_value(
-	                                    global.audio_params,
-	                                    param_ref),
-	                                    container_name(editing));
-			*/
-	        cur.param = param_ref;
-	        }
+	        //var param_ref = variable_struct_get(editing,"blend");
+	        cur.param = editing.variable_has_hook("blend");
         
 	        cur.blend = variable_struct_get(editing,"blend_map");
 	        global.highlighted = cur;

@@ -2,11 +2,11 @@
   "isDnD": false,
   "isCompatibility": false,
   "parent": {
-    "name": "browser",
-    "path": "folders/Libraries/Bard/engine/editor/browser.yy",
+    "name": "busses",
+    "path": "folders/Libraries/Bard/engine/class_editors/busses.yy",
   },
   "resourceVersion": "1.0",
-  "name": "drawParamList",
+  "name": "bus_getdata",
   "tags": [],
   "resourceType": "GMScript",
 }

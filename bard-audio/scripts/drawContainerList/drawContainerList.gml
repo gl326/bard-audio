@@ -4,7 +4,7 @@
 /// @param y
 /// @param contain
 /// @param optional ind
-function drawContainerList(list,xx,yy) {
+function drawContainerList(list,xx,yy,parent=undefined) {
 	draw_set_halign(fa_left);
 	draw_set_valign(fa_top);
 	draw_set_font(-1);
@@ -77,7 +77,7 @@ function drawContainerList(list,xx,yy) {
 		                        and containsearch.text==""{
 		                        holding_move = true;
 		                        holding_list = list;
-		                        if list == container_search{holding_list = container_root_list();}
+		                        //if list == container_search{holding_list = container_root_list();}
 		                        holding_ind = _i;
 		                    }
 		                }
@@ -104,39 +104,37 @@ function drawContainerList(list,xx,yy) {
 		                            if !data.from_project{
 		                                if holding_audio{
 		                                    if holding_move{
-		                                        if list==holding_list and i>holding_ind{i -= 1;}
+		                                        if list==holding_list and i>holding_ind{
+													_i -= 1;
+												}
 		                                        aeDeleteDropped();
 		                                    }
-		                                    ds_list_insert(list,i,dropped);
+		                                    array_insert(list,_i,dropped);
 		                                    dropped = -1;
 		                                    //save_audioedit();
 		                                    }
 		                                else{
-		                                    if ds_list_find_index(parent,dropped)==-1 //if not dropping into myself
+		                                    if data.parent!=dropped //if not dropping into myself
 		                                        and (!fold or item!=dropped)
 		                                    {
 		                                        if holding_move{
-		                                            if list==holding_list and i>holding_ind{i -= 1;}
+		                                            if list==holding_list and i>holding_ind{_i -= 1;}
 		                                            aeDeleteDropped();
 		                                            }
                                             
-		                                        var to_drop = dropped;
-		                                        if !holding_audio{to_drop = string(dropped);}
 		                                        if fold{
-		                                            ds_list_add(container_contents(item),to_drop);
+													array_push(data.contents,dropped);
 		                                            aeResetBlendMap(item);
 		                                            }
 		                                        else{
-		                                            ds_list_insert(list,i,to_drop);
-		                                            if ds_list_size(parent)>0{
-		                                                aeResetBlendMap(ds_map_find_value(parent,ds_list_size(parent)-1));
-		                                                }
+		                                            array_insert(list,_i,dropped);
+		                                            aeResetBlendMap(parent);   
 		                                            }
                                         
 		                                        dropped = -1;
 		                                        //save_audioedit();
 		                                        }else{
-		                                        show_message("This would put a container inside itself, which is bad news!");
+													show_message("This would put a container inside itself, which is bad news!");
 		                                        }
 		                                    }
 		                            }
@@ -155,7 +153,7 @@ function drawContainerList(list,xx,yy) {
 		
 		if fold{
 			if (data.editor_expand){
-				yy = drawContainerList(container_getdata(item).contents,xx+tab,yy);
+				yy = drawContainerList(container_getdata(item).contents,xx+tab,yy,item);
 			}
 		}
 		

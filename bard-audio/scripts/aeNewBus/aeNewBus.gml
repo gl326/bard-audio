@@ -3,6 +3,7 @@ function aeNewBus() {
 	var val = get_string("name the new bus","");
 	if val!=""{
 	    bus_create(val);
+		aeBrowserUpdate();
 	}
 	}
 

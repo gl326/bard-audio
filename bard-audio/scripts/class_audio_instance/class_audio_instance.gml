@@ -27,6 +27,7 @@ function class_audio_instance(_container,_sound=-1,_loops=false,_gain=0,_pitch=0
 	
 	playstart = current_time;
 	
+	index = 0;
 	
 	blend = 0;
 	
@@ -198,7 +199,7 @@ function class_audio_instance(_container,_sound=-1,_loops=false,_gain=0,_pitch=0
 	        audio_sound_gain(aud_playing,finalvolumecalc,0);
 	    }
     
-	    audio_sound_pitch(aud_playing,1+pitch);
+	    update_current_pitch();
 	
 		if randstart{
 			audio_sound_set_track_position(aud_playing,random(audio_sound_length(aud_playing)));
@@ -223,6 +224,12 @@ function class_audio_instance(_container,_sound=-1,_loops=false,_gain=0,_pitch=0
 	}
 	}
 	
+	static update_current_pitch = function(){
+		var snd = aud;
+		if sync{snd = file;}
+		audio_sound_pitch(snd,1+pitch);
+	}
+	
 	//using current state of my bus, file, container etc.... set the gain of my attached sound.
 	static update_current_volume = function(parentVolume){
 		var snd = aud;
@@ -233,7 +240,6 @@ function class_audio_instance(_container,_sound=-1,_loops=false,_gain=0,_pitch=0
                             //ds_map_replace(s,"current_vol",ds_map_find_value(s,"current_vol")*(ng+1)/(bp+1)); //old (bad) way
 			var newFinalVol = lerp(0,clamp(current_vol,0,1),QuadInOut(parentVolume)*(1+blend));
             audio_sound_gain(snd,newFinalVol,0);
-            
 	}
 	
 	static copy_from = function(naud){

@@ -14,9 +14,7 @@ function aeDeleteBus() {
 	        }
 	    } 
 	    if !option{
-	            //save_audioedit();
-	            ds_list_clear(bus_search);
-	            rebuild_bussearch = true;
+	            aeBrowserUpdate();
 	        }
 	    return 1;
 	    }else{return 0;}
