@@ -10,6 +10,18 @@ function class_audio_parameter(_name="",_default=0) constructor{
 	
 	ds_map_add(global.audio_params,name,self); //track me!
 	
+	ELEPHANT_SCHEMA
+    {
+        ELEPHANT_VERBOSE_EXCLUDE : [
+			"val",
+        ],
+    }
+	
+	ELEPHANT_POST_READ_METHOD
+    {
+		val = default_value;
+    }
+	
 	static set_container_values = function(_container){
 		var attrs = container_hook(_container),
 			ret = false;

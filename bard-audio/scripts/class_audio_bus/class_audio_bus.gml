@@ -24,7 +24,14 @@ function class_audio_bus(_name="",_gain=0,_parent=undefined) constructor{
     {
         ELEPHANT_VERBOSE_EXCLUDE : [
 			"editor_expand",
+			"gain",
+			"calc",
         ],
+    }
+	
+	ELEPHANT_POST_READ_METHOD
+    {
+		gain = default_gain;
     }
     
 	

@@ -78,4 +78,6 @@ drag_x = -1; drag_y = -1;
 
 	audio_special_emitter = -1; //... for testing certain things
 	
+	event_user(10);
+	
 	event_user(3);

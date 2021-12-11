@@ -5,7 +5,8 @@
 #macro DISABLE_SYNCGROUPS true //game maker has a 'sync group' feature but it had some weird issues on some platforms right when we were trying to ship wandersong so we rerouted all the logic to avoid using them
 	//this might be a decision we could go back on but in general the fewer different features we're relying on, the better. even at their best sync groups have a lot of weird/unpredictable/unique behavior that 
 	//forces you to treat them different from other ypes of playing sounds.
-#macro ROOT_SOUND_FOLDER "Sounds"
+#macro ROOT_SOUND_FOLDER "Sounds" //root folder for all audio inside the game maker project
+#macro EXTERN_SOUND_FOLDER "audio" //folder for all external audio files, should be located in your project datafiles
 
 //default values for spatial audio
 audio_listener_orientation(0,0,1,0,-1,0);
@@ -15,7 +16,6 @@ global.default_sound_size = 1400;// //if sounds are within this distance of the 
 global.default_sound_atten = 2850;// //at this distance, sounds are inaudible
 global.listener_distance = 1250;//50 //how far the listener is from the screen
 global.max_listener_distance = 1500; //farthest the listener can be from the screen - the distance is alered based on the view scale
-
 
 //run this ~once per frame to update the state of all sounds
 function bard_audio_update(){
@@ -255,6 +255,8 @@ global.music_keys = ds_map_create();
 global.music_key = "";
 bard_audio_system_music_keys();
 
+global.external_audio_index = 1000000;
+
 #endregion
 
 /////////state for current playign music&ambience. 
@@ -264,3 +266,6 @@ bard_audio_system_music_keys();
 //and all the global beatevent() scripts reference this music player
 global.music_player = new class_audio_playstack(4); //2 second gap between songs ending/starting
 global.ambience_player = new class_audio_playstack(4);
+
+////load external data
+bard_audio_data_load();
