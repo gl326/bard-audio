@@ -194,20 +194,37 @@ ds_list_add(multi_buttons,blendebut);
 
 ////////////////////MUSIC CORNER
 
-bpmbut = newStackedHighlightable(objTextfield,3);
+bpmbut = newStackedHighlightable(objTextfield,3,-1,"BPM");
 bpmbut.container_edit=true; bpmbut.param="bpm";
 bpmbut.percent=false; bpmbut.plusmin = false;
 ds_list_add(multi_buttons,bpmbut);
 ds_list_add(loop_buttons,bpmbut);
 ds_list_add(choice_buttons,bpmbut);
 
-beatstartbut = newHighlightable(objTextfield,lerp(bpmbut.l,bpmbut.r,.5),bpmbut.t,bpmbut.r,bpmbut.b);
+beatstartbut = newHighlightable(objTextfield,lerp(bpmbut.l,bpmbut.r,.5),bpmbut.t,lerp(bpmbut.l,bpmbut.r,.75),bpmbut.b,"Measure");
 beatstartbut.container_edit=true; beatstartbut.param="beatstart";
 beatstartbut.percent=false; beatstartbut.plusmin = false;
 ds_list_add(multi_buttons,beatstartbut);
 ds_list_add(loop_buttons,beatstartbut);
 ds_list_add(choice_buttons,beatstartbut);
+
+var b = newHighlightable(objTextfield,lerp(bpmbut.l,bpmbut.r,.75),bpmbut.t,bpmbut.r,bpmbut.b);
+    b.container_edit = true; b.param = "beats_per_measure";
+    b.percent=false; b.plusmin = false;
+    ds_list_add(loop_buttons,b);
+    ds_list_add(choice_buttons,b);
+    ds_list_add(multi_buttons,b);
+
 bpmbut.r = lerp(bpmbut.l,bpmbut.r,.5);
+
+/*
+    var b = newStackedHighlightable(objTextfield,3,-1,"MeasureCount");
+    b.container_edit = true; b.param = "beats_per_measure";
+    b.percent=false; b.plusmin = false;
+    ds_list_add(loop_buttons,b);
+    ds_list_add(choice_buttons,b);
+    ds_list_add(multi_buttons,b);
+	*/
 
 /*
 musicbut = newStackedHighlightable(objaeButton,3);
