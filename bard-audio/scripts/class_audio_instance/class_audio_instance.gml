@@ -184,7 +184,7 @@ function class_audio_instance(_container,_sound=-1,_loops=false,_gain=0,_pitch=0
 	        }
 	    }
     
-	    if is_undefined(aud_playing){destroy(); return -1;}
+	    if is_undefined(aud_playing){return -1;}
 		
 		aud = aud_playing;
 	    if sync{
@@ -257,6 +257,9 @@ function class_audio_instance(_container,_sound=-1,_loops=false,_gain=0,_pitch=0
 	
 	//might never be used
 	static destroy = function(_player = container_player(container)){
-		array_delete(_player.playing,array_find_index(_player.playing,self),1);
+		var ind = array_find_index(_player.playing,self);
+		if ind>-1{
+			array_delete(_player.playing,ind,1);
+		}
 	}
 }

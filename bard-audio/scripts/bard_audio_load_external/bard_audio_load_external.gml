@@ -1,4 +1,6 @@
 // the basic structure here is ripped right outta juju's Gumshoe library for browsing files
+//this is used in the editor to identify external files and create an internal matching structure. 
+//this does not load them into memory for playing audio
 function bard_audio_load_external(_directory,_parent=undefined){
     var _directories = [],
 		_directory_containers = [];

@@ -11,7 +11,6 @@ function aeSaveEditor() {
 	file_text_write_string(file,str); file_text_writeln(file);
 	file_text_write_real(file,history_id); file_text_writeln(file);
 	file_text_write_string(file,json_encode(fakemap)); file_text_writeln(file);
-	file_text_write_string(file,string(the_audio.audio_loaded)); file_text_writeln(file);
 	file_text_close(file);
 
 	ds_map_delete(fakemap,"history");

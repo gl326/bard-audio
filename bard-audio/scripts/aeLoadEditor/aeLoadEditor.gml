@@ -20,41 +20,8 @@ function aeLoadEditor() {
 	    editing_history = ds_map_find_value(fakemap,"history");
 	    file_text_readln(file);
     
-	    if !file_text_eof(file){
-	        audio_grouplist_load(file_text_read_string(file));
-	        file_text_close(file);
-	    }
-    
 	    file_text_close(file);
     
-	    ///////////ORGANIZING BUSSES FOR BROWSING////////////
-	    var n = ds_map_size(global.audio_busses),k=ds_map_find_first(global.audio_busses);
-	    ds_map_destroy(bushierarchy);
-	    bushierarchy = ds_map_create();
-	    ds_list_clear(busses);
-    
-	    //make lists
-	    for(var i=0;i<n;i+=1){
-	        ds_map_add_list(bushierarchy,k,ds_list_create()); //make the lists
-	        k = ds_map_find_next(global.audio_busses,k);
-	    }
-    
-	    ///sort to lists
-	    k=ds_map_find_first(global.audio_busses)
-	    for(var i=0;i<n;i+=1){
-	        var bus = ds_map_find_value(global.audio_busses,k);
-	        if ds_exists(bus,ds_type_map){
-	        var par = ds_map_find_value(bus,"parent");
-	        //show_message(string(par));
-	        if is_real(par){
-	            //show_message("no parent for "+k)
-	            ds_list_add(busses,k);
-	        }else{
-	            ds_list_add(ds_map_find_value(bushierarchy,par),k);
-	        }
-	        }else{show_message("bus "+k+" is missing ("+string(bus)+")");}
-	        k = ds_map_find_next(global.audio_busses,k);
-	    }
     
 	    ds_map_delete(fakemap,"history");
 	    ds_map_destroy(fakemap);
@@ -71,7 +38,7 @@ function aeLoadEditor() {
 	        editing_audio = false;
 	        }
 	    if !editing_audio{
-	        if !ds_exists(editing,ds_type_map){editing = -1;}
+	        if !is_struct(editing){editing = -1;}
 	    }else{
 	        if !audio_exists(editing){editing = -1;}
 	    }

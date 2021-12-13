@@ -250,6 +250,9 @@ global.audio_list_index = ds_map_create(); //for containers that need to remembe
 global.audio_emitters = ds_map_create(); //for tracking emitters
 global.audio_param_copy_map = ds_map_create(); //this is a blank dummy map we use to copy data around when setting parameters
 global.audio_external_assets = ds_map_create(); //map external asset paths to indexes
+global.audio_load_queue = [];
+global.audio_loading = undefined;
+
 
 //definitions for music keys and current musical key state
 global.music_keys = ds_map_create();
@@ -267,3 +270,6 @@ global.external_audio_index = 1000000;
 //and all the global beatevent() scripts reference this music player
 global.music_player = new class_audio_playstack(4); //2 second gap between songs ending/starting
 global.ambience_player = new class_audio_playstack(4);
+
+global.__project_datafiles = undefined;
+bard_audio_data_load();

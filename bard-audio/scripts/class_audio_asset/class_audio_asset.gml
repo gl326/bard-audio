@@ -16,8 +16,9 @@ function class_audio_asset(_name="",_external=false) constructor{
 	loaded_buffer = -1;
 	streamed = false;
 	
-	is_grouped = false;
-	audio_group = ""; //if we're an internal file in an audio group, track that here
+	//is_grouped = false;
+	//audio_group = ""; //if we're an internal file in an audio group, track that here
+	audio_group_id = 0;
 	
 	ELEPHANT_SCHEMA
     {
@@ -25,7 +26,7 @@ function class_audio_asset(_name="",_external=false) constructor{
 			"loaded",
 			"index",
 			"loaded_buffer",
-			"loaded_audio"
+			"loaded_audio",
         ],
     }
 	
@@ -38,7 +39,7 @@ function class_audio_asset(_name="",_external=false) constructor{
 		if !external{
 			path = "";
 			index = asset_get_index(name);
-			is_grouped = (audio_group!="");
+
 		}else{
 			path = name;
 			name = filename_name(path);
@@ -66,28 +67,22 @@ function class_audio_asset(_name="",_external=false) constructor{
 	}
 	
 	static play = function(prio,looping){
-		if !external{
-			if !is_grouped or load(){
+		if load(){
+			if !external{
 				return audio_play_sound(index,prio,looping);	
 			}else{
-				return -1;	
+				return audio_play_sound(loaded_audio,prio,looping);
 			}
-		}else{
-			load();
-			return audio_play_sound(loaded_audio,prio,looping);
 		}
 	}
 	
 	static play_on = function(emitterID,looping,prio){
-		if !external{
-			if !is_grouped or load(){
+		if load(){
+			if !external{
 				return audio_play_sound_on(emitterID,index,looping,prio);	
 			}else{
-				return -1; //couldnt play, triggered an async load
+				return audio_play_sound_on(emitterID,loaded_audio,looping,prio);	
 			}
-		}else{
-			load();
-			return audio_play_sound_on(emitterID,loaded_audio,looping,prio);	
 		}
 	}
 	
@@ -103,16 +98,21 @@ function class_audio_asset(_name="",_external=false) constructor{
 		if external and !loaded{
 			if streamed{
 				loaded_audio = audio_create_stream(path);
+				loaded = true;	
 			}else{
-				loaded_buffer = buffer_load(path);
-				var _newBuff = buffer_create(buffer_get_size(loaded_buffer), buffer_fixed, 1);
-				buffer_copy(loaded_buffer, 0, buffer_get_size(loaded_buffer), _newBuff, 0);
-				loaded_audio = __audioExtWavBufferToAudio(_newBuff);
-				buffer_delete(loaded_buffer);
-				loaded_buffer = _newBuff;
+				if loaded==0{
+					bard_audio_load_queue_add(path,self);
+					loaded = -1;
+				}
+				return false;
 			}
-			
-			loaded = true;	
+		}else{
+			if audio_group_id>0 and !audio_group_is_loaded(audio_group_id){
+				if !audio_group_load_queued(audio_group_id){
+					bard_audio_load_queue_add(audio_group_id,self);	
+				}
+				return false;
+			}
 		}
 		
 		return true;
@@ -130,6 +130,10 @@ function class_audio_asset(_name="",_external=false) constructor{
 			loaded_buffer = -1;
 			
 			loaded = false;	
+		}else{
+			if audio_group_id>0 and audio_group_is_loaded(audio_group_id){
+				bard_audio_load_queue_add(-audio_group_id,self);	
+			}	
 		}
 		
 		return true;

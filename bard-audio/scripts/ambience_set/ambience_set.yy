@@ -6,7 +6,7 @@
     "path": "folders/Libraries/Bard/gameplay/audio_state.yy",
   },
   "resourceVersion": "1.0",
-  "name": "ambience_update",
+  "name": "ambience_set",
   "tags": [],
   "resourceType": "GMScript",
 }

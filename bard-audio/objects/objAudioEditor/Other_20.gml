@@ -20,6 +20,14 @@ var parent_from_path = function(path){
 		
 		return string_copy(path,_parent_start+1,_parent_end-_parent_start-1); //get name of next folder up	
 }
+
+var audio_group_names = [];
+var audio_group_data = project_data.AudioGroups;
+_i = 0;
+repeat(array_length(audio_group_data)){
+	audio_group_names[_i] = audio_group_data[_i].name;
+	_i ++;
+}
 	
 var _data = global.bard_audio_data[bard_audio_class.container]; //serialized folders data
 	
@@ -59,7 +67,8 @@ repeat(resource_n){
 			//create or get matching class
 			var asset = audio_asset_create(asset_get_index(_name));
 			asset.editor_order = resource.order;
-		
+			asset.audio_group_id = array_find_index(audio_group_names,resource_data.audioGroupId.name);
+			
 			var _j = 0;
 			repeat(array_length(parent_data.contents_serialize)){
 				var _cdata = parent_data.contents_serialize[_j];
