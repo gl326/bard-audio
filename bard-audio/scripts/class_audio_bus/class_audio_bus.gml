@@ -11,14 +11,7 @@ function class_audio_bus(_name="",_gain=0,_parent=undefined) constructor{
 	
 	children = [];
 	
-	ds_map_add(global.audio_busses,name,self); //track me!
-	
-	//find my mommy
-	if parent!=undefined{
-		if array_find_index(parent.children,self)==-1{
-			array_push(parent.children,self);	
-		}
-	}
+	parent_connect();
 	
 	ELEPHANT_SCHEMA
     {
@@ -32,14 +25,28 @@ function class_audio_bus(_name="",_gain=0,_parent=undefined) constructor{
 	ELEPHANT_POST_READ_METHOD
     {
 		gain = default_gain;
+		track();
     }
     
+	static track = function(){
+		ds_map_add(global.audio_busses,name,self); //track me!
+	}
+	
+	static parent_connect = function(){
+		//find my mommy and make sure we good
+		if parent!=undefined{
+			var parent_data = bus_getdata(parent);
+			if array_find_index(parent_data.children,self)==-1{
+				array_push(parent_data.children,self);	
+			}
+		}		
+	}
 	
 	static recalculate = function(_calc = 0, calced=[]){
 		array_push(calced,name);
 	    //if ds_exists(map,ds_type_map){
 	    var ncalc = ((_calc+1)
-	            *((gain/100)+1)
+	            *((gain/1)+1)
 	            )-1;	
 		var i;
 		

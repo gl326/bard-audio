@@ -4,6 +4,7 @@
 function bus_create(name,gain=0,parent=undefined) {
 	if !ds_map_exists(global.audio_busses,name){
 		var ret = new class_audio_bus(name,gain,parent);
+		ret.track();
 		array_push(
 			global.bard_audio_data[bard_audio_class.bus], 
 			ret

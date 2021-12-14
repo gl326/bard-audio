@@ -2,6 +2,7 @@
 function container_create(name,fromProject=false){
 	if !ds_map_exists(global.audio_containers,name){
 		var ret = new class_audio_container(name,fromProject);
+		ret.track();
 		array_push(
 			global.bard_audio_data[bard_audio_class.container], 
 			ret

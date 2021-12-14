@@ -2,8 +2,8 @@
 // https://help.yoyogames.com/hc/en-us/articles/360005277377 for more information
 function class_audio_asset(_name="",_external=false) constructor{
 	external = _external;
-	name = _name;
-	path = "";
+	name = "";
+	path = _name;
 	index = 0;
 	
 	gain = 0;
@@ -27,6 +27,7 @@ function class_audio_asset(_name="",_external=false) constructor{
 			"index",
 			"loaded_buffer",
 			"loaded_audio",
+			"name",
         ],
     }
 	
@@ -37,11 +38,9 @@ function class_audio_asset(_name="",_external=false) constructor{
 
 	static setup = function(){
 		if !external{
-			path = "";
+			name = path;
 			index = asset_get_index(name);
-
 		}else{
-			path = name;
 			name = filename_name(path);
 			index = global.external_audio_index;
 			global.external_audio_index ++;
@@ -62,6 +61,15 @@ function class_audio_asset(_name="",_external=false) constructor{
 				ds_map_add(global.audio_assets,index,self); //track me!
 			}else{
 				show_debug_message(concat("WARNING! no file for \"",path,"\". was it deleted or renamed?"));
+			}
+		}
+		
+		//weird blank
+		if name=="" and path==""{
+			//stop serializing me
+			var ind = array_find_index(global.bard_audio_data[bard_audio_class.asset],self);
+			if ind!=-1{
+				array_delete(global.bard_audio_data[bard_audio_class.asset],ind,1);	
 			}
 		}
 	}

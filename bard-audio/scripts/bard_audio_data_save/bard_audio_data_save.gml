@@ -6,4 +6,9 @@ function bard_audio_data_save(){
         
         var _string = snap_to_json(GregephantToJSON(global.bard_audio_data), true, true);
         file_write_string(_path, _string);
+		
+		show_debug_message("audio data saved!");
+		with(objAudioEditor){
+			saved_fx = 1;	
+		}
 }

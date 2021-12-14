@@ -63,7 +63,6 @@ function class_audio_container(_name = "", fromProject = false) constructor{
 	
 	from_project = fromProject;
 	
-	ds_map_add(global.audio_containers,name,self); //track me!
 	
 	editor_expand = false;
 	editor_deserialized = false;
@@ -84,29 +83,40 @@ function class_audio_container(_name = "", fromProject = false) constructor{
     
     ELEPHANT_POST_READ_METHOD
     {
-		deserialize_contents();
+		//deserialize_contents();
+		track();
     }
     
     #endregion
 	
-	//turn the serialized contents into game data
-	static deserialize_contents = function(){
+	static track = function(){
+		ds_map_add(global.audio_containers,name,self); //track me!	
+	}
+	
+	static check_parent = function(){
 		//check parent link
 		if name!=ROOT_SOUND_FOLDER{ //this is the master container, so dont look at my parent
-			var parent_data = container_getdata(parent);
+			var parent_data = ((parent=="")?undefined : container_getdata(parent));
 			if is_undefined(parent_data) or array_find_index(parent_data.contents_serialize,name)==-1{
 				if parent!=""{
 					show_debug_message(concat("WARNING! container ",name," failed to link to its parent, ",parent,". moving to root folder"));
 				}
 				parent = ROOT_SOUND_FOLDER;
-				parent_data = container_getdata(parent,true,true);
-				array_push(parent_data.contents_serialize,name);
-				array_push(parent_data.contents,name);		
+				parent_data = container_getdata(parent,true);
+				if array_find_index(parent_data.contents_serialize,name)==-1{
+					array_push(parent_data.contents_serialize,name);
+				}
+				if array_find_index(parent_data.contents,name)==-1{
+					array_push(parent_data.contents,name);
+				}
 			}
 		}else{
 			parent = "";	
-		}
-		
+		}	
+	}
+	
+	//turn the serialized contents into game data
+	static deserialize_contents = function(){
 		var n = array_length(contents_serialize);
 		contents = array_create(n);
 		
@@ -124,7 +134,7 @@ function class_audio_container(_name = "", fromProject = false) constructor{
 				item = audio_asset_index(string_copy(item,2,string_length(item)-1));	
 				if item==-1{
 					//array_delete(contents_serialize,_i,1);
-					show_debug_message(concat("WARNING! ",contents_serialize[_i]," was listed as an asset in ",name," but no longer exists"));
+					show_debug_message(concat("WARNING! ",contents_serialize[_i]," was listed as an external asset in ",name," but no longer exists"));
 					//continue;	
 				}
 			}

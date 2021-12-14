@@ -24,8 +24,8 @@ function drawBusList(list,xx,yy) {
 				draw_set_color(color_fg);
 			    var blend = color_fg;
 			    var gain = data.default_gain;
-				if gain>-100{
-					gain = 20*log10((gain/100)+1);
+				if gain>-1{
+					gain = 20*log10((gain/1)+1);
 				}else{gain = -144;}
 				var line = data.name+" ("+string(gain)+"dB)";
 				
@@ -71,7 +71,7 @@ function drawBusList(list,xx,yy) {
 		                        stf.editing = data; stf.param = "default_gain"; stf.draggable=true;
 		                        stf.dB = true;
 								stf.update_func = aeUpdateBusGain;
-		                        var text,val = data.default_gain/100;
+		                        var text,val = data.default_gain;///100;
 		                        if val>-1{
 		                            text = string(20*log10(val+1))
 		                        }else{

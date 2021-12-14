@@ -43,7 +43,9 @@ if objAudioEditor.dragging==id and editing>0{
         text = string(c_val);
         if editing!=-1 and (!objAudioEditor.editing_audio or !container_edit){
             var val = c_val;
-            if dB{val = (power(10,(val)/(20))-1)*100;}
+            if dB{
+				val = (power(10,(val)/(20))-1);//*100;
+			}
             if variable_struct_get(editing,param)!=val{
                 variable_struct_set(editing,param,val);
             }
@@ -108,7 +110,9 @@ if am_highlighted(){
         if (editing!=-1 and !objAudioEditor.editing_audio) or !container_edit{
             if !istext{
             var val = real(text);
-            if dB{val = (power(10,(val)/(20))-1)*100;}
+            if dB{
+				val = (power(10,(val)/(20))-1);//*100;
+			}
             if variable_struct_get(editing,param)!=val{
                 variable_struct_set(editing,param,val);
             }}else{

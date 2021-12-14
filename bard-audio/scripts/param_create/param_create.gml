@@ -4,6 +4,7 @@
 function param_create(name,defaultValue) {
 	if !ds_map_exists(global.audio_params,name){
 		var ret = new class_audio_parameter(name,defaultValue);
+		ret.track();
 		array_push(
 			global.bard_audio_data[bard_audio_class.parameter], 
 			ret

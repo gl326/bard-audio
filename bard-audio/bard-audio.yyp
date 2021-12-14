@@ -346,6 +346,7 @@
   ],
   "IncludedFiles": [
     {"CopyToMask":-1,"filePath":"datafiles/audio/test_external","resourceVersion":"1.0","name":"noisy_pop.wav","resourceType":"GMIncludedFile",},
+    {"CopyToMask":-1,"filePath":"datafiles","resourceVersion":"1.0","name":"audio_data.json","resourceType":"GMIncludedFile",},
   ],
   "MetaData": {
     "IDEVersion": "2.3.5.589",

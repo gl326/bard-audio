@@ -14,6 +14,12 @@ function bard_audio_data_load(){
 				_data[_i].deserialize_contents();
 				_i ++;
 			}
+			
+			_i = 0;
+			repeat(array_length(_data)){
+				_data[_i].check_parent();
+				_i ++;
+			}
         }
         
         
