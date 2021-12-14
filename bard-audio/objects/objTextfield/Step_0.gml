@@ -129,7 +129,7 @@ if am_highlighted(){
 //remove param ref
 if param_ref!="" and mouse_in_region(l,t,r,b) and mouse_check_button_pressed(mb_right)
     and (am_highlighted() or global.highlighted==noone){
-		param_delete_connection(param,container,variable);
+		param_delete_connection(param_ref,editing.name,param);
 		/*
     ds_map_destroy(ds_map_find_value(
                         ds_map_find_value(

@@ -9,7 +9,7 @@ name = _container.name;
 //show_debug_message(string(id)+" user event 0");
 /**/
 playing = []; //currently playing sounds + attributes
-parameters = [];//map_Create(); //parameters our sounds are dependent on (watch them for updates)
+parameters = container.get_parameters();//map_Create(); //parameters our sounds are dependent on (watch them for updates)
 parameters_update = [];
 parameters_updated = false;
 
@@ -447,7 +447,6 @@ static update_amplaying = function(){
 
 static update_params = function(){
 	var _n = array_length(playing);
-		
 	if live_update and parameters_updated>0 and _n{
 	repeat(parameters_updated){ //usually 1, but when setting unique parameters this happens once for each unique one to get the different sound sets
 			var uniquep = -1,found = false;

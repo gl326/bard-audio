@@ -11,7 +11,7 @@ function ds_map_create_pooled(){
 }
 function ds_map_destroy_pooled(map){
 	ds_map_clear(map);
-	ds_stack_push(global.bard_audio_map_pool);
+	ds_stack_push(global.bard_audio_map_pool,map);
 }
 
 //use this if you want to clean up memory. could be a safety measure that you run after a couple hours of gmaeplay or something. not necessary though.

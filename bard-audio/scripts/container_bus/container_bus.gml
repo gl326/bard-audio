@@ -2,7 +2,4 @@
 /// @param id
 function container_bus(argument0) {
 	container_getdata(argument0).bus;
-
-
-
 }

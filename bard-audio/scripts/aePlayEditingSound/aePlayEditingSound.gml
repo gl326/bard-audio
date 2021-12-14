@@ -16,6 +16,10 @@ function aePlayEditingSound() {
 	    if container_is_playing(editing){
 	        container_stop(editing);
 	    }else{
+			var player = container_player(editing);
+			if !is_undefined(player){
+				player.parameters = editing.get_parameters(); //update the attached parameters in case they were edited	
+			}
 	        container_play(editing);
 	    }
 	}

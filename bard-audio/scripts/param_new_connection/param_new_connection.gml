@@ -3,6 +3,7 @@
 /// @param  container id
 /// @param  connected to
 function param_new_connection(param,container,variable) {
-	global.audio_params[?param].hook_add(container,variable);
-	container_getdata(container).hook_add(param);
+	var cdata = container_getdata(container);
+	global.audio_params[?param].hook_add(cdata,variable);
+	cdata.hook_add(param);
 }

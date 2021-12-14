@@ -18,7 +18,9 @@
 				"general",
 				"test_sfx",
 				"test_music",
-				"test_external"
+				"chicory_bgm",
+				"test_external",
+				"bard_spirit_bgm"
 			],
 			"name" : "Sounds",
 			"parameters" : []
@@ -43,11 +45,16 @@
 			"type" : 1
 		},
 		{
+			"3d_pan" : 0,
+			"3d_sound_falloff" : 0,
+			"3d_sound_size" : 0,
 			"__Elephant_Constructor__" : "class_audio_container",
 			"__Elephant_Schema_Version__" : 0,
 			"blend_map" : [],
+			"bus" : "music",
 			"contents_serialize" : [
-				"chicory_bgm"
+				"bard_main_bgm",
+				"bard_sail_bgm"
 			],
 			"from_project" : 1,
 			"name" : "test_music",
@@ -77,12 +84,11 @@
 				"chicory_bgm_main",
 				"chicory_bgm_lowkey"
 			],
-			"from_project" : 1,
 			"name" : "chicory_bgm",
 			"parameters" : [
 				"calm"
 			],
-			"parent" : "test_music",
+			"parent" : "Sounds",
 			"type" : 2
 		},
 		{
@@ -98,7 +104,6 @@
 				"$chicory_meadows_bgm_and_lowkey_head_105bpm_CMaj_16beats",
 				"$chicory_meadows_lowkey_loop_105bpm_CMaj"
 			],
-			"from_project" : 1,
 			"lpdelayin" : 9.11,
 			"name" : "chicory_bgm_lowkey",
 			"parameters" : [],
@@ -118,7 +123,6 @@
 				"$chicory_meadows_bgm_head_105bpm_CMaj_16beats",
 				"$chicory_meadows_bgm_loop_105bpm_CMaj"
 			],
-			"from_project" : 1,
 			"lpdelayin" : 9.11,
 			"name" : "chicory_bgm_main",
 			"parameters" : [],
@@ -138,6 +142,127 @@
 			"name" : "test_external",
 			"parameters" : [],
 			"parent" : "Sounds"
+		},
+		{
+			"3d_pan" : 0,
+			"3d_sound_falloff" : 0,
+			"3d_sound_size" : 0,
+			"__Elephant_Constructor__" : "class_audio_container",
+			"__Elephant_Schema_Version__" : 0,
+			"blend" : 2.2189349112,
+			"blend_map" : [
+				{
+					"__Elephant_Constructor__" : "class_audio_container_blendmap",
+					"__Elephant_Schema_Version__" : 0
+				},
+				{
+					"__Elephant_Constructor__" : "class_audio_container_blendmap",
+					"__Elephant_Schema_Version__" : 0,
+					"cleft" : 99.2603550296
+				}
+			],
+			"blend_on" : 1,
+			"bpm" : 140,
+			"bus" : "music",
+			"contents_serialize" : [
+				"$mus_act1_bardstheme_passive_lp_140bpm",
+				"$mus_act1_bardstheme_active_lp_140bpm"
+			],
+			"from_project" : 1,
+			"loop" : 1,
+			"name" : "bard_main_bgm",
+			"parameters" : [
+				"intensity"
+			],
+			"parent" : "test_music",
+			"type" : 2
+		},
+		{
+			"3d_pan" : 0,
+			"3d_sound_falloff" : 0,
+			"3d_sound_size" : 0,
+			"__Elephant_Constructor__" : "class_audio_container",
+			"__Elephant_Schema_Version__" : 0,
+			"blend_map" : [],
+			"bpm" : 110,
+			"bus" : "music",
+			"contents_serialize" : [
+				"$mus_act1_spiritworld_intro_110bpm",
+				"bard_spirit_bgm_loop"
+			],
+			"lpdelayin" : 12.9,
+			"name" : "bard_spirit_bgm",
+			"parameters" : [],
+			"parent" : "Sounds",
+			"type" : 1
+		},
+		{
+			"3d_pan" : 0,
+			"3d_sound_falloff" : 0,
+			"3d_sound_size" : 0,
+			"__Elephant_Constructor__" : "class_audio_container",
+			"__Elephant_Schema_Version__" : 0,
+			"blend" : 86.8343195266,
+			"blend_map" : [
+				{
+					"__Elephant_Constructor__" : "class_audio_container_blendmap",
+					"__Elephant_Schema_Version__" : 0
+				},
+				{
+					"__Elephant_Constructor__" : "class_audio_container_blendmap",
+					"__Elephant_Schema_Version__" : 0,
+					"cleft" : 99.2603550296
+				}
+			],
+			"blend_on" : 1,
+			"bpm" : 110,
+			"bus" : "music",
+			"contents_serialize" : [
+				"$mus_act1_spiritworld_passive_lp_110bpm",
+				"$mus_act1_spiritworld_active_lp_110bpm"
+			],
+			"name" : "bard_spirit_bgm_loop",
+			"parameters" : [
+				"intensity"
+			],
+			"parent" : "bard_spirit_bgm",
+			"sync" : 1,
+			"type" : 2
+		},
+		{
+			"3d_pan" : 0,
+			"3d_sound_falloff" : 0,
+			"3d_sound_size" : 0,
+			"__Elephant_Constructor__" : "class_audio_container",
+			"__Elephant_Schema_Version__" : 0,
+			"blend" : 2.2189349112,
+			"blend_map" : [
+				{
+					"__Elephant_Constructor__" : "class_audio_container_blendmap",
+					"__Elephant_Schema_Version__" : 0
+				},
+				{
+					"__Elephant_Constructor__" : "class_audio_container_blendmap",
+					"__Elephant_Schema_Version__" : 0,
+					"cleft" : 97.9289940828
+				}
+			],
+			"blend_on" : true,
+			"bpm" : 70,
+			"bus" : "music",
+			"contents_serialize" : [
+				"$mus_act3_sailing__passive_lp_70bpm_Fmaj",
+				"$mus_act3_sailing_active_lp_70bpm_Fmaj"
+			],
+			"from_project" : 1,
+			"loop" : true,
+			"name" : "bard_sail_bgm",
+			"parameters" : [
+				"intensity"
+			],
+			"parent" : "test_music",
+			"sync" : true,
+			"type" : 2
 		}
 	],
 	[
@@ -217,6 +342,84 @@
 				]
 			},
 			"name" : "squeakiness"
+		},
+		{
+			"__Elephant_Constructor__" : "class_audio_parameter",
+			"__Elephant_Schema_Version__" : 0,
+			"hooks" : {
+				"__Elephant_Constructor__" : "class_map",
+				"__Elephant_Schema_Version__" : 0,
+				"bard_main_bgm" : [
+					{
+						"__Elephant_Constructor__" : "class_audio_hook",
+						"__Elephant_Schema_Version__" : 0,
+						"curve" : {
+							"__Elephant_Constructor__" : "class_audio_hook_curve",
+							"__Elephant_Schema_Version__" : 0,
+							"points" : [
+								{
+									"__Elephant_Constructor__" : "class_audio_hook_curve_point",
+									"__Elephant_Schema_Version__" : 0
+								},
+								{
+									"__Elephant_Constructor__" : "class_audio_hook_curve_point",
+									"__Elephant_Schema_Version__" : 0,
+									"x" : 100,
+									"y" : 100
+								}
+							]
+						},
+						"variable" : "blend"
+					}
+				],
+				"bard_sail_bgm" : [
+					{
+						"__Elephant_Constructor__" : "class_audio_hook",
+						"__Elephant_Schema_Version__" : 0,
+						"curve" : {
+							"__Elephant_Constructor__" : "class_audio_hook_curve",
+							"__Elephant_Schema_Version__" : 0,
+							"points" : [
+								{
+									"__Elephant_Constructor__" : "class_audio_hook_curve_point",
+									"__Elephant_Schema_Version__" : 0
+								},
+								{
+									"__Elephant_Constructor__" : "class_audio_hook_curve_point",
+									"__Elephant_Schema_Version__" : 0,
+									"x" : 100,
+									"y" : 100
+								}
+							]
+						},
+						"variable" : "blend"
+					}
+				],
+				"bard_spirit_bgm_loop" : [
+					{
+						"__Elephant_Constructor__" : "class_audio_hook",
+						"__Elephant_Schema_Version__" : 0,
+						"curve" : {
+							"__Elephant_Constructor__" : "class_audio_hook_curve",
+							"__Elephant_Schema_Version__" : 0,
+							"points" : [
+								{
+									"__Elephant_Constructor__" : "class_audio_hook_curve_point",
+									"__Elephant_Schema_Version__" : 0
+								},
+								{
+									"__Elephant_Constructor__" : "class_audio_hook_curve_point",
+									"__Elephant_Schema_Version__" : 0,
+									"x" : 100,
+									"y" : 100
+								}
+							]
+						},
+						"variable" : "blend"
+					}
+				]
+			},
+			"name" : "intensity"
 		}
 	],
 	[
@@ -224,7 +427,7 @@
 			"__Elephant_Constructor__" : "class_audio_bus",
 			"__Elephant_Schema_Version__" : 0,
 			"children" : [],
-			"default_gain" : -29.2054215616,
+			"default_gain" : -0.2920542156,
 			"name" : "music",
 			"parent" : "music_setting"
 		},
@@ -304,6 +507,51 @@
 			"__Elephant_Schema_Version__" : 0,
 			"external" : 1,
 			"path" : "audio/test_external\\noisy_pop.wav"
+		},
+		{
+			"__Elephant_Constructor__" : "class_audio_asset",
+			"__Elephant_Schema_Version__" : 0,
+			"bus" : "music",
+			"editor_order" : 1,
+			"path" : "mus_act1_spiritworld_active_lp_110bpm"
+		},
+		{
+			"__Elephant_Constructor__" : "class_audio_asset",
+			"__Elephant_Schema_Version__" : 0,
+			"bus" : "music",
+			"editor_order" : 1,
+			"path" : "mus_act1_bardstheme_active_lp_140bpm"
+		},
+		{
+			"__Elephant_Constructor__" : "class_audio_asset",
+			"__Elephant_Schema_Version__" : 0,
+			"bus" : "music",
+			"path" : "mus_act1_spiritworld_intro_110bpm"
+		},
+		{
+			"__Elephant_Constructor__" : "class_audio_asset",
+			"__Elephant_Schema_Version__" : 0,
+			"bus" : "music",
+			"path" : "mus_act1_spiritworld_passive_lp_110bpm"
+		},
+		{
+			"__Elephant_Constructor__" : "class_audio_asset",
+			"__Elephant_Schema_Version__" : 0,
+			"bus" : "music",
+			"path" : "mus_act1_bardstheme_passive_lp_140bpm"
+		},
+		{
+			"__Elephant_Constructor__" : "class_audio_asset",
+			"__Elephant_Schema_Version__" : 0,
+			"bus" : "music",
+			"path" : "mus_act3_sailing__passive_lp_70bpm_Fmaj"
+		},
+		{
+			"__Elephant_Constructor__" : "class_audio_asset",
+			"__Elephant_Schema_Version__" : 0,
+			"bus" : "music",
+			"editor_order" : 1,
+			"path" : "mus_act3_sailing_active_lp_70bpm_Fmaj"
 		}
 	]
 ]

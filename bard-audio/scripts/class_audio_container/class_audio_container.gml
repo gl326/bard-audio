@@ -250,7 +250,9 @@ function class_audio_container(_name = "", fromProject = false) constructor{
 	}
 	
 	if sync {
-	    inst.sync = true;
+	    if !DISABLE_SYNCGROUPS{
+			inst.sync = true;
+		}
 	    obj.sync = true;
 	}else{
 	    obj.sync = false;
@@ -525,6 +527,41 @@ function class_audio_container(_name = "", fromProject = false) constructor{
 			}	
 			
 			return true;
+	}
+	
+	//recursively find all parameters that might trigger updates in any child containers.
+	//called with no arguments to begin a search from this container
+	static get_parameters = function(array = [],map = undefined){
+		var top = is_undefined(map);
+		
+		if top{
+			map = ds_map_create_pooled();	
+			array_copy(array,0,parameters,0,array_length(parameters));
+		}else{
+			var _i = 0;
+			repeat(array_length(parameters)){
+				if !ds_map_exists(map,parameters[_i]){
+					array_push(array,parameters[_i]);	
+					ds_map_add(map,parameters[_i],1);
+				}
+				_i ++;
+			}
+		}
+		
+		//recurse deeper
+		var _i = 0;
+		repeat(array_length(contents)){
+			if is_string(contents[_i]){
+				array = container_getdata(contents[_i]).get_parameters(array,map);
+			}
+			_i ++;
+		}
+		
+		//bubble up
+		if top{
+			ds_map_destroy_pooled(map);	
+		}
+		return array;
 	}
 }
 

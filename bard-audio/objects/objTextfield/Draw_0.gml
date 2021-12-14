@@ -1,6 +1,8 @@
 
 draw_set_color(objAudioEditor.color_fg);
-if param_ref!=""{draw_set_color(objAudioEditor.color_fg2);}
+if param_ref!=""{
+	draw_set_color(objAudioEditor.color_fg2);
+	}
 
 var dragging = (objAudioEditor.dragging==id and objAudioEditor.drag_start);
 
@@ -8,6 +10,9 @@ draw_rectangle(l,t,r,b,!dragging);
 
 if dragging{draw_set_color(objAudioEditor.color_bg);}
 var ss = string(text),s=ss;
+if param_ref!=""{
+	s = string(param_ref);	
+}
 if container_edit and param_ref=="" and s==string_number(s) and string_digits(s)!=""{
     if real(s)>0 and plusmin{s = "+"+s;}
     else{

@@ -47,7 +47,7 @@ function class_audio_parameter(_name="",_default=0) constructor{
 	}
 	
 	static container_hook = function(_container){
-		return hooks.Get(_container.name);
+		return hooks.Get(container_getdata(_container).name);
 	}
 	
 	static container_hook_copy = function(_containerFrom,_containerTo){
@@ -115,9 +115,10 @@ function class_audio_parameter(_name="",_default=0) constructor{
 	}
 		
 	static hook_delete = function(_container,_container_var){
-		hook_delete_variable(_container.name,_container_var);
-		if !array_length(container_hook(_container)){
-			hook_delete_container(_container.name);	
+		var cdata = container_getdata(_container);
+		hook_delete_variable(cdata.name,_container_var);
+		if !array_length(container_hook(cdata)){
+			hook_delete_container(cdata.name);	
 		}
 	}
 }
