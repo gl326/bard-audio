@@ -73,7 +73,9 @@ if editing!=-1{
             (container_name(editing)),
             2,2,0
         );
-        
+        if editing.from_project{
+			draw_sprite_ext(sprAudioButtons,8, (room_width/3) + 8+96+8+8+2*string_width(container_name(editing))+16,8+24,2,2,0,color_fg,1);
+		}
         
         //draw_text((room_width*2/3) + 8,room_height/4,"VOL min-max");
         //draw_text((room_width*2/3) + 8,(room_height/4)+88,"PITCH min-max");

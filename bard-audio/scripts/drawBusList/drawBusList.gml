@@ -25,7 +25,7 @@ function drawBusList(list,xx,yy) {
 			    var blend = color_fg;
 			    var gain = data.default_gain;
 				if gain>-1{
-					gain = 20*log10((gain/1)+1);
+					gain = PercentToDB(gain);
 				}else{gain = -144;}
 				var line = data.name+" ("+string(gain)+"dB)";
 				
@@ -73,7 +73,7 @@ function drawBusList(list,xx,yy) {
 								stf.update_func = aeUpdateBusGain;
 		                        var text,val = data.default_gain;///100;
 		                        if val>-1{
-		                            text = string(20*log10(val+1))
+		                            text = string(PercentToDB(val))
 		                        }else{
 		                            text = "-144";
 		                        }

@@ -2,11 +2,11 @@
   "isDnD": false,
   "isCompatibility": false,
   "parent": {
-    "name": "functions",
-    "path": "folders/Libraries/Bard/engine/editor/functions.yy",
+    "name": "params",
+    "path": "folders/Libraries/Bard/gameplay/params.yy",
   },
   "resourceVersion": "1.0",
-  "name": "aeRenameEditingSound",
+  "name": "audio_param_reset",
   "tags": [],
   "resourceType": "GMScript",
 }

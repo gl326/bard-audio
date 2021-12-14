@@ -149,7 +149,7 @@
 			"3d_sound_size" : 0,
 			"__Elephant_Constructor__" : "class_audio_container",
 			"__Elephant_Schema_Version__" : 0,
-			"blend" : 2.2189349112,
+			"blend" : 98.224852071,
 			"blend_map" : [
 				{
 					"__Elephant_Constructor__" : "class_audio_container_blendmap",
@@ -235,7 +235,7 @@
 			"3d_sound_size" : 0,
 			"__Elephant_Constructor__" : "class_audio_container",
 			"__Elephant_Schema_Version__" : 0,
-			"blend" : 2.2189349112,
+			"blend" : 98.224852071,
 			"blend_map" : [
 				{
 					"__Elephant_Constructor__" : "class_audio_container_blendmap",

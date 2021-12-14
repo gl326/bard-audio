@@ -49,6 +49,12 @@ function drawContainerList(list,xx,yy,parent=undefined) {
 					draw_rectangle(anim_x-8,yy,anim_x+8,yy+line_h,false);
 				}
 				
+				if fold{
+					if data.from_project{
+						draw_sprite_ext(sprAudioButtons,8,xx+8+string_width(_name),yy+12,1,1,0,draw_get_color(),1);
+					}	
+				}
+				
 				draw_text(xx,yy,_name);
 				
 				///////interaction.......

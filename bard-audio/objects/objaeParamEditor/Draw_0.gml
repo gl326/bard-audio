@@ -21,7 +21,7 @@ for(var i=0;i<=divs;i+=1){
     var yy = lerp(gb,gt,i/divs);
 	var yperc = lerp(ymin,ymax,i/divs);
 	if dB{
-		draw_text(gl-2,yy,string(20*log10((yperc/100)+1))+"dB");
+		draw_text(gl-2,yy,string(PercentToDB(yperc/100))+"dB");
 	}else{
 		draw_text(gl-2,yy,string(yperc)+"%");
 	}

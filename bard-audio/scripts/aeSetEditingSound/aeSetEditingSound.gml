@@ -49,7 +49,7 @@ function aeSetEditingSound() {
 	                    assetgainbut.param = audio_asset_name(editing);
 	                    var val = (audio_asset_gain(editing))/100;
 	                    if val>-1{
-	                        assetgainbut.text = string(20*log10(val+1))
+	                        assetgainbut.text = string(PercentToDB(val))
 	                    }else{
 	                        assetgainbut.text = "-144";
 	                    }

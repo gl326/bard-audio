@@ -29,7 +29,7 @@ if is_struct(curves) and blend_param_drag==""{
 	        xf.text = string(xx);
 			yf.dB = dB;
 			if dB{
-				yf.text = string(20*log10((yy/100)+1));
+				yf.text = string(PercentToDB(yy/100));
 			}else{
 				yf.text = string(yy);
 			}

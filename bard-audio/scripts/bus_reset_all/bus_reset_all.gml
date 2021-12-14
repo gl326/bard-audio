@@ -4,7 +4,7 @@
 //for in-game code you will be better served having a well-defined hierarchy and calling reset() only on the busses you would have ever changed
 function bus_reset_all(){
 	var busses = ds_map_keys_to_array(global.audio_busses),
-		_i;
+		_i = 0;
 	repeat(array_length(busses)){
 		bus_reset(busses[_i]);
 		_i ++;	

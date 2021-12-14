@@ -1,21 +1,44 @@
-// Script assets have changed for v2.3.0 see
-// https://help.yoyogames.com/hc/en-us/articles/360005277377 for more information
-#macro audio_uses_z false
-#macro audio_in_editor (room==rmAudioEditor)
-#macro DISABLE_SYNCGROUPS true //game maker has a 'sync group' feature but it had some weird issues on some platforms right when we were trying to ship wandersong so we rerouted all the logic to avoid using them
-	//this might be a decision we could go back on but in general the fewer different features we're relying on, the better. even at their best sync groups have a lot of weird/unpredictable/unique behavior that 
-	//forces you to treat them different from other ypes of playing sounds.
-#macro ROOT_SOUND_FOLDER "Sounds" //root folder for all audio inside the game maker project
-#macro EXTERN_SOUND_FOLDER "audio/" //folder for all external audio files, should be located in your project datafiles
+////////bard audio system!!!!!!
 
-//default values for spatial audio
+#macro audio_uses_z false 
+/*if TRUE, then we will assume every spatial object has an internal variable called "z," the same as every game maker object 
+has variables called "x" and "y." if you arent using a z variable then leave this off.
+*/
+
+#macro AUDIO_EDITOR_ROOM rmAudioEditor 
+/*The GameMaker room used as the audio editor. it can be named anything, just make sure its a room that contains objAudioEditor.
+*/
+
+#macro EDITOR_PLAY_ROOM rmAudioDemo 
+/* When you hit CTRL+ENTER in the editor, it will go to this room. make it a room that could be a reasonable entrypoint to begin
+gameplay! that way you can edit sounds, test them in-game, and then go back to adjust.
+*/
+
+#macro ROOT_SOUND_FOLDER "Sounds" 
+/*root folder for all audio *inside the game maker project* */
+
+#macro EXTERN_SOUND_FOLDER "audio/" 
+/* folder for any external audio files, should be located in your project datafiles
+*DO include the final slash* */
+
+#macro DISABLE_SYNCGROUPS true 
+/* game maker has a "sync group" feature but it had some weird issues on some platforms right when we were trying to ship wandersong so we rerouted all the logic to avoid using them
+	this might be a decision we could go back on but in general the fewer different features we"re relying on, the better. even at their best sync groups have a lot of weird/unpredictable/unique behavior that 
+	forces you to treat them different from other ypes of playing sounds.*/
+
+//////////default values for spatial audio//////////
 audio_listener_orientation(0,0,1,0,-1,0);
 audio_falloff_set_model(audio_falloff_linear_distance); //_clamped?
 
-global.default_sound_size = 1400;// //if sounds are within this distance of the listener, they're full volume
+global.default_sound_size = 1400;// //if sounds are within this distance of the listener, theyre full volume
 global.default_sound_atten = 2850;// //at this distance, sounds are inaudible
 global.listener_distance = 1250;//50 //how far the listener is from the screen
 global.max_listener_distance = 1500; //farthest the listener can be from the screen - the distance is alered based on the view scale
+
+////////// if you want to add music keys, add them in *bard_audio_system_music_keys* //////////
+
+
+//////////IMPORTANT FUNCTIONS! Use these to hook the system into your game!//////////
 
 //run this ~once per frame to update the state of all sounds
 function bard_audio_update(){
@@ -46,7 +69,7 @@ function bard_audio_update(){
 	}
 }
 
-//stop tracking sounds - ie. for a room end
+//function to stop tracking sounds - ie. for a room end
 function bard_audio_clear(clearPersistent = false){
 	var _i = 0;
 	repeat(array_length(global.audio_players)){
@@ -72,6 +95,32 @@ function bard_audio_listener_update(_x,_y,_z = 0,_view_zoom_scale=1){
 	-global.max_listener_distance,global.max_listener_distance);
 	
 	audio_listener_position(global.listener_x,global.listener_y,global.listener_z);
+}
+	
+//make sure to put this in the Asynchonous Event > Save/Load of some global object.
+//this is used to manage audio that's being loaded in and assign it correctly.
+function bard_audio_load_event(){
+	if !is_undefined(global.audio_loading){
+		if async_load[?"id"]==global.audio_loading.id{
+			if async_load[?"status"]{
+				if is_string(global.audio_loading.item){ 
+					//path to external file
+					var _newBuff = buffer_create(buffer_get_size(global.audio_loading.buffer), buffer_fixed, 1);
+					buffer_copy(global.audio_loading.buffer, 0, buffer_get_size(global.audio_loading.buffer), _newBuff, 0);
+				
+					global.audio_loading.from.loaded_audio = __audioExtWavBufferToAudio(_newBuff);
+					global.audio_loading.from.loaded_buffer = _newBuff;
+					global.audio_loading.from.loaded = true;
+					
+					buffer_delete(global.audio_loading.buffer);
+				}else{
+					//audio group. no extra logic needed.
+				}
+			}
+		
+			bard_audio_load_queue_end();
+		}
+	}
 }
 	
 //do this in the draw_gui event to display info on playing sounds
@@ -218,6 +267,8 @@ function bard_audio_debug_gui(){
 global.listener_x = 0;
 global.listener_y = 0;
 global.listener_z = 0;
+
+#macro audio_in_editor (room==AUDIO_EDITOR_ROOM)
 
 //data structures that hold referneces to important things
 

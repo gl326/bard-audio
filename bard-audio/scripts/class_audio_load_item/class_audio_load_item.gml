@@ -74,26 +74,3 @@ function bard_audio_load_queue_end(){
 	bard_audio_load_queue_update();
 }
 
-//for async save/load event
-function bard_audio_load_event(){
-	if !is_undefined(global.audio_loading){
-		if async_load[?"id"]==global.audio_loading.id{
-			if async_load[?"status"]{
-				if is_string(global.audio_loading.item){ //path to external file
-					var _newBuff = buffer_create(buffer_get_size(global.audio_loading.buffer), buffer_fixed, 1);
-					buffer_copy(global.audio_loading.buffer, 0, buffer_get_size(global.audio_loading.buffer), _newBuff, 0);
-				
-					global.audio_loading.from.loaded_audio = __audioExtWavBufferToAudio(_newBuff);
-					global.audio_loading.from.loaded_buffer = _newBuff;
-					global.audio_loading.from.loaded = true;
-					
-					buffer_delete(global.audio_loading.buffer);
-				}else{
-					//audio group. no extra logic needed really.
-				}
-			}
-		
-			bard_audio_load_queue_end();
-		}
-	}
-}

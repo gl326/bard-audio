@@ -80,7 +80,11 @@ if search_update<=0{
 						repeat(array_length(source)){
 							var class = source[_i];
 							if string_pos(text,string_lower(class.name)){
-								array_push(browser,class);
+								if tab==0{
+									array_push(browser,class.name);
+								}else{
+									array_push(browser,class);
+								}
 							}
 							_i++;	
 						}

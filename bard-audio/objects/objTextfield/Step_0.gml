@@ -16,7 +16,7 @@ if (container_edit and !objAudioEditor.editing_audio and (editing!=objAudioEdito
             if dB{
                 var val = real(text)/100;
                 if val>-1{
-                    text = string(20*log10(val+1))
+                    text = string(PercentToDB(val))
                 }else{
                     text = "-144";
                 }
@@ -44,7 +44,7 @@ if objAudioEditor.dragging==id and editing>0{
         if editing!=-1 and (!objAudioEditor.editing_audio or !container_edit){
             var val = c_val;
             if dB{
-				val = (power(10,(val)/(20))-1);//*100;
+				val = DBToPercent(val);//*100;
 			}
             if variable_struct_get(editing,param)!=val{
                 variable_struct_set(editing,param,val);
@@ -111,7 +111,7 @@ if am_highlighted(){
             if !istext{
             var val = real(text);
             if dB{
-				val = (power(10,(val)/(20))-1);//*100;
+				val = DBToPercent(val);//*100;
 			}
             if variable_struct_get(editing,param)!=val{
                 variable_struct_set(editing,param,val);
@@ -186,7 +186,7 @@ if slider and param_ref=="" and editing!=-1 and !objAudioEditor.editing_audio{
                 if c_val<=-100{
                     text = "-144";
                 }else{
-                    text = string(20*log10((c_val/100)+1));
+                    text = string(PercentToDB(c_val/100));
                 }
             }else{
                 c_val = lerp(slider_min,slider_max,amt);
