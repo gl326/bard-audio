@@ -94,6 +94,18 @@ function class_audio_asset(_name="",_external=false) constructor{
 		}	
 	}
 	
+	static is_loaded = function(){
+		if external{
+			return (loaded>=1);
+		}else{
+			if audio_group_id>0 and !audio_group_is_loaded(audio_group_id){
+				return false;
+			}else{
+				return true;	
+			}
+		}
+	}
+	
 	static load = function(){
 		if external and !loaded{
 			if streamed{

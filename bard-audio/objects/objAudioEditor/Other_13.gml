@@ -108,12 +108,6 @@ reloadbut = newHighlightable(objaeButton,128+16,(butt_g*2)+(butt_h*2),(room_widt
 reloadbut.script = aeReloadProject;
 reloadbut.name = "Reload Project";
 
-/*
-loadbut = newHighlightable(objaeButton,(room_width/3) + 8 - (128),(butt_g*2)+(butt_h*2),(room_width/3) - 8,(butt_g*2)+(butt_h*3));
-loadbut.script = aeNewEditorpanel;//aeAudioLoadPanel;
-loadbut.args[0] = objaeAudioloader;
-loadbut.name = "LOAD";*/
-
 testbut = newHighlightable(objaeButton,(room_width/3)+16,8+48+8,(room_width/3)+(room_width*3/9)-8,8+butt_h+8+butt_h+butt_h);
 testbut.script = aePlayEditingSound;
 testbut.name = "TEST";

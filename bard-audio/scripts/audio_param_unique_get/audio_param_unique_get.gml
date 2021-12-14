@@ -2,11 +2,14 @@
 /// @param sound
 /// @param  id
 /// @param  new number
-function audio_param_unique_get(container,param) {
+function audio_param_unique_get(param,container,playID) {
 	var player = container_player(container);
 	if !is_undefined(player){
-		return ds_map_Find_value(player.unique_param,param);	
+		//ds_map_add_map(unique_param_settings,playID,map_Create(param,newv));
+		if ds_map_exists(player.unique_param_settings,playID){
+			return ds_map_Find_value(player.unique_param_settings,playID)[?param];	
+		}
 	}
 
-	return noone;
+	return undefined;
 }

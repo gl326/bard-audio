@@ -495,6 +495,27 @@ function class_audio_container(_name = "", fromProject = false) constructor{
 			_i ++;
 		}
 	}
+	
+	static is_loaded = function(_recursive = true){
+				var _i = 0;
+			repeat(array_length(contents)){
+				var item = contents[_i];
+				if is_string(item){
+					if _recursive{
+						if !container_getdata(item).is_loaded(){
+							return false;	
+						}
+					}
+				}else{
+					if !audio_asset_is_loaded(item){
+						return false;	
+					}
+				}
+				_i ++;
+			}	
+			
+			return true;
+	}
 }
 
 

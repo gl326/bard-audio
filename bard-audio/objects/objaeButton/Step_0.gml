@@ -20,10 +20,6 @@ if script==aeToggleSoundAttribute{
     }
 }
 
-if script==audio_grouplist_load{
-    lit = (the_audio.audio_loaded==args[0]);
-}
-
 if script==aeAlphabetical{
     lit = (objAudioEditor.alphabetical);
 }
