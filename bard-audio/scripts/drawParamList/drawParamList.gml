@@ -48,32 +48,12 @@ function drawParamList(list,xx,yy) {
 				            else{clicked = item.name;}
 				        }
 				        if mouse_check_button_pressed(mb_left) and keyboard_check(vk_delete){
-				            if show_question("delete the parameter "+name+"?"){
+				            if show_question("delete the parameter "+item.name+"?"){
 				                ////destroy all references
-				                var k = ds_map_find_first(con), ps = ds_map_size(con);
-				                for(var ii=0;ii<ps;ii+=1){
-				                    if k!="name" and k!="default"{
-				                        var c_name = k,
-				                            contain = ds_map_find_value(global.audio_containers,k),
-				                            plist = ds_map_find_value(con,k),
-				                            kk = ds_map_find_first(plist),
-				                            nn = ds_map_size(plist);
-				                        for(var j=0;j<nn;j+=1){
-				                            var param = ds_map_find_value(plist,kk);
-				                            if string(ds_map_Find_value(contain,param))==name{
-				                                ds_map_Replace(contain,param,0);
-				                            }
-				                            kk = ds_map_find_next(plist,kk);
-				                        }
-                        
-				                    }
-				                    k = ds_map_find_next(con,k);
-				                }
-				                ds_map_destroy(con);
-				                ds_map_delete(global.audio_params,name);
-				                ds_map_delete(global.audio_state,name);
-				                ds_list_delete(list,i);
-				                with(objAudioEditor){ds_list_delete(params,ds_list_find_index(params,con));}
+								var _data = global.bard_audio_data[bard_audio_class.parameter];
+								array_delete(_data,array_find_index(_data,item),1);
+								ds_map_delete(global.audio_params,item.name);
+				                aeBrowserUpdate();
 				                break;
 				            }
 				        }

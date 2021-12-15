@@ -133,6 +133,13 @@ function class_audio_tween(_variable_string_name, _dest=1, _length=1, _curve=1,_
 					}
 				}
 	}
+	
+	static destroy = function(){
+		var ind = array_find_index(global.audio_tweens,self);
+		if ind!=-1{
+			array_delete(global.audio_tweens,ind,1);	
+		}
+	}
 }
 
 function tween_audio(variable_string_name,dest,timeInSeconds=1,curve=1,isColor=false){

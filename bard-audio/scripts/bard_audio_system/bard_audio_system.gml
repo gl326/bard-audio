@@ -30,8 +30,8 @@ gameplay! that way you can edit sounds, test them in-game, and then go back to a
 audio_listener_orientation(0,0,1,0,-1,0);
 audio_falloff_set_model(audio_falloff_linear_distance); //_clamped?
 
-global.default_sound_size = 1400;// //if sounds are within this distance of the listener, theyre full volume
-global.default_sound_atten = 2850;// //at this distance, sounds are inaudible
+global.default_sound_size = 1000;// //if sounds are within this distance of the listener, theyre full volume
+global.default_sound_atten = 2000;// //at this distance, sounds are inaudible
 global.listener_distance = 1250;//50 //how far the listener is from the screen
 global.max_listener_distance = 1500; //farthest the listener can be from the screen - the distance is alered based on the view scale
 

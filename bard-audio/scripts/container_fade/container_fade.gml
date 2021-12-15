@@ -3,6 +3,6 @@
 function container_fade(container,newVolume,time=2,curve=1) {
 	var player = container_player(container);
 	if !is_undefined(player){
-		return player.tween_audio("volume",newVolume,time,curve);
+		with(player){return tween_audio("volume",newVolume,time,curve);}
 	}
 }

@@ -4,23 +4,10 @@
 			"__Elephant_Constructor__" : "class_audio_container",
 			"__Elephant_Schema_Version__" : 0,
 			"blend_map" : [],
-			"contents_serialize" : [],
-			"from_project" : 1,
-			"name" : "general",
-			"parameters" : [],
-			"parent" : "Sounds"
-		},
-		{
-			"__Elephant_Constructor__" : "class_audio_container",
-			"__Elephant_Schema_Version__" : 0,
-			"blend_map" : [],
 			"contents_serialize" : [
-				"general",
 				"test_sfx",
 				"test_music",
-				"chicory_bgm",
-				"test_external",
-				"bard_spirit_bgm"
+				"test_external"
 			],
 			"name" : "Sounds",
 			"parameters" : []
@@ -32,9 +19,10 @@
 			"__Elephant_Constructor__" : "class_audio_container",
 			"__Elephant_Schema_Version__" : 0,
 			"blend_map" : [],
+			"bus" : "sfx",
 			"contents_serialize" : [
-				"$texure_paint_loop",
-				"$fart"
+				"test_looping_sfx",
+				"test_choice_sfx"
 			],
 			"from_project" : 1,
 			"name" : "test_sfx",
@@ -62,86 +50,27 @@
 			"parent" : "Sounds"
 		},
 		{
-			"3d_pan" : 0,
-			"3d_sound_falloff" : 0,
-			"3d_sound_size" : 0,
-			"__Elephant_Constructor__" : "class_audio_container",
-			"__Elephant_Schema_Version__" : 0,
-			"blend_map" : [
-				{
-					"__Elephant_Constructor__" : "class_audio_container_blendmap",
-					"__Elephant_Schema_Version__" : 0,
-					"cright" : 6.6568047337
-				},
-				{
-					"__Elephant_Constructor__" : "class_audio_container_blendmap",
-					"__Elephant_Schema_Version__" : 0,
-					"cleft" : 93.3431952663
-				}
-			],
-			"blend_on" : 1,
-			"contents_serialize" : [
-				"chicory_bgm_main",
-				"chicory_bgm_lowkey"
-			],
-			"name" : "chicory_bgm",
-			"parameters" : [
-				"calm"
-			],
-			"parent" : "Sounds",
-			"type" : 2
-		},
-		{
+			"3d" : 1,
 			"3d_pan" : 0,
 			"3d_sound_falloff" : 0,
 			"3d_sound_size" : 0,
 			"__Elephant_Constructor__" : "class_audio_container",
 			"__Elephant_Schema_Version__" : 0,
 			"blend_map" : [],
-			"bpm" : 105,
-			"bus" : "music",
-			"contents_serialize" : [
-				"$chicory_meadows_bgm_and_lowkey_head_105bpm_CMaj_16beats",
-				"$chicory_meadows_lowkey_loop_105bpm_CMaj"
-			],
-			"lpdelayin" : 9.11,
-			"name" : "chicory_bgm_lowkey",
-			"parameters" : [],
-			"parent" : "chicory_bgm",
-			"type" : 1
-		},
-		{
-			"3d_pan" : 0,
-			"3d_sound_falloff" : 0,
-			"3d_sound_size" : 0,
-			"__Elephant_Constructor__" : "class_audio_container",
-			"__Elephant_Schema_Version__" : 0,
-			"blend_map" : [],
-			"bpm" : 105,
-			"bus" : "music",
-			"contents_serialize" : [
-				"$chicory_meadows_bgm_head_105bpm_CMaj_16beats",
-				"$chicory_meadows_bgm_loop_105bpm_CMaj"
-			],
-			"lpdelayin" : 9.11,
-			"name" : "chicory_bgm_main",
-			"parameters" : [],
-			"parent" : "chicory_bgm",
-			"type" : 1
-		},
-		{
-			"3d_pan" : 0,
-			"3d_sound_falloff" : 0,
-			"3d_sound_size" : 0,
-			"__Elephant_Constructor__" : "class_audio_container",
-			"__Elephant_Schema_Version__" : 0,
-			"blend_map" : [],
+			"bus" : "sfx",
 			"contents_serialize" : [
 				"%audio/test_external\\noisy_pop.wav"
 			],
+			"contin" : 1,
+			"from_project" : 1,
 			"name" : "test_external",
 			"parameters" : [],
-			"parent" : "Sounds"
+			"parent" : "Sounds",
+			"pitchmax" : 56.41,
+			"pitchmin" : -53.07,
+			"spacerand" : true,
+			"volmax" : 0.0023052381,
+			"volmin" : -0.0022999362
 		},
 		{
 			"3d_pan" : 0,
@@ -149,7 +78,7 @@
 			"3d_sound_size" : 0,
 			"__Elephant_Constructor__" : "class_audio_container",
 			"__Elephant_Schema_Version__" : 0,
-			"blend" : 98.224852071,
+			"blend" : 0.9912720364,
 			"blend_map" : [
 				{
 					"__Elephant_Constructor__" : "class_audio_container_blendmap",
@@ -183,59 +112,6 @@
 			"3d_sound_size" : 0,
 			"__Elephant_Constructor__" : "class_audio_container",
 			"__Elephant_Schema_Version__" : 0,
-			"blend_map" : [],
-			"bpm" : 110,
-			"bus" : "music",
-			"contents_serialize" : [
-				"$mus_act1_spiritworld_intro_110bpm",
-				"bard_spirit_bgm_loop"
-			],
-			"lpdelayin" : 12.9,
-			"name" : "bard_spirit_bgm",
-			"parameters" : [],
-			"parent" : "Sounds",
-			"type" : 1
-		},
-		{
-			"3d_pan" : 0,
-			"3d_sound_falloff" : 0,
-			"3d_sound_size" : 0,
-			"__Elephant_Constructor__" : "class_audio_container",
-			"__Elephant_Schema_Version__" : 0,
-			"blend" : 86.8343195266,
-			"blend_map" : [
-				{
-					"__Elephant_Constructor__" : "class_audio_container_blendmap",
-					"__Elephant_Schema_Version__" : 0
-				},
-				{
-					"__Elephant_Constructor__" : "class_audio_container_blendmap",
-					"__Elephant_Schema_Version__" : 0,
-					"cleft" : 99.2603550296
-				}
-			],
-			"blend_on" : 1,
-			"bpm" : 110,
-			"bus" : "music",
-			"contents_serialize" : [
-				"$mus_act1_spiritworld_passive_lp_110bpm",
-				"$mus_act1_spiritworld_active_lp_110bpm"
-			],
-			"name" : "bard_spirit_bgm_loop",
-			"parameters" : [
-				"intensity"
-			],
-			"parent" : "bard_spirit_bgm",
-			"sync" : 1,
-			"type" : 2
-		},
-		{
-			"3d_pan" : 0,
-			"3d_sound_falloff" : 0,
-			"3d_sound_size" : 0,
-			"__Elephant_Constructor__" : "class_audio_container",
-			"__Elephant_Schema_Version__" : 0,
-			"blend" : 98.224852071,
 			"blend_map" : [
 				{
 					"__Elephant_Constructor__" : "class_audio_container_blendmap",
@@ -247,7 +123,7 @@
 					"cleft" : 97.9289940828
 				}
 			],
-			"blend_on" : true,
+			"blend_on" : 1,
 			"bpm" : 70,
 			"bus" : "music",
 			"contents_serialize" : [
@@ -255,94 +131,57 @@
 				"$mus_act3_sailing_active_lp_70bpm_Fmaj"
 			],
 			"from_project" : 1,
-			"loop" : true,
+			"loop" : 1,
 			"name" : "bard_sail_bgm",
 			"parameters" : [
 				"intensity"
 			],
 			"parent" : "test_music",
-			"sync" : true,
+			"sync" : 1,
 			"type" : 2
+		},
+		{
+			"3d_pan" : 0,
+			"3d_sound_falloff" : 0,
+			"3d_sound_size" : 0,
+			"__Elephant_Constructor__" : "class_audio_container",
+			"__Elephant_Schema_Version__" : 0,
+			"blend_map" : [],
+			"bus" : "sfx",
+			"contents_serialize" : [
+				"$texure_paint_loop"
+			],
+			"from_project" : 1,
+			"loop" : 1,
+			"lpfade" : 0.2,
+			"lpfadein" : 0.2,
+			"name" : "test_looping_sfx",
+			"parameters" : [],
+			"parent" : "test_sfx",
+			"randstart" : 1
+		},
+		{
+			"3d" : 1,
+			"3d_pan" : 0,
+			"3d_sound_falloff" : 0,
+			"3d_sound_size" : 0,
+			"__Elephant_Constructor__" : "class_audio_container",
+			"__Elephant_Schema_Version__" : 0,
+			"blend_map" : [],
+			"bus" : "sfx",
+			"contents_serialize" : [
+				"$piano_brush_note01",
+				"$piano_brush_note02",
+				"$piano_brush_note03",
+				"$piano_brush_note04"
+			],
+			"from_project" : 1,
+			"name" : "test_choice_sfx",
+			"parameters" : [],
+			"parent" : "test_sfx"
 		}
 	],
 	[
-		{
-			"__Elephant_Constructor__" : "class_audio_parameter",
-			"__Elephant_Schema_Version__" : 0,
-			"hooks" : {
-				"__Elephant_Constructor__" : "class_map",
-				"__Elephant_Schema_Version__" : 0,
-				"chicory_bgm" : [
-					{
-						"__Elephant_Constructor__" : "class_audio_hook",
-						"__Elephant_Schema_Version__" : 0,
-						"curve" : {
-							"__Elephant_Constructor__" : "class_audio_hook_curve",
-							"__Elephant_Schema_Version__" : 0,
-							"points" : [
-								{
-									"__Elephant_Constructor__" : "class_audio_hook_curve_point",
-									"__Elephant_Schema_Version__" : 0
-								},
-								{
-									"__Elephant_Constructor__" : "class_audio_hook_curve_point",
-									"__Elephant_Schema_Version__" : 0,
-									"x" : 100,
-									"y" : 100
-								}
-							]
-						},
-						"variable" : "blend"
-					}
-				]
-			},
-			"name" : "calm"
-		},
-		{
-			"__Elephant_Constructor__" : "class_audio_parameter",
-			"__Elephant_Schema_Version__" : 0,
-			"hooks" : {
-				"__Elephant_Constructor__" : "class_map",
-				"__Elephant_Schema_Version__" : 0,
-				"test_sfx" : [
-					{
-						"__Elephant_Constructor__" : "class_audio_hook",
-						"__Elephant_Schema_Version__" : 0,
-						"curve" : {
-							"__Elephant_Constructor__" : "class_audio_hook_curve",
-							"__Elephant_Schema_Version__" : 0,
-							"points" : [
-								{
-									"__Elephant_Constructor__" : "class_audio_hook_curve_point",
-									"__Elephant_Schema_Version__" : 0,
-									"y" : -50
-								},
-								{
-									"__Elephant_Constructor__" : "class_audio_hook_curve_point",
-									"__Elephant_Schema_Version__" : 0,
-									"x" : 36.91,
-									"y" : -31.25
-								},
-								{
-									"__Elephant_Constructor__" : "class_audio_hook_curve_point",
-									"__Elephant_Schema_Version__" : 0,
-									"x" : 73.28,
-									"y" : 20.67
-								},
-								{
-									"__Elephant_Constructor__" : "class_audio_hook_curve_point",
-									"__Elephant_Schema_Version__" : 0,
-									"x" : 100,
-									"y" : 100
-								}
-							]
-						},
-						"variable" : "pitch"
-					}
-				]
-			},
-			"name" : "squeakiness"
-		},
 		{
 			"__Elephant_Constructor__" : "class_audio_parameter",
 			"__Elephant_Schema_Version__" : 0,
@@ -394,29 +233,6 @@
 						},
 						"variable" : "blend"
 					}
-				],
-				"bard_spirit_bgm_loop" : [
-					{
-						"__Elephant_Constructor__" : "class_audio_hook",
-						"__Elephant_Schema_Version__" : 0,
-						"curve" : {
-							"__Elephant_Constructor__" : "class_audio_hook_curve",
-							"__Elephant_Schema_Version__" : 0,
-							"points" : [
-								{
-									"__Elephant_Constructor__" : "class_audio_hook_curve_point",
-									"__Elephant_Schema_Version__" : 0
-								},
-								{
-									"__Elephant_Constructor__" : "class_audio_hook_curve_point",
-									"__Elephant_Schema_Version__" : 0,
-									"x" : 100,
-									"y" : 100
-								}
-							]
-						},
-						"variable" : "blend"
-					}
 				]
 			},
 			"name" : "intensity"
@@ -427,7 +243,7 @@
 			"__Elephant_Constructor__" : "class_audio_bus",
 			"__Elephant_Schema_Version__" : 0,
 			"children" : [],
-			"default_gain" : -0.2920542156,
+			"default_gain" : -0.6018928294,
 			"name" : "music",
 			"parent" : "music_setting"
 		},
@@ -462,7 +278,6 @@
 			"__Elephant_Constructor__" : "class_audio_bus",
 			"__Elephant_Schema_Version__" : 0,
 			"children" : [],
-			"default_gain" : -43.765867481,
 			"name" : "sfx",
 			"parent" : "sfx_setting"
 		}
@@ -500,6 +315,7 @@
 		{
 			"__Elephant_Constructor__" : "class_audio_asset",
 			"__Elephant_Schema_Version__" : 0,
+			"bus" : "sfx",
 			"path" : "texure_paint_loop"
 		},
 		{
@@ -552,6 +368,33 @@
 			"bus" : "music",
 			"editor_order" : 1,
 			"path" : "mus_act3_sailing_active_lp_70bpm_Fmaj"
+		},
+		{
+			"__Elephant_Constructor__" : "class_audio_asset",
+			"__Elephant_Schema_Version__" : 0,
+			"bus" : "sfx",
+			"editor_order" : 2,
+			"path" : "piano_brush_note03"
+		},
+		{
+			"__Elephant_Constructor__" : "class_audio_asset",
+			"__Elephant_Schema_Version__" : 0,
+			"bus" : "sfx",
+			"path" : "piano_brush_note01"
+		},
+		{
+			"__Elephant_Constructor__" : "class_audio_asset",
+			"__Elephant_Schema_Version__" : 0,
+			"bus" : "sfx",
+			"editor_order" : 3,
+			"path" : "piano_brush_note04"
+		},
+		{
+			"__Elephant_Constructor__" : "class_audio_asset",
+			"__Elephant_Schema_Version__" : 0,
+			"bus" : "sfx",
+			"editor_order" : 1,
+			"path" : "piano_brush_note02"
 		}
 	]
 ]

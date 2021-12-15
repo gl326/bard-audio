@@ -270,13 +270,13 @@ static align_time = function(){
 			}
 }
 
-static beatEvent = function(){
+static get_beatEvent = function(){
 	return beat_event; //?	
 }
-static doubleBeatEvent = function(){
+static get_doubleBeatEvent = function(){
 	return dbeat_event; //?	
 }
-static measureEvent = function(){
+static get_measureEvent = function(){
 	return measure_event; //?	
 }
 static get_bpm = function(){

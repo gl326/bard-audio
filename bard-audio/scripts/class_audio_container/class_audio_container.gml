@@ -299,7 +299,7 @@ function class_audio_container(_name = "", fromProject = false) constructor{
 	if type!=1 and specsnd==0 and loop{
 	    inst.loop = true; //loop
 	}
-	if lpfade{
+	if lpfade>0{
 	    inst.fadeout = lpfade;
 	}
 	if randstart{
@@ -310,7 +310,7 @@ function class_audio_container(_name = "", fromProject = false) constructor{
 		}
 	}
 
-	if type!=1 and lpfadein{
+	if type!=1 and lpfadein>0{
 	    inst.fadein = lpfadein;
 	}
     

@@ -2,11 +2,11 @@
   "isDnD": false,
   "isCompatibility": false,
   "parent": {
-    "name": "Bard",
-    "path": "folders/Libraries/Bard.yy",
+    "name": "audio_state",
+    "path": "folders/Libraries/Bard/gameplay/audio_state.yy",
   },
   "resourceVersion": "1.0",
-  "name": "bard_audio_system_music_keys",
+  "name": "music_is_paused",
   "tags": [],
   "resourceType": "GMScript",
 }

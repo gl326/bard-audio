@@ -78,8 +78,10 @@ function class_audio_instance(_container,_sound=-1,_loops=false,_gain=0,_pitch=0
 					global.listener_z);
 	    }else{
 			if !instance_exists(player.owner){
-				show_debug_message("container "+name+" owner "+string(player.owner)+" ceased to exist ");
-				player.owner = noone;
+					if player.owner!=noone{
+						show_debug_message("container "+name+" owner "+string(player.owner)+" ceased to exist ");
+						player.owner = noone;
+					}
 				}
 			else{
 				if owner<=0{owner = player.owner;}

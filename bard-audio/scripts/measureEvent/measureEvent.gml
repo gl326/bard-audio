@@ -2,7 +2,7 @@
 function measureEvent() {
 	var player = container_player(music_playing());
 	if !is_undefined(player){
-		return player.measureEvent();
+		return player.get_measureEvent();
 	}else{
 		return false;	
 	}

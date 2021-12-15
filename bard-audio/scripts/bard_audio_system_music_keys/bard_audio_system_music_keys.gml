@@ -18,6 +18,15 @@ function bard_audio_system_music_keys(){
 		music_note.a,
 		music_note.b,
 		music_note.c);
+	music_key_define("fmaj",
+		music_note.f,
+		music_note.g,
+		music_note.a,
+		music_note.bb,
+		music_note.c,
+		music_note.d,
+		music_note.e,
+		music_note.f);
 	music_key_define("amin",
 		music_note.a,
 		music_note.b,

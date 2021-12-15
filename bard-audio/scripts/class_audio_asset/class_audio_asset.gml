@@ -74,7 +74,7 @@ function class_audio_asset(_name="",_external=false) constructor{
 		}
 	}
 	
-	static play = function(prio,looping){
+	static play = function(prio=0,looping=0){
 		if load(){
 			if !external{
 				return audio_play_sound(index,prio,looping);	
@@ -84,7 +84,7 @@ function class_audio_asset(_name="",_external=false) constructor{
 		}
 	}
 	
-	static play_on = function(emitterID,looping,prio){
+	static play_on = function(emitterID,looping,prio=0){
 		if load(){
 			if !external{
 				return audio_play_sound_on(emitterID,index,looping,prio);	
