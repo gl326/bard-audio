@@ -8,7 +8,8 @@ if debug_mode and keyboard_check(vk_control) and keyboard_check_pressed(ord("M")
 	debug_view = !debug_view;	
 }
 
-if room==rmAudioDemo{
+//demo stuff 
+if room==EDITOR_PLAY_ROOM{
 	if keyboard_check_pressed(ord("Q")){
 		music_set("bard_main_bgm");	
 		set_music_key("cmaj");

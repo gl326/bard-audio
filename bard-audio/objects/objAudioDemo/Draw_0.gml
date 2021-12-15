@@ -1,6 +1,6 @@
 /// @description Insert description here
 // You can write your code in this editor
-if room==rmAudioDemo{
+if room==EDITOR_PLAY_ROOM{
 	draw_set_color(c_white);
 	draw_line(room_width/4,room_height/2,room_width*3/4,room_height/2);
 	draw_line(room_width/2,room_height/4,room_width/2,room_height*3/4);
