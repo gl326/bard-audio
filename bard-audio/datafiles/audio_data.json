@@ -68,7 +68,7 @@
 			"parent" : "Sounds",
 			"pitchmax" : 56.41,
 			"pitchmin" : -53.07,
-			"spacerand" : true,
+			"spacerand" : 1,
 			"volmax" : 0.0023052381,
 			"volmin" : -0.0022999362
 		},

@@ -54,6 +54,12 @@ function class_audio_asset(_name="",_external=false) constructor{
 				ds_map_add(global.audio_assets,index,self); //track me!
 			}else{
 				show_debug_message(concat("WARNING! no matching audio asset for \"",name,"\". was it deleted or renamed?"));
+				
+				//remove from serialisation
+				var ind = array_find_index(global.bard_audio_data[bard_audio_class.asset],self);
+				if ind!=-1{
+					array_delete(global.bard_audio_data[bard_audio_class.asset],ind,1);	
+				}
 			}
 		}else{	
 			if file_exists(path){
@@ -61,6 +67,12 @@ function class_audio_asset(_name="",_external=false) constructor{
 				ds_map_add(global.audio_assets,index,self); //track me!
 			}else{
 				show_debug_message(concat("WARNING! no file for \"",path,"\". was it deleted or renamed?"));
+				
+				//remove from serialisation
+				var ind = array_find_index(global.bard_audio_data[bard_audio_class.asset],self);
+				if ind!=-1{
+					array_delete(global.bard_audio_data[bard_audio_class.asset],ind,1);	
+				}
 			}
 		}
 		
