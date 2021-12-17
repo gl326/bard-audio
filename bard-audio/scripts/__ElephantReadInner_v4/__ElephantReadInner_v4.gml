@@ -110,7 +110,7 @@ function __ElephantReadInner_v4(_buffer, _datatype)
                     {
                         //Get variables names, and alphabetize them so that they match the order that they were serialized
                         var _names = variable_struct_get_names(_schema);
-                        array_sort(_names, lb_sort_ascending);
+                        array_sort(_names, true);
                         
                         //Iterate over the variable names and read them
                         var _i = 0;

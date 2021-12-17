@@ -79,7 +79,7 @@ function __ElephantToJSONInner(_target)
             
             //Sort the names alphabetically
             //This is important for serializing circular references so that the indexes are always created in the same order
-            array_sort(_names, lb_sort_ascending);
+            array_sort(_names, true);
             
             //Write the relevant data to the JSON
             var _length = array_length(_names);

@@ -250,7 +250,7 @@ function __ElephantBufferInner(_buffer, _target, _datatype)
                 else
                 {
                     //Alphabetize the variables names so that they'll match the order that they will be deserialized
-                    array_sort(_names, lb_sort_ascending);
+                    array_sort(_names, true);
             
                     //Iterate over the serializable variable names and write them
                     var _i = 0;
