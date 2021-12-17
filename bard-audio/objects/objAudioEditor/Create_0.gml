@@ -46,7 +46,7 @@ drag_start = false;
 drag_x = -1; drag_y = -1;
 
 ///files
-    project_file = get_project_file();
+    project_file = bard_get_project_file();
     
     //containers = ds_list_create(); //REAL = audio asset, STRING = id of subcontainer
 	loaded_search = false;

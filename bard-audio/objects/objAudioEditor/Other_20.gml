@@ -57,7 +57,7 @@ repeat(resource_n){
 		path = resource.id.path;
 	if string_copy(path,1,7)=="sounds/"{
 		//found a sound asset!
-		var resource_data = json_parse(file_read_string(global.__project_directory+path)),
+		var resource_data = json_parse(file_read_string(global.__bard_project_directory+path)),
 			parent = resource_data.parent.name,
 			_name = resource_data.name;
 		

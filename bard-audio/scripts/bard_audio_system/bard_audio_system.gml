@@ -322,5 +322,5 @@ global.external_audio_index = 1000000;
 global.music_player = new class_audio_playstack(4); //2 second gap between songs ending/starting
 global.ambience_player = new class_audio_playstack(4);
 
-global.__project_datafiles = undefined;
+global.__bard_project_datafiles = undefined;
 bard_audio_data_load();
