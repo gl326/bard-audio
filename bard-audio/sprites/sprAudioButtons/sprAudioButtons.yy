@@ -101,8 +101,8 @@
   ],
   "nineSlice": null,
   "parent": {
-    "name": "editor",
-    "path": "folders/Sprites/editor.yy",
+    "name": "Bard",
+    "path": "folders/Libraries/Bard.yy",
   },
   "resourceVersion": "1.0",
   "name": "sprAudioButtons",

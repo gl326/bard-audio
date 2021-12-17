@@ -28,8 +28,8 @@
   "properties": [],
   "overriddenProperties": [],
   "parent": {
-    "name": "gameplay",
-    "path": "folders/Objects/bard_audio_engine/gameplay.yy",
+    "name": "objects",
+    "path": "folders/Libraries/Bard/objects.yy",
   },
   "resourceVersion": "1.0",
   "name": "objLocationsound",

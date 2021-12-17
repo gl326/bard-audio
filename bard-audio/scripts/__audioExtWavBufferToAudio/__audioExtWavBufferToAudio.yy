@@ -2,8 +2,8 @@
   "isDnD": false,
   "isCompatibility": false,
   "parent": {
-    "name": "AudioEXT",
-    "path": "folders/Libraries/AudioEXT.yy",
+    "name": "other_library",
+    "path": "folders/Libraries/Bard/other_library.yy",
   },
   "resourceVersion": "1.0",
   "name": "__audioExtWavBufferToAudio",

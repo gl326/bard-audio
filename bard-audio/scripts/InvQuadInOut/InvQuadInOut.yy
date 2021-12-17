@@ -3,7 +3,7 @@
   "isCompatibility": false,
   "parent": {
     "name": "easing",
-    "path": "folders/Scripts/general/easing.yy",
+    "path": "folders/Libraries/Bard/general scripts/easing.yy",
   },
   "resourceVersion": "1.0",
   "name": "InvQuadInOut",

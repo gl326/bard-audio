@@ -28,8 +28,8 @@
   "properties": [],
   "overriddenProperties": [],
   "parent": {
-    "name": "audioeditor",
-    "path": "folders/Objects/bard_audio_engine/audioeditor.yy",
+    "name": "objects",
+    "path": "folders/Libraries/Bard/editor/objects.yy",
   },
   "resourceVersion": "1.0",
   "name": "objTextfield",

@@ -138,4 +138,5 @@ if keyboard_check_pressed(vk_down) or mouse_wheel_down(){
     //}
 }
 
+bard_audio_listener_update(room_width/2, room_height/2);
 bard_audio_update();

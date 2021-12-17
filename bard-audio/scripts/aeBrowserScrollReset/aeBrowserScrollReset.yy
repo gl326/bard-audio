@@ -3,7 +3,7 @@
   "isCompatibility": false,
   "parent": {
     "name": "browser",
-    "path": "folders/Libraries/Bard/engine/editor/browser.yy",
+    "path": "folders/Libraries/Bard/editor/scripts/browser.yy",
   },
   "resourceVersion": "1.0",
   "name": "aeBrowserScrollReset",

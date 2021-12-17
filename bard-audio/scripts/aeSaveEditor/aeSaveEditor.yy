@@ -2,8 +2,8 @@
   "isDnD": false,
   "isCompatibility": false,
   "parent": {
-    "name": "editor",
-    "path": "folders/Libraries/Bard/engine/editor.yy",
+    "name": "scripts",
+    "path": "folders/Libraries/Bard/editor/scripts.yy",
   },
   "resourceVersion": "1.0",
   "name": "aeSaveEditor",
