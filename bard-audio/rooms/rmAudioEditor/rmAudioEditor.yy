@@ -49,7 +49,7 @@
   },
   "parent": {
     "name": "editor",
-    "path": "folders/Libraries/Bard/editor.yy",
+    "path": "folders/Libraries/Bard/engine/editor.yy",
   },
   "resourceVersion": "1.0",
   "name": "rmAudioEditor",
