@@ -176,12 +176,15 @@ blendabut = newHighlightable(objTextfield,(room_width/3)+(room_width*2/9)+8,(but
 blendabut.container_edit = true; blendabut.param = "blend";
 ds_list_add(multi_buttons,blendabut);
 
+/*
 blendbut = newHighlightable(objaeButton,(room_width/3)+8,(butt_g*4)+(butt_h*4),(room_width/3)+(room_width/12)-8,(8*4)+(butt_h*5));
 blendbut.name = "BLEND";
 blendbut.script = aeToggleSoundAttribute; blendbut.args[0] = "blend_on";
 ds_list_add(multi_buttons,blendbut);
+*/
 
-blendebut = newHighlightable(objaeButton,(room_width/3)+8+(room_width/12),(butt_g*4)+(butt_h*4),(room_width/3)+(room_width/6)+(room_width/36)-8,(8*4)+(butt_h*5));
+//newHighlightable(objaeButton,(room_width/3)+8+(room_width/12),(butt_g*4)+(butt_h*4),(room_width/3)+(room_width/6)+(room_width/36)-8,(8*4)+(butt_h*5));
+blendebut = newHighlightable(objaeButton,(room_width/3)+8,(butt_g*4)+(butt_h*4),(room_width/3)+(room_width/6)+(room_width/36)-8,(8*4)+(butt_h*5));
 blendebut.name = "EDIT blend";
 blendebut.script = aeEditSoundBlend;
 ds_list_add(multi_buttons,blendebut);
@@ -320,6 +323,7 @@ column[0] = 0; column[1] = 0;
 
 var b = newStackedHighlightable(objTextfield,0,1,"gain");
 b.container_edit = true; b.param = "gain"; b.dB = true; b.slider = true; b.slide_r = (room_width*11/12)-28;
+//b.slider_min = -1; b.slider_max = 1;
 ds_list_add(container_buttons,b);
 var bb = newHighlightable(objaeButton,(room_width*11/12),b.t,room_width-8,b.b);
 ds_list_add(container_buttons,bb);
@@ -328,9 +332,11 @@ bb.name = "setChild";
 
 var b = newStackedHighlightable(objTextfield,0,1,"random gain min, max");
 b.container_edit = true; b.param = "volmin"; b.dB = true; b.slider = true;
+//b.slider_min = -1; b.slider_max = 1;
 ds_list_add(container_buttons,b);
 var b = newStackedHighlightable(objTextfield,0,1);
 b.container_edit = true; b.param = "volmax"; b.dB = true; b.slider = true;
+//b.slider_min = -1; b.slider_max = 1;
 ds_list_add(container_buttons,b);
 var b = newStackedHighlightable(objaeButton,0,1);
 b.script = aeDefaultGainRand; b.name="default";
@@ -352,7 +358,7 @@ ds_list_add(container_buttons,b);
 
 
 b = newStackedHighlightable(objaeButton,0,1,);//"3D settings:");
-b.script = aeToggleSoundAttribute; b.name="3D"; b.args[0] = "3d";
+b.script = aeToggleSoundAttribute; b.name="3D"; b.args[0] = "threed";
 ds_list_add(container_buttons,b);
 var b = newStackedHighlightable(objTextfield,0,1, "size (def "+string(global.default_sound_size)+")");
 b.container_edit = true; b.param = "3d_sound_size"; b.percent=false; b.plusmin = false;

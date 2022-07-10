@@ -1,7 +1,7 @@
 // the basic structure here is ripped right outta juju's Gumshoe library for browsing files
 //this is used in the editor to identify external files and create an internal matching structure. 
 //this does not load them into memory for playing audio
-function bard_audio_load_external(_directory,_parent=undefined){
+function bard_audio_load_external(_directory,_project = global.__bard_project_directory + "datafiles/",_parent=undefined){
     var _directories = [],
 		_directory_containers = [];
 	
@@ -9,12 +9,12 @@ function bard_audio_load_external(_directory,_parent=undefined){
     var _file = undefined;
     while(true)
     {
-        _file = (_file == undefined)? file_find_first(_directory + "*", fa_directory) : file_find_next();
+        _file = (_file == undefined)? file_find_first(_project + _directory + "*", fa_directory) : file_find_next();
         if (_file == "") break;
         
 		var _path = _directory + _file;
 		
-        if (directory_exists(_path))
+        if (directory_exists(_project + _path))
         {
             //queue this directory for processing later
             _directories[@ array_length(_directories)] = _path + "\\";
@@ -32,7 +32,7 @@ function bard_audio_load_external(_directory,_parent=undefined){
         else 
         {
 			//create an asset
-			var asset = audio_asset_external(_path);
+			var asset = audio_asset_external(_path,_project);
             
 			if !is_undefined(_parent){
 				//add to parent contents
@@ -47,7 +47,7 @@ function bard_audio_load_external(_directory,_parent=undefined){
     var _i = 0;
     repeat(array_length(_directories))
     {
-		bard_audio_load_external(_directories[_i],_directory_containers[_i]);
+		bard_audio_load_external(_directories[_i], _project, _directory_containers[_i]);
         ++_i;
     }
     

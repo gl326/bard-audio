@@ -52,6 +52,7 @@ if mouse_in_region(gl,gb,gr,b-32) and param!=""{
     if curves!=-1{
         yy = remap_value(editing.param_eval(attribute,param),gmin,gmax,gb,gt);
         draw_circle(xx,yy,8,1);
+        draw_circle(xx,yy,8,1);
     }
     draw_line(xx,yy,xx,gb+4+24+8);
     draw_line(lerp(gr,gl,.5),gb+4+24+8,xx,gb+4+24+8);

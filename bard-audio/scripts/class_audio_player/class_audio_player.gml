@@ -157,6 +157,7 @@ static play = function(option=false,_playedBy=noone){
 	playid += 1;
 	seed = random_get_seed();
 	am_playing = true;
+	
 	if !is_struct(_playedBy) and _playedBy!=noone{owner = _playedBy;}
 
 	var playlist = container.create_instances(option);
@@ -188,6 +189,7 @@ static play = function(option=false,_playedBy=noone){
 	start_time = current_time;
 	//first_beat = true; //?
 	firstplay = true;
+	
 	return self;
 }
 
@@ -332,6 +334,8 @@ static update_bpm = function(ms_passed = (current_time - time_p)){
 				}else{
 					group_track_pos = group_pos;	
 				}
+				group_track_pos += snd.delayin;
+				
 				beatcalc = group_track_pos/(60/bpm);
 		    }else{
 			    var snd = playing[0],
@@ -353,8 +357,10 @@ static update_bpm = function(ms_passed = (current_time - time_p)){
 					}else{
 						group_track_pos = group_pos;	
 					}
+					group_track_pos += snd.delayin;
 					beatcalc = group_track_pos/(60/bpm);
 		    }
+			
 			beatcalc += beat_start;
 		
 			dbeat = floor(beatcalc*2);
@@ -377,9 +383,9 @@ static update_bpm = function(ms_passed = (current_time - time_p)){
 								}
 						//show_debug_message("beat updated from varying container! t:"+string(current_time/500)+" g:"+string(group_pos));
 						}
-		        measure_event = (nbeat and (beat mod beats_per_measure)==0);
+		        measure_event = (nbeat and (beats mod beats_per_measure)==0);
 				
-		        measures = floor(beat/beats_per_measure);
+		        measures = floor(beats/beats_per_measure);
 		        time_in_beats = beatcalc;
 				//////// susss of this ////////////////////////////
 			
@@ -562,7 +568,7 @@ static update_bus = function(){
 		                b = s.bus;
 		            if array_find_index(bus_update,b)!=-1{
 		                    //if is_equal(bus,b){
-		                        var ng = bus_gain(b),
+		                        var ng = bus_gain_current(b),
 		                            bp = s.bus_vol;
 		                    if ng!=bp{
 		                        if array_find_index(fadeout_sounds,s)==-1 or s.sync{ //not fading out already
@@ -791,29 +797,30 @@ static stop = function(sid=-1,option=false){
 	return 1;
 }
 
-static destroy = function(){
-	//stop all sounds that marked as looping
-	var _i=0;
-	repeat(array_length(playing)){
-		var s = playing[_i];
-		if s.loop{
-			audio_stop_sound(s.aud);
+static destroy = function(_hard_stop = false){
+	if !DELETED{
+		//stop all sounds that marked as looping
+		var _i=0;
+		repeat(array_length(playing)){
+			var s = playing[_i];
+			if s.loop or _hard_stop{
+				audio_stop_sound(s.aud);
+			}
+			_i ++;
 		}
-		_i ++;
+		//non-looping sounds can be allowed to play out, usually better than cutting them off.
+		//but they could be cut off with a stop() if you want first.
+	
+		ds_map_destroy_pooled(unique_param_settings);
+	
+		array_delete(global.audio_players,array_find_index(global.audio_players,self),1); //stop tracking me
+	
+		//once this function is called, this player will stop updating and will be missing some internal data.
+		//if you have a reference to it from outside the system somehow, then it will stay alive in memory and honor that reference.
+		//IF you are doing that, this var will let you know that it wants to die
+		//even if you play the same container again with container_play(), that will spawn a new player which you would want to start referencing instead
+		DELETED = true; 
 	}
-	//non-looping sounds can be allowed to play out, usually better than cutting them off.
-	//but they could be cut off with a stop() if you want first.
-	
-	ds_map_destroy_pooled(unique_param_settings);
-	
-	array_delete(global.audio_players,array_find_index(global.audio_players,self),1); //stop tracking me
-	
-	//once this function is called, this player will stop updating and will be missing some internal data.
-	//if you have a reference to it from outside the system somehow, then it will stay alive in memory and honor that reference.
-	//IF you are doing that, this var will let you know that it wants to die
-	//even if you play the same container again with container_play(), that will spawn a new player which you would want to start referencing instead
-	DELETED = true; 
-	
 	return false;
 }
 }

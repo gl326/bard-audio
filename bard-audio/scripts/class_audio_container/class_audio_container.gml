@@ -52,7 +52,7 @@ function class_audio_container(_name = "", fromProject = false) constructor{
 	
 	vibration = false; //if true, this plays a second instance that vibrates a ps5 controller :o
 	
-	blend_on = false;
+	blend_on = true;//false;
 	blend_map = [];
 	blend = 0;
 	
@@ -147,7 +147,7 @@ function class_audio_container(_name = "", fromProject = false) constructor{
 	
 	static copy_from_container = function(copyFrom){
 		var copyData = container_getdata(copyFrom);
-		struct_inherit_values(self,copyData,
+		struct_inherit_values(self,copyData,false,
 			"name",
 			"contents",
 			"contents_serialize",
@@ -337,7 +337,8 @@ function class_audio_container(_name = "", fromProject = false) constructor{
 			i ++;
 	    }
     
-		if blend_on{
+		if true //blend_on
+		{
 		    i=0;
 		    repeat(min(n,array_length(blend_map))){
 		        var newsound = newlist[i];

@@ -6,17 +6,17 @@
 
 function GregephantToJSON(_target)
 {
-    global.__elephantFound      = ds_map_create();
+    global.__elephantFound      = ds_map_create_pooled();
     global.__elephantFoundCount = 0;
-	global.__gregephantTemplates = ds_map_create();
+	global.__gregephantTemplates = ds_map_create_pooled();
     
     ELEPHANT_IS_DESERIALIZING = false;
     ELEPHANT_SCHEMA_VERSION   = undefined;
     
     var _duplicate = __GregephantToJSONInner(_target);
     
-    ds_map_destroy(global.__elephantFound);
-	ds_map_destroy(global.__gregephantTemplates);
+    ds_map_destroy_pooled(global.__elephantFound);
+	ds_map_destroy_pooled(global.__gregephantTemplates);
     
     ELEPHANT_IS_DESERIALIZING = undefined;
     ELEPHANT_SCHEMA_VERSION   = undefined;

@@ -5,8 +5,9 @@
 function bus_reset_all(){
 	var busses = ds_map_keys_to_array(global.audio_busses),
 		_i = 0;
+	if !is_undefined(busses){
 	repeat(array_length(busses)){
 		bus_reset(busses[_i]);
 		_i ++;	
-	}
+	}}
 }

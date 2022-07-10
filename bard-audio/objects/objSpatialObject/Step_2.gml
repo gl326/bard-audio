@@ -14,9 +14,9 @@ if audio_emitter!=-1{
         ey = 0,
         ez = 0;//(depth*lerp(1,5,sqr(min(1,abs(depth)/100))));
 	if audio_emitter_pan>0{
-		ex = audio_emitter_pan*((camera_get_view_x(the_scenemanager.camera)+(camera_get_view_width(the_scenemanager.camera)/2))-x);
+		//ex = audio_emitter_pan*((camera_get_view_x(the_scenemanager.camera)+(camera_get_view_width(the_scenemanager.camera)/2))-x);
 	}
 	for(var i=0;i<audio_emitter_n;i+=1){
-		audio_emitter_position(ds_list_find_value(audio_emitter,i),x+ex,y+ey,ez);
+		audio_emitter_position(audio_emitter[i],x+ex,y+ey,ez);
 	}
 }

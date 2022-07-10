@@ -29,7 +29,7 @@
   "overriddenProperties": [],
   "parent": {
     "name": "objects",
-    "path": "folders/Libraries/Bard/engine/editor/objects.yy",
+    "path": "folders/Libraries/Bard/editor/objects.yy",
   },
   "resourceVersion": "1.0",
   "name": "objTextfield",

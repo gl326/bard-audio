@@ -41,8 +41,9 @@ if slider and param_ref=="" and editing!=-1 and !objAudioEditor.editing_audio{
 	    if dB{
 	        slide_x = 
 	            lerp(slide_l,slide_r,
-	            clamp(InvQuadInOut((variable_struct_get(editing,param)-slider_min)/(slider_max-slider_min)),0,1)
+	            clamp(InvQuadInOut(((variable_struct_get(editing,param) )-slider_min)/(slider_max-slider_min)),0,1)
 	            );
+			//draw_text(slide_l,b,string(variable_struct_get(editing,param)));
 	    }else{
 	    slide_x = 
 	        lerp(slide_l,slide_r,

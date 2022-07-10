@@ -1,9 +1,5 @@
-/// @description aeNewEditorpanel(obj,x,y,w,h)
-/// @param obj
-/// @param x
-/// @param y
-/// @param w
-/// @param h
+// Script assets have changed for v2.3.0 see
+// https://help.yoyogames.com/hc/en-us/articles/360005277377 for more information
 function aeNewEditorpanel() {
 	if argument_count==1{
 	return instance_create_depth(0,0,0,argument[0]);

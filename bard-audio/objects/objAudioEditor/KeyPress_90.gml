@@ -1,3 +1,4 @@
+/* no
 if keyboard_check(vk_control) and audio_loaded{
 if file_Exists("working\\backups\\audio\\audio_data_"+string(audio_data_version-1)){
     audio_data_version -= 1;

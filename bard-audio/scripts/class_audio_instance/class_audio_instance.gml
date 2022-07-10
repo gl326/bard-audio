@@ -89,9 +89,9 @@ function class_audio_instance(_container,_sound=-1,_loops=false,_gain=0,_pitch=0
 
 		    if threed{ //dlay spunds need to know this player
 				with(owner){
-					var ref_dist = container.threed_sound_size,
-		                max_dist = container.threed_sound_falloff,
-						cust_pan = container.threed_pan;
+					var ref_dist = other.container.threed_sound_size,
+		                max_dist = other.container.threed_sound_falloff,
+						cust_pan = other.container.threed_pan;
 		                //falloff_factor = ds_map_Find_value(container,"3d_falloff_factor");
 		            if ref_dist==0{
 						ref_dist = global.default_sound_size;
@@ -135,7 +135,7 @@ function class_audio_instance(_container,_sound=-1,_loops=false,_gain=0,_pitch=0
 		            var new_emitter = audio_emitter_Create();
 		            audio_emitter_falloff(new_emitter,ref_dist,max_dist,falloff_factor);
 		            audio_emitter_gain(new_emitter,1);
-					audio_emitter_position(new_emitter,x,y,audio_uses_z?z: 0);
+					audio_emitter_position(new_emitter,x,y,AUDIO_USES_Z?z: 0);
 					player.emitter = new_emitter;
 					other.emitter = new_emitter;
 					array_push(audio_emitter,new_emitter);
@@ -159,7 +159,7 @@ function class_audio_instance(_container,_sound=-1,_loops=false,_gain=0,_pitch=0
 		
 		var file_vol = audio_asset_gain(file); 
 		
-	    bus_vol = bus_gain(bus_id);
+	    bus_vol = bus_gain_current(bus_id);
 	    var blend_vol = 1+blend;
         
 	    current_vol = (vol+1)*(file_vol+1)*(bus_vol+1);
@@ -171,7 +171,7 @@ function class_audio_instance(_container,_sound=-1,_loops=false,_gain=0,_pitch=0
 	    loop = looping;
 
 	    if !sync{
-			if !threed{
+			if !threed or player.emitter==-1{
 	            aud_playing = audio_asset_play(file,0,looping);
 	        }else{
 	            aud_playing = audio_asset_play_on(player.emitter,file,looping,0);

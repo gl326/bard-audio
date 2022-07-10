@@ -1,6 +1,6 @@
 ////////bard audio system!!!!!!
 
-#macro audio_uses_z false 
+#macro AUDIO_USES_Z false 
 /*if TRUE, then we will assume every spatial object has an internal variable called "z," the same as every game maker object 
 has variables called "x" and "y." if you arent using a z variable then leave this off.
 */
@@ -23,8 +23,20 @@ gameplay! that way you can edit sounds, test them in-game, and then go back to a
 
 #macro DISABLE_SYNCGROUPS true 
 /* game maker has a "sync group" feature but it had some weird issues on some platforms right when we were trying to ship wandersong so we rerouted all the logic to avoid using them
-	this might be a decision we could go back on but in general the fewer different features we"re relying on, the better. even at their best sync groups have a lot of weird/unpredictable/unique behavior that 
-	forces you to treat them different from other ypes of playing sounds.*/
+	this might be a decision we could go back on but in general the fewer different features we're relying on, the better. even at their best sync groups have a lot of weird/unpredictable/unique behavior that 
+	forces you to treat them different from other types of playing sounds.*/
+	
+#macro AUDIO_EDITOR_AUTO_SAVE true 
+/*when 'true' it auto-saves. could be very slow in a giant project so leaving the option to disable this later*/
+
+#macro AUDIO_ENABLE true
+/* when 'false,' no audio is loaded or played through the system ever. might be useful for saving processing or load time etc. */
+
+#macro MUSIC_DEFAULT_FADEOUT 2
+/*when using the music_* functions to change from one trakc ot another, this is the default fadeout length before starting the next song */
+
+#macro MUSIC_DEFAULT_GAP 0
+/*when using the music_* functions to change from one track to another, this is the default gap of silence starting the next song (this time always follows the previous song fading out) */
 
 //////////default values for spatial audio//////////
 audio_listener_orientation(0,0,1,0,-1,0);
@@ -48,15 +60,14 @@ function bard_audio_update(){
 	//states for music, ambience etc.
 	var _i = 0;
 	repeat(array_length(global.audio_playstacks)){
-		if global.audio_playstacks[_i].update(){
-			_i ++;
-		}
+		global.audio_playstacks[_i].update();
+		_i ++;
 	}
 	
 	//players for individual containers
 	_i = 0;
 	repeat(array_length(global.audio_players)){
-		if global.audio_players[_i].update(){
+		if global.audio_players[_i].update(){ //returns FALSE if this update happened to destroy the player, so we know not to advance down the list
 			_i ++;
 		}
 	}
@@ -74,7 +85,7 @@ function bard_audio_clear(clearPersistent = false){
 	var _i = 0;
 	repeat(array_length(global.audio_players)){
 		if clearPersistent or !global.audio_players[_i].persistent{
-			global.audio_players[_i].destroy();
+			global.audio_players[_i].destroy(true);
 		}else{
 			_i ++;	
 		}
@@ -130,7 +141,15 @@ function bard_audio_debug_gui(){
 		text_color = c_white,
 		text_bcolor = c_black,
 		debug_h = 0;
-
+		
+	var _i = 0;
+	repeat(array_length(global.audio_players)){
+		debug_h += 40;
+		var _player = global.audio_players[_i];
+		debug_h += array_length(_player.playing)*20;
+		debug_h += (array_length(_player.delay_sounds)>0)*20;
+		debug_h += array_length(_player.delay_sounds)*20;
+	}
 
 	draw_set_color(text_bcolor);
 	draw_set_alpha(.5);
@@ -144,18 +163,29 @@ function bard_audio_debug_gui(){
 	repeat(array_length(global.audio_players)){
 		with(global.audio_players[_i]){
 	    if array_length(playing){
+			var _tstr = container.name+" (pitch: "+string(pitch)+")";
+			if bpm>0{
+				_tstr += " ("+string(1 + (get_beat() mod beats_per_measure))+"/"+string(beats_per_measure)+" B:"+string(get_time_in_beats())+" M:"+string(get_measure())+")";
+			}
 	        draw_set_color(text_bcolor);
-	        draw_text(20,yy+4,container.name+" ("+string(pitch)+")");
+	        draw_text(20,yy+4,_tstr);
 	        draw_set_color(text_color);
-	        draw_set_color(text_color);
-	        draw_text(20,yy,container.name);
+			if bpm>0{
+				if beatEvent(){
+					draw_set_color(c_yellow);	
+				}
+			}
+	        draw_text(20,yy,_tstr);
+			
+			
+			
 	        yy += 20;
 	        for(var i=0;i<array_length(playing);i+=1){
 	            var s = playing[i],
 	                aud = s.aud,
 	                file = s.file,
 	                yyy=0,
-	                str = audio_asset_name(file)+": gain "+string(audio_sound_get_gain(aud))+" pitch "+string(audio_sound_get_pitch(aud));//+" pos "+string(audio_sound_get_track_position(aud));
+	                str = string(audio_asset_name(file))+": gain "+string(audio_sound_get_gain(aud))+" pitch "+string(audio_sound_get_pitch(aud));//+" pos "+string(audio_sound_get_track_position(aud));
 	                str+="[input gain: "+string(s.current_vol)+"]"
 	                if s.blend!=0{str+="[blend: "+string(s.blend)+"]";}
 	                str+=" bus "+string(s.bus)+" "+string(s.bus_vol);
@@ -167,7 +197,9 @@ function bard_audio_debug_gui(){
 						ez = audio_emitter_get_z(emit)-global.listener_z,
 						egain = audio_emitter_get_gain(emitter);
 						str+="\n(emitter| x:"+string((ex))+", y:"+string((ey))+", z:"+string(ez)
-							+", dist:"+string(sqrt(sqr(ex)+sqr(ey)+sqr(ez)))+", size "+string(aemitter_size)+"/"+string(aemitter_atten)+", pan "+string(100*aemitter_pan)+"%"+" gain "+string(egain)+")"}
+							+", dist:"+string(sqrt(sqr(ex)+sqr(ey)+sqr(ez)))+", size "+string(aemitter_size)+"/"+string(aemitter_atten)+", pan "+string(100*aemitter_pan)+"%"+" gain "+string(egain)+")"
+				}
+				
             
 	            draw_set_color(text_bcolor);
 	            draw_text(20,yy+4,str);
@@ -319,8 +351,10 @@ global.external_audio_index = 1000000;
 //this just works for me
 //the functions music_set() and ambience_set() are interfaces to talk to these
 //and all the global beatevent() scripts reference this music player
-global.music_player = new class_audio_playstack(4); //2 second gap between songs ending/starting
-global.ambience_player = new class_audio_playstack(4);
+global.music_player = new class_audio_playstack("music", 4); //2 second gap between songs ending/starting
+
+global.ambience_player = new class_audio_playstack("ambience", 4, true);
+global.ambience_player.set_fade_in(2);
 
 global.__bard_project_datafiles = undefined;
 bard_audio_data_load();

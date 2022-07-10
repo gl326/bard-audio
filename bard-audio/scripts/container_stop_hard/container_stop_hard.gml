@@ -2,6 +2,6 @@
 function container_stop_hard(container) {
 	var player = container_player(container);
 	if !is_undefined(player){
-		player.destroy();	
+		player.destroy(true);	
 	}
 }

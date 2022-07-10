@@ -32,6 +32,7 @@ function aeSetEditingSound() {
 	                editing = cid;
                 
 	                if !editing_audio{
+						container_load(cid); //!
 	                    for(var i=0;i<ds_list_size(container_buttons);i+=1){
 	                        (ds_list_find_value(container_buttons,i)).visible = true;
 	                    }
@@ -58,6 +59,10 @@ function aeSetEditingSound() {
 	                    assetbusbut.text = audio_asset_bus(editing);
 	                }
                 
+	}
+	
+	if AUDIO_EDITOR_AUTO_SAVE{
+		bard_audio_data_save();
 	}
 
 	return true;

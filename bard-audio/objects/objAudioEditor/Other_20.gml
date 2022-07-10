@@ -94,7 +94,9 @@ repeat(resource_n){
 #endregion
 
 #region external
-	bard_audio_load_external(EXTERN_SOUND_FOLDER);
+	_bard_get_project();
+	var _project = global.__bard_project_directory + "datafiles/";
+	bard_audio_load_external(EXTERN_SOUND_FOLDER, _project);
 #endregion
 
 //unpack all the contents

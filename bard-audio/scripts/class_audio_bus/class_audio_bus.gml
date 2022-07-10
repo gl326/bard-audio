@@ -64,7 +64,7 @@ function class_audio_bus(_name="",_gain=0,_parent=undefined) constructor{
 	        repeat(array_length(children)){
 	            var newbus = children[i];
 	            if array_find_index(calced,newbus)=-1{
-	                newbus.recalculate(calc,calced);
+	                bus_getdata(newbus).recalculate(calc,calced);
 					i ++;
 	            }else{
 	                array_delete(children,i,1); //something weird happened. 

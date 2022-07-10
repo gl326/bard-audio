@@ -7,5 +7,12 @@ function container_play(_container,_option = false,_playedBy = undefined){
 			_playedBy = id;	
 		}
 	}
-	return container_player(_container,true).play(_option,_playedBy).playid;
+	//if we're playing a container which was in the process of fading out, then lets hard swap that bad boy out
+	var _player = container_player(_container,true);
+	if _player.fading_out{
+		_player.destroy();
+		_player = container_player(_container,true);
+	}
+	
+	return _player.play(_option,_playedBy).playid;
 }

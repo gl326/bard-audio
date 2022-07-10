@@ -1,6 +1,6 @@
 // Script assets have changed for v2.3.0 see
 // https://help.yoyogames.com/hc/en-us/articles/360005277377 for more information
-function class_audio_asset(_name="",_external=false) constructor{
+function class_audio_asset(_name="",_external=false,_project = "") constructor{
 	external = _external;
 	name = "";
 	path = _name;
@@ -20,6 +20,8 @@ function class_audio_asset(_name="",_external=false) constructor{
 	//audio_group = ""; //if we're an internal file in an audio group, track that here
 	audio_group_id = 0;
 	
+	project = _project;
+	
 	ELEPHANT_SCHEMA
     {
         ELEPHANT_VERBOSE_EXCLUDE : [
@@ -28,6 +30,7 @@ function class_audio_asset(_name="",_external=false) constructor{
 			"loaded_buffer",
 			"loaded_audio",
 			"name",
+			"project"
         ],
     }
 	
@@ -62,9 +65,35 @@ function class_audio_asset(_name="",_external=false) constructor{
 				}
 			}
 		}else{	
-			if file_exists(path){
+			var _exists = false;
+			if file_exists(project+path){
+				_exists = true;
+			}else{
+						var all_files = gumshoe(EXTERN_SOUND_FOLDER,filename_ext(path), false),
+							found = -1,
+							_i = 0,
+							search_name = filename_name(path);
+						repeat(array_length(all_files)){
+							var file = all_files[_i];
+							var file_name = filename_name(file);
+							if file_name==search_name{
+								if found==-1{
+									show_debug_message(path+" [>>MOVED TO>>] "+file);	
+									path = file;
+									_exists = true;
+									break; //you could remove this to keep searching and make sure there arent duplicates, but for the sake of speed on big projects its probably not worth a warning
+								}else{
+									show_debug_message("WARNING! found multiple viable replacements for "+path+"! sound might be wonky");
+									break;
+								}
+							}
+							_i ++;	
+						}
+			}
+			
+			if _exists{
 				ds_map_add(global.audio_external_assets,path,index); //for lookup
-				ds_map_add(global.audio_assets,index,self); //track me!
+				ds_map_add(global.audio_assets,index,self); //track me!	
 			}else{
 				show_debug_message(concat("WARNING! no file for \"",path,"\". was it deleted or renamed?"));
 				
@@ -127,13 +156,17 @@ function class_audio_asset(_name="",_external=false) constructor{
 	}
 	
 	static load = function(){
+		if !AUDIO_ENABLE{
+			return false;	
+		}
+		
 		if external and !loaded{
 			if streamed{
-				loaded_audio = audio_create_stream(path);
+				loaded_audio = audio_create_stream(project+path);
 				loaded = true;	
 			}else{
 				if loaded==0{
-					bard_audio_load_queue_add(path,self);
+					bard_audio_load_queue_add(project+path,self);
 					loaded = -1;
 				}
 				return false;

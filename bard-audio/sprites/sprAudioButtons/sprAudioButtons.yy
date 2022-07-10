@@ -101,8 +101,8 @@
   ],
   "nineSlice": null,
   "parent": {
-    "name": "engine",
-    "path": "folders/Libraries/Bard/engine.yy",
+    "name": "Bard",
+    "path": "folders/Libraries/Bard.yy",
   },
   "resourceVersion": "1.0",
   "name": "sprAudioButtons",

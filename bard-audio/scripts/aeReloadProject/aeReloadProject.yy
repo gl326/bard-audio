@@ -3,7 +3,7 @@
   "isCompatibility": false,
   "parent": {
     "name": "functions",
-    "path": "folders/Libraries/Bard/engine/editor/scripts/functions.yy",
+    "path": "folders/Libraries/Bard/editor/scripts/functions.yy",
   },
   "resourceVersion": "1.0",
   "name": "aeReloadProject",

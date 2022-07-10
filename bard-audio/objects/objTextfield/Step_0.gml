@@ -44,7 +44,7 @@ if objAudioEditor.dragging==id and editing>0{
         if editing!=-1 and (!objAudioEditor.editing_audio or !container_edit){
             var val = c_val;
             if dB{
-				val = DBToPercent(val);//*100;
+				val = DBToPercent(val)*100;//*100;
 			}
             if variable_struct_get(editing,param)!=val{
                 variable_struct_set(editing,param,val);
@@ -111,7 +111,7 @@ if am_highlighted(){
             if !istext{
             var val = real(text);
             if dB{
-				val = DBToPercent(val);//*100;
+				val = DBToPercent(val)*100;//*100;
 			}
             if variable_struct_get(editing,param)!=val{
                 variable_struct_set(editing,param,val);
@@ -160,7 +160,7 @@ if slider and param_ref=="" and editing!=-1 and !objAudioEditor.editing_audio{
     if dB{
         slide_x = 
             lerp(slide_l,slide_r,
-            clamp(InvQuadInOut((variable_struct_get(editing,param)-slider_min)/(slider_max-slider_min)),0,1)
+            clamp(InvQuadInOut(((variable_struct_get(editing,param) )-slider_min)/(slider_max-slider_min)),0,1)
             );
     }else{
     slide_x = 
@@ -182,7 +182,7 @@ if slider and param_ref=="" and editing!=-1 and !objAudioEditor.editing_audio{
                 c_val = amt,
                 ;
             if dB{
-                c_val = lerp(slider_min,slider_max,QuadInOut(amt));
+                c_val = lerp(slider_min,slider_max,QuadInOut(amt));///100;
                 if c_val<=-100{
                     text = "-144";
                 }else{

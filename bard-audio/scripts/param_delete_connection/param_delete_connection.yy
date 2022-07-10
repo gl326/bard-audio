@@ -3,7 +3,7 @@
   "isCompatibility": false,
   "parent": {
     "name": "params",
-    "path": "folders/Libraries/Bard/engine/engine code/class_editors/params.yy",
+    "path": "folders/Libraries/Bard/engine/class_editors/params.yy",
   },
   "resourceVersion": "1.0",
   "name": "param_delete_connection",
