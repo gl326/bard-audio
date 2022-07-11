@@ -155,7 +155,6 @@
     {"id":{"name":"bard_audio_load_external","path":"scripts/bard_audio_load_external/bard_audio_load_external.yy",},"order":10,},
     {"id":{"name":"container_play","path":"scripts/container_play/container_play.yy",},"order":12,},
     {"id":{"name":"piano_brush_note01","path":"sounds/piano_brush_note01/piano_brush_note01.yy",},"order":0,},
-    {"id":{"name":"EleAlpha","path":"scripts/EleAlpha/EleAlpha.yy",},"order":2,},
     {"id":{"name":"container_name","path":"scripts/container_name/container_name.yy",},"order":2,},
     {"id":{"name":"grid_Set","path":"scripts/grid_Set/grid_Set.yy",},"order":22,},
     {"id":{"name":"ds_list_add_sorted","path":"scripts/ds_list_add_sorted/ds_list_add_sorted.yy",},"order":3,},
