@@ -5,6 +5,13 @@
 has variables called "x" and "y." if you arent using a z variable then leave this off.
 */
 
+#macro AUDIO_EDITOR_CAN_LOAD_DATA true
+/* this should be set to false or debug_mode when making any public build releases. 
+when true, this allows the game to look for project files & audio editor data on the user's file system. 
+this is important because, when you query the user's file system for project data stuff, it gives users a potential avenue of attack to edit the game or do weird stuff
+i prefer to leave this as debug_mode at all times for safety, and only use the audio editor in debug mode.
+*/
+
 #macro AUDIO_EDITOR_ROOM rmAudioEditor 
 /*The GameMaker room used as the audio editor. it can be named anything, just make sure its a room that contains objAudioEditor.
 */

@@ -3,7 +3,7 @@ global.__bard_project_directory = undefined;
 
 function bard_get_project_directory()
 {
-    if (debug_mode)
+    if (AUDIO_EDITOR_CAN_LOAD_DATA)
     {
         _bard_get_project();
         return global.__bard_project_directory;
@@ -16,7 +16,7 @@ function bard_get_project_directory()
 
 function bard_get_project_file()
 {
-    if (debug_mode)
+    if (AUDIO_EDITOR_CAN_LOAD_DATA)
     {
         _bard_get_project();
         return global.__bard_project_path;
@@ -29,7 +29,7 @@ function bard_get_project_file()
 
 function _bard_get_project()
 {
-    if (debug_mode)
+    if (AUDIO_EDITOR_CAN_LOAD_DATA)
     {
         if (global.__bard_project_directory == undefined)
         {
