@@ -361,13 +361,13 @@ b = newStackedHighlightable(objaeButton,0,1,);//"3D settings:");
 b.script = aeToggleSoundAttribute; b.name="3D"; b.args[0] = "threed";
 ds_list_add(container_buttons,b);
 var b = newStackedHighlightable(objTextfield,0,1, "size (def "+string(global.default_sound_size)+")");
-b.container_edit = true; b.param = "3d_sound_size"; b.percent=false; b.plusmin = false;
+b.container_edit = true; b.param = "threed_sound_size"; b.percent=false; b.plusmin = false;
 ds_list_add(container_buttons,b);
 var b = newStackedHighlightable(objTextfield,0,1, "attenuation (def "+string(global.default_sound_atten)+")");
-b.container_edit = true; b.param = "3d_sound_falloff"; b.percent=false; b.plusmin = false;
+b.container_edit = true; b.param = "threed_sound_falloff"; b.percent=false; b.plusmin = false;
 ds_list_add(container_buttons,b);
 var b = newStackedHighlightable(objTextfield,0,1, "pan sticky");
-b.container_edit = true; b.param = "3d_pan"; b.percent=true; b.plusmin = false;
+b.container_edit = true; b.param = "threed_pan"; b.percent=true; b.plusmin = false;
 ds_list_add(container_buttons,b);
 
 /////////////////////SORT STUFFF
