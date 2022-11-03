@@ -275,8 +275,8 @@
     "children": [],
   },
   "RoomOrderNodes": [
-    {"roomId":{"name":"rmAudioEditor","path":"rooms/rmAudioEditor/rmAudioEditor.yy",},},
     {"roomId":{"name":"rmAudioDemo","path":"rooms/rmAudioDemo/rmAudioDemo.yy",},},
+    {"roomId":{"name":"rmAudioEditor","path":"rooms/rmAudioEditor/rmAudioEditor.yy",},},
   ],
   "Folders": [
     {"folderPath":"folders/Sprites.yy","order":0,"resourceVersion":"1.0","name":"Sprites","tags":[],"resourceType":"GMFolder",},
