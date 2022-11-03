@@ -80,24 +80,26 @@ function __GregephantToJSONInner(_target)
                 
                 if (_verbose) __ElephantRemoveExcludedVariables(_names, _elephantSchemas);
 				
-				//GREGEPHANT: get the template for a blank version of this struct
-				if !ds_map_exists(global.__gregephantTemplates,_instanceof){
-					var _constructorFunction = asset_get_index(_instanceof);
-		            if (is_method(_constructorFunction))
-		            {
-		                //Is a method
-		                _template = new _constructorFunction();
-		            }
-		            else if (is_numeric(_constructorFunction) && script_exists(_constructorFunction))
-		            {
-		                //Is a script
-		                _template = new _constructorFunction();
-		            }
-					ds_map_add(global.__gregephantTemplates,_instanceof,_template);
-				}else{
-					_template = global.__gregephantTemplates[?_instanceof];	
+				if (!variable_struct_exists(_target, __ELEPHANT_VERBOSE_FORCE_NAME) or !_target[$ __ELEPHANT_VERBOSE_FORCE_NAME]){
+					//GREGEPHANT: get the template for a blank version of this struct
+					if !ds_map_exists(global.__gregephantTemplates,_instanceof){
+						var _constructorFunction = asset_get_index(_instanceof);
+			            if (is_method(_constructorFunction))
+			            {
+			                //Is a method
+			                _template = new _constructorFunction();
+			            }
+			            else if (is_numeric(_constructorFunction) && script_exists(_constructorFunction))
+			            {
+			                //Is a script
+			                _template = new _constructorFunction();
+			            }
+						ds_map_add(global.__gregephantTemplates,_instanceof,_template);
+					}else{
+						_template = global.__gregephantTemplates[?_instanceof];	
+					}
+					_hastemplate = true;
 				}
-				_hastemplate = true;
             }
             
             //Sort the names alphabetically

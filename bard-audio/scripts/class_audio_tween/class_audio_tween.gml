@@ -61,6 +61,10 @@ function class_audio_tween(_variable_string_name, _dest=1, _length=1, _curve=1,_
 				}
 			}else{
 				set_value(dest);
+				
+				if is_method(update_function){
+					update_function();
+				}
 			}
 		}
 		

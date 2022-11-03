@@ -100,12 +100,16 @@ function class_map() constructor{
 			switch(argument_count){
 				case 1: ret = func(val); break;
 				case 2: ret = func(val,argument[1]); break;
-				default: ret = func(val,argument[1],argument[2]); break;
+				case 3: ret = func(val,argument[1],argument[2]); break;
+				case 4: ret = func(val,argument[1],argument[2],argument[3]); break;
+				default: ret = func(val,argument[1],argument[2],argument[3],argument[4]); break;
 			}
 			if !is_undefined(ret){
 				return ret;	
 			}
 		}
+		
+		return undefined;
 	}
 	
 	static ForEachKey = function(func){
@@ -121,5 +125,18 @@ function class_map() constructor{
 				default: func(val,argument[1],argument[2],argument[3],argument[4]); break;
 			}
 		}
+	}
+	
+	static FindKey = function(_content){
+		var keys = Keys();
+		var _i = 0;
+		repeat(array_length(keys)){
+			if self[$keys[_i]] == _content{
+				return keys[_i];
+			}
+			_i ++;	
+		}
+		
+		return undefined;
 	}
 }

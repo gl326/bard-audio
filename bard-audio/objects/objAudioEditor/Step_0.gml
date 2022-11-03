@@ -24,8 +24,8 @@ if !mouse_check_button(mb_left){dragging = noone; drag_start = false;}
 }
 
 if clicked!=-1{
-    doubleclick+=1;
-    if doubleclick>=15{
+    doubleclick+=delta_time;
+    if doubleclick>=(1000000*.33){
         clicked = -1;
         doubleclick = 0;
     }

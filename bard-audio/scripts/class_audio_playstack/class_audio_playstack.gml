@@ -42,6 +42,10 @@ function class_audio_playstack(_name="", layers=1, _overlaps = false) constructo
 		return self;
 	}
 	
+	static set_overlap = function(_trueOrFalse){
+		overlaps = _trueOrFalse;	
+	}
+	
 	static get_playing = function(){
 		var tier = get_playing_tier();
 		if tier>=0{
@@ -212,6 +216,12 @@ function class_audio_playstack(_name="", layers=1, _overlaps = false) constructo
 				if !(is_real(current[i]) and current[i]==-1){ //we have an instruction!
 					if is_string(current[i]){ //it's an instruction to play something
 							if container_is_paused(current[i]){ //make sure it's unpaused
+								if fade_in{
+									container_set_volume(current[i],0);
+									with(container_player(current[i])){
+										tween_audio("volume",1,other.fade_in);
+									}
+								}
 								container_unpause(current[i]);
 							}else if !container_is_running(current[i]){ //this container has stopped for some other reason
 								if debug_on{

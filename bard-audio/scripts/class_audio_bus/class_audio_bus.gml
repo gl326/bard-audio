@@ -46,7 +46,7 @@ function class_audio_bus(_name="",_gain=0,_parent=undefined) constructor{
 		array_push(calced,name);
 	    //if ds_exists(map,ds_type_map){
 	    var ncalc = ((_calc+1)
-	            *((gain/1)+1)
+	            *((gain/100)+1)
 	            )-1;	
 		var i;
 		

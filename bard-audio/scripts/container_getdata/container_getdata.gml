@@ -21,3 +21,7 @@ function container_getdata(_container,mustExist=false,fromProject=false){
 	}
 	return _container;
 }
+
+function container_exists(_containerName){
+	return (ds_map_exists(global.audio_containers,_containerName));
+}

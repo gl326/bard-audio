@@ -99,9 +99,29 @@ function class_audio_container(_name = "", fromProject = false) constructor{
 			var parent_data = ((parent=="")?undefined : container_getdata(parent));
 			if is_undefined(parent_data) or array_find_index(parent_data.contents_serialize,name)==-1{
 				if parent!=""{
-					show_debug_message(concat("WARNING! container ",name," failed to link to its parent, ",parent,". moving to root folder"));
+					show_debug_message(concat("WARNING! container ",name," failed to link to its parent, ",parent));
 				}
-				parent = ROOT_SOUND_FOLDER;
+				var _found = false;
+				if from_project{
+					var _data = global.bard_audio_data[bard_audio_class.container],
+						_i = 0;
+					repeat(array_length(_data)){
+						var _c = _data[_i];
+						if _c.from_project{
+							if array_find_index(_c.contents_serialize,name)!=-1{
+								parent = _c.name;
+								_found = true;
+								show_debug_message("...... found new parent project folder: "+parent);
+								break;
+							}
+						}
+						_i ++;
+					}	
+				}
+				if !_found{
+					show_debug_message("...... moving to root folder");
+					parent = ROOT_SOUND_FOLDER;
+				}
 				parent_data = container_getdata(parent,true);
 				if array_find_index(parent_data.contents_serialize,name)==-1{
 					array_push(parent_data.contents_serialize,name);
@@ -131,7 +151,7 @@ function class_audio_container(_name = "", fromProject = false) constructor{
 					//continue;	
 				}
 			}else if string_char_at(item,1)=="%"{ //external file
-				item = audio_asset_index(string_copy(item,2,string_length(item)-1));	
+				item = audio_asset_index(string_copy(item,2,string_length(item)-1), self, _i);	
 				if item==-1{
 					//array_delete(contents_serialize,_i,1);
 					show_debug_message(concat("WARNING! ",contents_serialize[_i]," was listed as an external asset in ",name," but no longer exists"));
@@ -488,7 +508,12 @@ function class_audio_container(_name = "", fromProject = false) constructor{
 		repeat(array_length(contents)){
 			var item = contents[_i];
 			if is_string(item){
-				container_getdata(item).load();	
+				var _data = container_getdata(item);
+				if !is_undefined(_data){
+					_data.load();	
+				}else{
+					show_debug_message("WARNING! no container data for "+item+" defined yet");
+				}
 			}else{
 				audio_asset_load(item);
 			}

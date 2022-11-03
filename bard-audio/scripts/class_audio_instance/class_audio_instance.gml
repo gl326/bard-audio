@@ -233,7 +233,7 @@ function class_audio_instance(_container,_sound=-1,_loops=false,_gain=0,_pitch=0
 	}
 	
 	//using current state of my bus, file, container etc.... set the gain of my attached sound.
-	static update_current_volume = function(parentVolume){
+	static update_current_volume = function(parentVolume = 1){
 		var snd = aud;
 		if sync{snd = file;}
         var file_vol = audio_asset_gain(file); 
@@ -263,5 +263,33 @@ function class_audio_instance(_container,_sound=-1,_loops=false,_gain=0,_pitch=0
 		if ind>-1{
 			array_delete(_player.playing,ind,1);
 		}
+	}
+	
+	static pitch_set = function(_pitch,_update = true){
+		pitch = _pitch;
+		if _update{
+			update_current_pitch();
+		}
+	}
+	
+	static volume_set = function(_volume,_update = true){
+		vol = _volume;
+		if _update{
+			update_current_volume();
+		}
+	}
+	
+	//multiply the pitch by a value, roughly 0-1.
+	//for ex. multiply by 0.5 to set the pitch by half / down one octave.
+	static pitch_multiply = function(_pitch,_update = true){
+		var _old_value = pitch+1;
+		var _new_value = _old_value * _pitch;
+		pitch_set(_new_value - 1, _update); 	
+	}
+	
+	static volume_multiply = function(_volume,_update = true){
+		var _old_value = vol+1;
+		var _new_value = _old_value * _volume;
+		volume_set(_new_value - 1, _update); 	
 	}
 }

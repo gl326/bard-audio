@@ -90,7 +90,6 @@
 					"cleft" : 99.2603550296
 				}
 			],
-			"blend_on" : 1,
 			"bpm" : 140,
 			"bus" : "music",
 			"contents_serialize" : [
@@ -123,7 +122,6 @@
 					"cleft" : 97.9289940828
 				}
 			],
-			"blend_on" : 1,
 			"bpm" : 70,
 			"bus" : "music",
 			"contents_serialize" : [
@@ -178,7 +176,8 @@
 			"from_project" : 1,
 			"name" : "test_choice_sfx",
 			"parameters" : [],
-			"parent" : "test_sfx"
+			"parent" : "test_sfx",
+			"threed" : true
 		}
 	],
 	[
@@ -286,35 +285,6 @@
 		{
 			"__Elephant_Constructor__" : "class_audio_asset",
 			"__Elephant_Schema_Version__" : 0,
-			"path" : "chicory_meadows_bgm_and_lowkey_head_105bpm_CMaj_16beats"
-		},
-		{
-			"__Elephant_Constructor__" : "class_audio_asset",
-			"__Elephant_Schema_Version__" : 0,
-			"audio_group_id" : 1,
-			"editor_order" : 1,
-			"path" : "fart"
-		},
-		{
-			"__Elephant_Constructor__" : "class_audio_asset",
-			"__Elephant_Schema_Version__" : 0,
-			"path" : "chicory_meadows_bgm_head_105bpm_CMaj_16beats"
-		},
-		{
-			"__Elephant_Constructor__" : "class_audio_asset",
-			"__Elephant_Schema_Version__" : 0,
-			"editor_order" : 1,
-			"path" : "chicory_meadows_lowkey_loop_105bpm_CMaj"
-		},
-		{
-			"__Elephant_Constructor__" : "class_audio_asset",
-			"__Elephant_Schema_Version__" : 0,
-			"editor_order" : 1,
-			"path" : "chicory_meadows_bgm_loop_105bpm_CMaj"
-		},
-		{
-			"__Elephant_Constructor__" : "class_audio_asset",
-			"__Elephant_Schema_Version__" : 0,
 			"bus" : "sfx",
 			"path" : "texure_paint_loop"
 		},
@@ -329,26 +299,7 @@
 			"__Elephant_Schema_Version__" : 0,
 			"bus" : "music",
 			"editor_order" : 1,
-			"path" : "mus_act1_spiritworld_active_lp_110bpm"
-		},
-		{
-			"__Elephant_Constructor__" : "class_audio_asset",
-			"__Elephant_Schema_Version__" : 0,
-			"bus" : "music",
-			"editor_order" : 1,
 			"path" : "mus_act1_bardstheme_active_lp_140bpm"
-		},
-		{
-			"__Elephant_Constructor__" : "class_audio_asset",
-			"__Elephant_Schema_Version__" : 0,
-			"bus" : "music",
-			"path" : "mus_act1_spiritworld_intro_110bpm"
-		},
-		{
-			"__Elephant_Constructor__" : "class_audio_asset",
-			"__Elephant_Schema_Version__" : 0,
-			"bus" : "music",
-			"path" : "mus_act1_spiritworld_passive_lp_110bpm"
 		},
 		{
 			"__Elephant_Constructor__" : "class_audio_asset",

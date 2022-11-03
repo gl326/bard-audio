@@ -22,6 +22,8 @@ function class_audio_asset(_name="",_external=false,_project = "") constructor{
 	
 	project = _project;
 	
+	marked_to_delete = false;
+	
 	ELEPHANT_SCHEMA
     {
         ELEPHANT_VERBOSE_EXCLUDE : [
@@ -30,7 +32,8 @@ function class_audio_asset(_name="",_external=false,_project = "") constructor{
 			"loaded_buffer",
 			"loaded_audio",
 			"name",
-			"project"
+			"project",
+			"marked_to_delete"
         ],
     }
 	
@@ -38,6 +41,19 @@ function class_audio_asset(_name="",_external=false,_project = "") constructor{
     {
 		setup(); //...
     }
+	
+	static DELETE = function(){
+		if ELEPHANT_IS_DESERIALIZING{
+			marked_to_delete = true;	
+		}else{
+				var ind = array_find_index(global.bard_audio_data[bard_audio_class.asset],self);
+				if ind!=-1{
+					array_delete(global.bard_audio_data[bard_audio_class.asset],ind,1);	
+				}else{
+					marked_to_delete = true;	
+				}
+		}
+	}
 
 	static setup = function(){
 		if !external{
@@ -57,12 +73,7 @@ function class_audio_asset(_name="",_external=false,_project = "") constructor{
 				ds_map_add(global.audio_assets,index,self); //track me!
 			}else{
 				show_debug_message(concat("WARNING! no matching audio asset for \"",name,"\". was it deleted or renamed?"));
-				
-				//remove from serialisation
-				var ind = array_find_index(global.bard_audio_data[bard_audio_class.asset],self);
-				if ind!=-1{
-					array_delete(global.bard_audio_data[bard_audio_class.asset],ind,1);	
-				}
+				DELETE();
 			}
 		}else{	
 			var _exists = false;
@@ -96,22 +107,13 @@ function class_audio_asset(_name="",_external=false,_project = "") constructor{
 				ds_map_add(global.audio_assets,index,self); //track me!	
 			}else{
 				show_debug_message(concat("WARNING! no file for \"",path,"\". was it deleted or renamed?"));
-				
-				//remove from serialisation
-				var ind = array_find_index(global.bard_audio_data[bard_audio_class.asset],self);
-				if ind!=-1{
-					array_delete(global.bard_audio_data[bard_audio_class.asset],ind,1);	
-				}
+				DELETE();
 			}
 		}
 		
 		//weird blank
 		if name=="" and path==""{
-			//stop serializing me
-			var ind = array_find_index(global.bard_audio_data[bard_audio_class.asset],self);
-			if ind!=-1{
-				array_delete(global.bard_audio_data[bard_audio_class.asset],ind,1);	
-			}
+			DELETE();
 		}
 	}
 	

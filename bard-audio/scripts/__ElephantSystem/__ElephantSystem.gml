@@ -25,6 +25,8 @@
 #macro  __ELEPHANT_VERSION_VERBOSE_NAME    "__Elephant_Version_Verbose__"
 #macro  __ELEPHANT_VERBOSE_EXCLUDE_NAME    "__Elephant_Verbose_Exclude__"
 
+#macro  __ELEPHANT_VERBOSE_FORCE_NAME	"__Elephant_Verbose_Force__" // added for bard audio
+
 #macro __ELEPHANT_JSON_CIRCULAR_REF    "__Elephant_Circular_Ref__"
 #macro __ELEPHANT_JSON_CONSTRUCTOR     "__Elephant_Constructor__"
 #macro __ELEPHANT_JSON_SCHEMA_VERSION  "__Elephant_Schema_Version__"

@@ -135,7 +135,7 @@ function class_audio_hook(_variableName) constructor{
 function class_audio_hook_curve() constructor{
 	points = [
 		new class_audio_hook_curve_point(0,0),
-		new class_audio_hook_curve_point(100,100)
+		new class_audio_hook_curve_point(100,0)
 	];
 	sorted = true;
 	

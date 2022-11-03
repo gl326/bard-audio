@@ -14,9 +14,15 @@ function struct_inherit_values(dest,source,_error=false){
 	repeat(i){
 		i -= 1;
 		if variable_struct_exists(dest,entries[i]){
-			variable_struct_set(dest,entries[i],ElephantDuplicate(variable_struct_get(source,entries[i])));	
+			if !is_method(variable_struct_get(source,entries[i])){
+				variable_struct_set(dest,entries[i],ElephantDuplicate(variable_struct_get(source,entries[i])));	
+			}else{
+				variable_struct_set(dest,entries[i],variable_struct_get(source,entries[i]));	
+			}
 		}else{
-			if _error{
+			if is_string(_error){
+				show_debug_message(_error+" (Error copying "+string(entries[i])+")");//.Error();
+			}else if _error{
 				show_debug_message("failed to copy data from field "+string(entries[i]));//.Error();
 			}
 		}

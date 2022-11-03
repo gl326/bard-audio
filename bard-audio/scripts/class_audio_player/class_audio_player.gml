@@ -153,7 +153,7 @@ static unpause = function(){
 	}
 }
 
-static play = function(option=false,_playedBy=noone){
+static play = function(option=false,_playedBy=noone,_volumeMultiply=1, _pitchMultiply=1){
 	playid += 1;
 	seed = random_get_seed();
 	am_playing = true;
@@ -175,7 +175,7 @@ static play = function(option=false,_playedBy=noone){
 
 	var i = 0;
 	repeat(n){
-		play_instance(playlist[i],option);
+		play_instance(playlist[i],option,_volumeMultiply,_pitchMultiply);
 		i ++;
 	}
 	auto_play = (container.type==CONTAINER_TYPE.CHOICE and container.contin);
@@ -193,7 +193,13 @@ static play = function(option=false,_playedBy=noone){
 	return self;
 }
 
-static play_instance = function(inst,option=false){
+static play_instance = function(inst,option=false,_volumeMultiply=1, _pitchMultiply=1){
+		if _volumeMultiply!=1{
+			inst.volume_multiply(_volumeMultiply);
+		}
+		if _pitchMultiply!=1{
+			inst.pitch_multiply(_pitchMultiply);
+		}
 		if  (inst.delayin<=0 or (!spec_snd and option)) or inst.sync{
 	        inst.play(self);
 	    }else{
@@ -294,22 +300,22 @@ static get_time_in_beats = function(){ //get the exact fractional value of where
 	return time_in_beats;	
 }
 
-static param_set_unique = function(param,newVal,playID){
+static param_set_unique = function(param,newVal,playID = -1){
 	newVal = clamp(newVal,0,100);
 			var isnew = true;
 			if ds_map_exists(unique_param_settings,playID){
 				var imap = ds_map_find_value(unique_param_settings,playID);
 				if ds_map_exists(imap,param){
-					if ds_map_find_value(imap,param)==newv{
+					if ds_map_find_value(imap,param)==newVal{
 						isnew = false;
 					}else{
-						ds_map_replace(imap,param,newv);	
+						ds_map_replace(imap,param,newVal);	
 					}
 				}else{
-					ds_map_add(imap,param,newv);
+					ds_map_add(imap,param,newVal);
 				}
 			}else{
-				ds_map_add_map(unique_param_settings,playID,map_Create(param,newv));	
+				ds_map_add_map(unique_param_settings,playID,map_Create(param,newVal));	
 			}
 			
 			if isnew{
@@ -451,6 +457,23 @@ static update_amplaying = function(){
 	}	
 }
 
+static get_instance = function(_playid){
+	var _i = 0;
+	repeat(array_length(playing)){
+		if playing[_i].playid==_playid{
+			return playing[_i];	
+		}
+	}
+	
+	_i = 0;
+	repeat(array_length(delay_sounds)){
+		if delay_sounds[_i].playid==_playid{
+			return delay_sounds[_i];	
+		}
+	}
+	return undefined;
+}
+
 static update_params = function(){
 	var _n = array_length(playing);
 	if live_update and parameters_updated>0 and _n{
@@ -469,8 +492,8 @@ static update_params = function(){
 					var k = ds_map_find_first(cmap),
 						kn = ds_map_size(cmap);
 					repeat(kn){
-						cmap[?k] = global.audio_state[?k];
-						global.audio_state[?k] = umap[?k];
+						cmap[?k] = global.audio_params[?k].val;
+						global.audio_params[?k].val = umap[?k];
 						k = ds_map_find_next(cmap,k);	
 					}
 					unique_param[0] = cmap;
@@ -546,7 +569,7 @@ static update_params = function(){
 				var k = ds_map_find_first(cmap),
 					kn = ds_map_size(cmap);
 				repeat(kn){
-					global.audio_state[?k] = cmap[?k];
+					global.audio_params[?k].val = cmap[?k];
 					k = ds_map_find_next(cmap,k);	
 				}
 				

@@ -129,7 +129,9 @@ function bard_audio_load_event(){
 					global.audio_loading.from.loaded_audio = __audioExtWavBufferToAudio(_newBuff);
 					global.audio_loading.from.loaded_buffer = _newBuff;
 					global.audio_loading.from.loaded = true;
-					
+					if global.audio_loading.from.loaded_audio==-1{
+						show_debug_message("!!!!!!!!!!!AUDIO ERROR! File "+string(global.audio_loading.item)+" failed to load due to an issue with the file!!!!!!!!!!!");	
+					}
 					buffer_delete(global.audio_loading.buffer);
 				}else{
 					//audio group. no extra logic needed.
