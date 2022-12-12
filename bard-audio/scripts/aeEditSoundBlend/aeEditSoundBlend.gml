@@ -15,7 +15,7 @@ function aeEditSoundBlend() {
 	        cur.param = editing.variable_has_hook("blend");
         
 	        cur.blend = variable_struct_get(editing,"blend_map");
-	        global.highlighted = cur;
+	        global.bard_editor_highlighted = cur;
     
     
 	}
