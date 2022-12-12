@@ -128,6 +128,7 @@
     {"id":{"name":"aeBrowserScrollReset","path":"scripts/aeBrowserScrollReset/aeBrowserScrollReset.yy",},"order":0,},
     {"id":{"name":"container_load","path":"scripts/container_load/container_load.yy",},"order":9,},
     {"id":{"name":"Sqr","path":"scripts/Sqr/Sqr.yy",},"order":7,},
+    {"id":{"name":"bard_audio_macros_EDITME","path":"scripts/bard_audio_macros_EDITME/bard_audio_macros_EDITME.yy",},"order":12,},
     {"id":{"name":"container_align_time","path":"scripts/container_align_time/container_align_time.yy",},"order":0,},
     {"id":{"name":"bus_getdata","path":"scripts/bus_getdata/bus_getdata.yy",},"order":3,},
     {"id":{"name":"list_Create","path":"scripts/list_Create/list_Create.yy",},"order":23,},
