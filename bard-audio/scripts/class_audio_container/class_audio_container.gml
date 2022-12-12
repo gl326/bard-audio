@@ -69,6 +69,8 @@ function class_audio_container(_name = "", fromProject = false) constructor{
 	editor_order = 0;
 	parent = "";
 	
+	effects = [];
+	
 	#region Serialization
     
     ELEPHANT_SCHEMA
@@ -139,7 +141,9 @@ function class_audio_container(_name = "", fromProject = false) constructor{
 	static deserialize_contents = function(){
 		var n = array_length(contents_serialize);
 		contents = array_create(n);
-		
+		if name=="ui_hover"{
+			var checkme = true;	
+		}
 		var _i = 0;
 		repeat(n){
 			var item = contents_serialize[_i];
@@ -209,14 +213,15 @@ function class_audio_container(_name = "", fromProject = false) constructor{
 	
 	//mark that we are hooked up to this parameter, now.
 	static hook_add = function(param){
-		if array_find_index(parameters,param)==-1{
+		//if array_find_index(parameters,param)==-1{
 			array_push(parameters,param);	
-		}
+		//}
 	}
 	
 	//delete a parameter connection
+	//just do this once per call - if we have more than one than it means we have more than one connection to it
 	static hook_delete = function(param){
-		while(array_find_index(parameters,param)!=-1){
+		if(array_find_index(parameters,param)!=-1){
 			array_delete(parameters,array_find_index(parameters,param),1);	
 		}
 	}
@@ -589,6 +594,64 @@ function class_audio_container(_name = "", fromProject = false) constructor{
 		}
 		return array;
 	}
+	
+	#region effects
+	//we hold data about effects, but if you try to set any or get the state of any, we actually forward you to a player.
+	//i don't know about any of that!!!! ok?? i'm just here to serialize data, not USE it!
+	static has_any_effects = function(){
+		return (array_length(effects)>0);	
+	}
+	
+	static set_effect = function(_name,_enabled){
+		var _effect = find_effect(_name);
+		if !is_undefined(_effect){
+			
+			set_effect_class(_effect,_enabled);
+		}
+	}
+	static find_effect = function(_name){
+		var _i = 0;
+		repeat(array_length(effects)){
+			if effects[_i].name==_name{
+				return effects[_i];	
+			}
+			_i ++;	
+		}
+		return undefined;
+	}
+	static has_effect = function(_name){
+		var _effect = find_effect(_name);
+		return !is_undefined(_effect) and has_effect_class(_effect);
+	}
+	
+	static has_effect_class = function(_effect){
+		return container_player(self,true).has_effect_class(_effect);
+	}
+	
+	static set_effect = function(_name,_enabled){
+		var _i = 0;
+		repeat(array_length(effects)){
+			if effects[_i].name==_name{
+				set_effect_class(effects[_i],_enabled);	
+			}
+			_i ++;	
+		}
+	}
+
+	static set_effect_class = function(_effect,_enabled){
+		return container_player(self,true).set_effect_class(_effect,_enabled);
+	}
+	
+	static set_default_effects = function(){
+		var _i = 0;
+		repeat(array_length(effects)){
+			if effects[_i].default_on{
+				set_effect_class(effects[_i]);	
+			}
+			_i++;	
+		}
+	}
+	#endregion
 }
 
 

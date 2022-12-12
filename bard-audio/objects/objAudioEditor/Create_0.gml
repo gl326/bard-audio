@@ -10,8 +10,8 @@ audio_data_version = 0;
     audio_data_maxversion = 0;
 event_user(1);
 
-global.highlighted = noone; 
-
+global.bard_editor_highlighted = noone; 
+global.bard_editor_clicked = noone; 
 
 line_height = 24;
 tab = 24;

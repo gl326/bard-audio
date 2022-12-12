@@ -8,6 +8,14 @@ function bus_reset_all(){
 	if !is_undefined(busses){
 	repeat(array_length(busses)){
 		bus_reset(busses[_i]);
+		bus_clear_effects(busses[_i],false);
 		_i ++;	
-	}}
+	}
+	
+	_i = 0;
+	repeat(array_length(busses)){
+		bus_getdata(busses[_i]).default_effects();
+		_i ++;	
+	}
+	}
 }

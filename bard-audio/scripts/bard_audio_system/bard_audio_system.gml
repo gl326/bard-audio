@@ -16,7 +16,7 @@ i prefer to leave this as debug_mode at all times for safety, and only use the a
 /*The GameMaker room used as the audio editor. it can be named anything, just make sure its a room that contains objAudioEditor.
 */
 
-#macro EDITOR_PLAY_ROOM rmAudioDemo 
+#macro EDITOR_PLAY_ROOM rmOverworld 
 /* When you hit CTRL+ENTER in the editor, it will go to this room. make it a room that could be a reasonable entrypoint to begin
 gameplay! that way you can edit sounds, test them in-game, and then go back to adjust.
 */
@@ -39,7 +39,7 @@ gameplay! that way you can edit sounds, test them in-game, and then go back to a
 #macro AUDIO_ENABLE true
 /* when 'false,' no audio is loaded or played through the system ever. might be useful for saving processing or load time etc. */
 
-#macro MUSIC_DEFAULT_FADEOUT 2
+#macro MUSIC_DEFAULT_FADEOUT 4
 /*when using the music_* functions to change from one trakc ot another, this is the default fadeout length before starting the next song */
 
 #macro MUSIC_DEFAULT_GAP 0
@@ -49,8 +49,8 @@ gameplay! that way you can edit sounds, test them in-game, and then go back to a
 audio_listener_orientation(0,0,1,0,-1,0);
 audio_falloff_set_model(audio_falloff_linear_distance); //_clamped?
 
-global.default_sound_size = 1000;// //if sounds are within this distance of the listener, theyre full volume
-global.default_sound_atten = 2000;// //at this distance, sounds are inaudible
+global.default_sound_size = 800;// //if sounds are within this distance of the listener, theyre full volume
+global.default_sound_atten = 2500;// //at this distance, sounds are inaudible
 global.listener_distance = 1250;//50 //how far the listener is from the screen
 global.max_listener_distance = 1500; //farthest the listener can be from the screen - the distance is alered based on the view scale
 
@@ -113,6 +113,21 @@ function bard_audio_listener_update(_x,_y,_z = 0,_view_zoom_scale=1){
 	-global.max_listener_distance,global.max_listener_distance);
 	
 	audio_listener_position(global.listener_x,global.listener_y,global.listener_z);
+	
+	//update default emitters to be on top of the listener. 
+	//they are used by sounds not tagged as 3D, therefore there should never be any distance factor to their volume.
+	//it would be neat if someday gamemaker adds a way for some emitters to not be 3D, since they're the only way to get audio effects.
+	var _i = 0;
+	repeat(array_length(global.bard_audio_data[bard_audio_class.bus])){
+		var _emitter = global.bard_audio_data[bard_audio_class.bus][_i].default_emitter;
+		if _emitter!=-1{
+			audio_emitter_position(
+				_emitter,
+				global.listener_x,global.listener_y,global.listener_z
+			);
+		}
+		_i ++;	
+	}
 }
 	
 //make sure to put this in the Asynchonous Event > Save/Load of some global object.
@@ -197,16 +212,21 @@ function bard_audio_debug_gui(){
 	                str = string(audio_asset_name(file))+": gain "+string(audio_sound_get_gain(aud))+" pitch "+string(audio_sound_get_pitch(aud));//+" pos "+string(audio_sound_get_track_position(aud));
 	                str+="[input gain: "+string(s.current_vol)+"]"
 	                if s.blend!=0{str+="[blend: "+string(s.blend)+"]";}
-	                str+=" bus "+string(s.bus)+" "+string(s.bus_vol);
+					if s.bus!=""{str+=" bus "+string(s.bus)+" "+string(100*(1+bus_gain_current(s.bus)))+"%";}
 					var emit = s.emitter;
 	            if emit!=-1{
 						yyy+=20;
 						var ex = audio_emitter_get_x(emit)-(global.listener_x), 
 						ey = audio_emitter_get_y(emit)-(global.listener_y),
 						ez = audio_emitter_get_z(emit)-global.listener_z,
-						egain = audio_emitter_get_gain(emitter);
+						egain = audio_emitter_get_gain(emit);
 						str+="\n(emitter| x:"+string((ex))+", y:"+string((ey))+", z:"+string(ez)
-							+", dist:"+string(sqrt(sqr(ex)+sqr(ey)+sqr(ez)))+", size "+string(aemitter_size)+"/"+string(aemitter_atten)+", pan "+string(100*aemitter_pan)+"%"+" gain "+string(egain)+")"
+							+", dist:"+string(sqrt(sqr(ex)+sqr(ey)+sqr(ez)));
+						if emitter!=-1{
+							str+=", size "+string(aemitter_size)+"/"+string(aemitter_atten)+", pan "+string(100*aemitter_pan)+"%"+" gain "+string(egain)+")";
+						}else{
+							str+=" gain "+string(egain)+")";	
+						}
 				}
 				
             
@@ -330,14 +350,13 @@ repeat(bard_audio_class._num){
 //these ones are not serialized, but are tracked via array 
 global.audio_players = [];
 global.audio_playstacks = [];
+global.audio_bus_param_watchers = [];
 
 //for data lookup and tracking during gameplay
 global.audio_containers = ds_map_create(); //settings and contents of all containers
 global.audio_params = ds_map_create(); //parameters, hooks and default values
 global.audio_busses = ds_map_create(); //audio busses
 global.audio_assets = ds_map_create(); //settings for individual sound assets (bus, gain)
-//global.audio_asset_vol = ds_map_create(); //volume settings for each sound asset
-//global.audio_asset_bus = ds_map_create(); //bus settings for each sound asset
 global.audio_list_index = ds_map_create(); //for containers that need to remember wha sounds they've played
 global.audio_emitters = ds_map_create(); //for tracking emitters
 global.audio_param_copy_map = ds_map_create(); //this is a blank dummy map we use to copy data around when setting parameters

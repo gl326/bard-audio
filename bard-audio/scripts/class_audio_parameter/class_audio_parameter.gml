@@ -41,13 +41,44 @@ function class_audio_parameter(_name="",_default=0) constructor{
 		return ret;
 	}
 	
+	static set_effect_values = function(_effect){
+		var attrs = effect_hook(_effect),
+			ret = false;
+		if !is_undefined(attrs){
+			var _i = 0;
+			repeat(array_length(attrs)){
+				var hook = attrs[_i];
+				_effect.set_value(hook.variable,hook.eval(val));
+				ret = true;
+				_i++;
+			}
+		}
+		return ret;
+	}
+	
 	//hook editing functions - slow, should only happen in the audio editor.
 	static container_variable_hook = function(_container,_container_var){
 		return hook_find_variable(container_hook(_container),_container_var);
 	}
 	
+	static effect_variable_hook = function(_container,_container_var){
+		return hook_find_variable(effect_hook(_container),_container_var);
+	}
+	
 	static container_hook = function(_container){
-		return hooks.Get(container_getdata(_container).name);
+		return get_hooks_for(container_getdata(_container).name);
+	}
+	
+	static effect_hook = function(_effect){
+		return get_hooks_for(_effect.uid);	
+	}
+	
+	static get_hooks_for = function(_name){
+		return hooks.Get(_name);
+	}
+	
+	static get_hook = function(_name,_var_name){
+		return hook_find_variable(get_hooks_for(_name),_var_name);
 	}
 	
 	static container_hook_copy = function(_containerFrom,_containerTo){
@@ -59,21 +90,32 @@ function class_audio_parameter(_name="",_default=0) constructor{
 		}
 	}
 	
-	static hook_add = function(_container,_container_var){
+	static hook_add_container = function(_container,_container_var){
 		var _container_name = _container.name;
 		if array_find_index(_container.parameters,name)==-1{
 			array_push(_container.parameters,name);	
 		}
 		
-		if !hooks.Exists(_container_name){
-			hooks.Add(_container_name,[]);
+		return hook_add(_container_name, _container_var);
+	}
+	
+	static hook_add_effect = function(_effect,_var_name){
+		if array_find_index(_effect.parameters,name)==-1{
+			array_push(_effect.parameters,name);	
 		}
-		var //attrs = container_hook(_container),
-			hook = container_variable_hook(_container,_container_var);
+		
+		return hook_add(_effect.uid,_var_name);	
+	}
+	
+	static hook_add = function(_name,_container_var){
+		if !hooks.Exists(_name){
+			hooks.Add(_name,[]);
+		}
+		var hook = get_hook(_name,_container_var);
 
 		if is_undefined(hook){
 			hook = new class_audio_hook(_container_var);
-			array_push(container_hook(_container),hook);
+			array_push(get_hooks_for(_name),hook);
 		}
 		return hook;
 	}
@@ -92,7 +134,7 @@ function class_audio_parameter(_name="",_default=0) constructor{
 	}
 	
 	static hook_delete_variable = function(_container_name,_container_var_name){
-		var attrs = container_hook(_container_name),
+		var attrs = get_hooks_for(_container_name),
 			_i = 0;
 		if !is_undefined(attrs){
 			repeat(array_length(attrs)){
@@ -108,18 +150,53 @@ function class_audio_parameter(_name="",_default=0) constructor{
 		return false; //failed to delete (DNE)
 	}
 	
-	static hook_delete_container = function(_container){
-		if hooks.Exists(_container){
-			hooks.Delete(_container);
-		}
-	}
-		
-	static hook_delete = function(_container,_container_var){
+	static hook_delete_container_var = function(_container,_container_var){
 		var cdata = container_getdata(_container);
 		hook_delete_variable(cdata.name,_container_var);
 		if !array_length(container_hook(cdata)){
-			hook_delete_container(cdata.name);	
+			hook_delete(cdata.name);	
 		}
+	}
+	
+	static hook_delete_effect_var = function(_effect,_container_var){
+		hook_delete_variable(_effect.uid,_container_var);
+		if !array_length(effect_hook(_effect)){
+			hook_delete(_effect.uid);	
+		}
+
+	}
+		
+	static hook_delete = function(_name){
+		if hooks.Exists(_name){
+			hooks.Delete(_name);
+		}
+	}
+	
+	////////////////////
+	static set = function(newv){
+		if newv!=val{
+		    val = newv;
+			trigger_update();
+		}
+	}
+	
+	static reset = function(){
+		set(default_value);	
+	}
+	
+	//anytime my value updates, let anyone who cares know
+	static trigger_update = function(){
+		var _i = 0;
+		repeat(array_length(global.audio_players)){
+			global.audio_players[_i].param_update(name);
+			_i ++;
+		}	
+		
+		var _i = 0;
+		repeat(array_length(global.audio_bus_param_watchers)){
+			global.audio_bus_param_watchers[_i].param_update(name);
+			_i ++;
+		}	
 	}
 }
 

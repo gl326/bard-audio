@@ -1,9 +1,17 @@
 if visible{
 if slider and !slide_setup{
-        if slide_l==0{slide_l = r+8+butt_w;}
-        if slide_r==0{slide_r = room_width - 8 - butt_w;}	
+        if slide_l==0{slide_l = r+8+butt_w-l;}
+		else{
+			slide_l -= l;	
+		}
+        if slide_r==0{slide_r = room_width - 8 - butt_w-l;}	
+		else{
+			slide_r -= l;	
+		}
+		slide_setup = true;
 }
 
+//update which container we're displaying values for
 if (container_edit and !objAudioEditor.editing_audio and (editing!=objAudioEditor.editing or force_update)){
     editing = objAudioEditor.editing;
     force_update = 0;
@@ -25,18 +33,7 @@ if (container_edit and !objAudioEditor.editing_audio and (editing!=objAudioEdito
     }
 }   
 
-///drag and drop params
-if container_edit and objAudioEditor.dropped!=-1 and objAudioEditor.holding_param and !istext
-    and mouse_in_region(l,t,r,b){
-    var pid = objAudioEditor.dropped;
-    param_ref = param_name(pid);
-    text = param_ref;
-    param_new_connection(pid,objAudioEditor.editing,param)
-    objAudioEditor.dropped = -1;
-    draggable = false;
-}
-
-if objAudioEditor.dragging==id and editing>0{
+if objAudioEditor.dragging==id and editing!=-1{
     if objAudioEditor.drag_start{
         var c_val = real(text);
         c_val += (mouse_x-drag_px)*.5*(1/max(1,200 - abs(mouse_y-objAudioEditor.drag_y)));
@@ -55,7 +52,7 @@ if objAudioEditor.dragging==id and editing>0{
     drag_px = mouse_x;
 }
 
-if am_highlighted(){
+if am_bard_editor_highlighted(){
     if param_ref==""{
     if string_length(text)>0 and keyboard_check_pressed(vk_backspace){
         text = string_copy(text,1,string_length(text)-1);
@@ -73,7 +70,7 @@ if am_highlighted(){
         variable_struct_set(editing,param,0);
     }
     if keyboard_check_pressed(vk_enter) or (mouse_check_button_pressed(mb_left) and !mouse_in_region(l,t,r,b)){
-        global.highlighted = noone;
+        global.bard_editor_highlighted = noone;
     }
     }else{
     ////////////////////open curve editor////////////////////////
@@ -88,10 +85,23 @@ if am_highlighted(){
                                     param_ref),
                                     container_name(editing)),
                                     param),
+                                    param),
                                     "points");//yep
                                     */
 
-        cur.curves = global.audio_params[?param_ref].container_variable_hook(editing,param).curve;
+		var _param = global.audio_params[?param_ref];
+        cur.curves = (container_edit?_param.container_variable_hook(editing,param):_param.effect_variable_hook(effect_editing,param)).curve;
+		cur.editing = editing;
+				
+		if effect_edit{
+			cur.dB_100 = false;
+			cur.editing_effect = true;
+			cur.editing = effect_editing;
+			var _params = effect_editing.get_template();
+			var _param = _params[$ param];
+			if _param.range[0]!=-infinity{ cur.ymin = _param.range[0];}
+			if _param.range[1]!=infinity{ cur.ymax = _param.range[1];}
+		}
 		/*ds_map_find_value(
                                 ds_map_find_value(
                                     global.audio_params,
@@ -100,18 +110,22 @@ if am_highlighted(){
 		cur.curve_name = param;//param_ref;
         cur.attribute = param;
         cur.param = param_ref;
-		cur.editing = editing;
-        global.highlighted = cur;
+
+        global.bard_editor_highlighted = cur;
     }
 }else{
     typetime = current_time;
-    if editing>0 and param_ref==""{
+    if (is_struct(editing)) and param_ref==""{
         if !istext and (string_number(text)!=text or string_digits(text)==""){text = "0";}
         if (editing!=-1 and !objAudioEditor.editing_audio) or !container_edit{
             if !istext{
             var val = real(text);
             if dB{
-				val = DBToPercent(val)*100;//*100;
+				if dB_100{
+					val = DBToPercent(val)*100;//*100;
+				}else{
+					val = DBToPercent(val)+1;
+				}
 			}
             if variable_struct_get(editing,param)!=val{
                 variable_struct_set(editing,param,val);
@@ -128,8 +142,14 @@ if am_highlighted(){
 
 //remove param ref
 if param_ref!="" and mouse_in_region(l,t,r,b) and mouse_check_button_pressed(mb_right)
-    and (am_highlighted() or global.highlighted==noone){
-		param_delete_connection(param_ref,editing.name,param);
+    and (am_bard_editor_highlighted() or global.bard_editor_highlighted==noone){
+		if container_edit{
+			param_delete_connection(param_ref,editing.name,param);
+		}else{
+			if effect_edit{
+				param_delete_effect_connection(param_ref,effect_editing,param);
+			}
+		}
 		/*
     ds_map_destroy(ds_map_find_value(
                         ds_map_find_value(
@@ -150,27 +170,27 @@ if param_ref!="" and mouse_in_region(l,t,r,b) and mouse_check_button_pressed(mb_
     if editing>0{
 		variable_struct_set(editing,param,0);
 		}
-    global.highlighted = id;
+    global.bard_editor_highlighted = id;
     draggable = true;
 }
 
-if slider and param_ref=="" and editing!=-1 and !objAudioEditor.editing_audio{
+if slider and param_ref=="" and editing!=-1{// and !objAudioEditor.editing_audio{
     var slide_x;
 	if is_real(variable_struct_get(editing,param)){
     if dB{
         slide_x = 
-            lerp(slide_l,slide_r,
+            lerp(l+slide_l,l+slide_r,
             clamp(InvQuadInOut(((variable_struct_get(editing,param) )-slider_min)/(slider_max-slider_min)),0,1)
             );
     }else{
     slide_x = 
-        lerp(slide_l,slide_r,
+        lerp(l+slide_l,l+slide_r,
         clamp((variable_struct_get(editing,param)-slider_min)/(slider_max-slider_min),0,1)
         );
     }
     
     if !slider_select{
-        if mouse_check_button_pressed(mb_left) and mouse_in_region(slide_x-butt_w,t,slide_x+butt_w,b) and global.highlighted==noone{
+        if mouse_check_button_pressed(mb_left) and mouse_in_region(slide_x-butt_w,t,slide_x+butt_w,b) and (global.bard_editor_highlighted==noone or panel_slider){
             slider_select = true;
             slide_select_x = mouse_x-slide_x;
         }
@@ -178,15 +198,17 @@ if slider and param_ref=="" and editing!=-1 and !objAudioEditor.editing_audio{
         if !mouse_check_button(mb_left){
             slider_select = false;
         }else{
-            var amt = clamp((mouse_x-slide_select_x-slide_l)/(slide_r-slide_l),0,1),
+            var amt = clamp((mouse_x-slide_select_x-(slide_l+l))/(slide_r-slide_l),0,1),
                 c_val = amt,
                 ;
             if dB{
                 c_val = lerp(slider_min,slider_max,QuadInOut(amt));///100;
-                if c_val<=-100{
+                if c_val<=(dB_100?-100:0){
                     text = "-144";
                 }else{
-                    text = string(PercentToDB(c_val/100));
+                    text = string(PercentToDB(
+						(dB_100?c_val/100:(c_val-1))
+					));
                 }
             }else{
                 c_val = lerp(slider_min,slider_max,amt);

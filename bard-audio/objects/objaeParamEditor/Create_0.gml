@@ -5,9 +5,9 @@ points = -1;
 curve = -1;
 curves = -1;
 curve_name = "";
-container = -1;
 blend = -1; //list of maps
 dB = false;
+dB_100 = true;
 
 ymin = -100;
 ymax = 100;
@@ -24,6 +24,7 @@ grabbed_curve = -1;
 editing_point = -1;
 
 editing = -1;
+editing_effect = false;
 
 gl=l; gt=t; gr=r; gb=b;
 firstframe = 1;

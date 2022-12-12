@@ -7,3 +7,11 @@ function audio_asset_name(assetIndex){
 		return 0;	
 	}
 }
+
+function audio_asset_data(assetIndex){
+	if ds_map_exists(global.audio_assets,assetIndex){
+		return global.audio_assets[?assetIndex];
+	}else{
+		return undefined;	
+	}
+}

@@ -1,11 +1,14 @@
 {
+global.bard_editor_clicked = noone; 
 if mouse_check_button_pressed(mb_left){
     var clickdepth = 9999999999;
-    //global.highlighted = noone;
+	global.bard_editor_clicked = global.bard_editor_highlighted;
+    global.bard_editor_highlighted = noone;
     with(objHighlightable){
         if depth<=clickdepth and visible{
             if mouse_in_region(l,t,r,b){
-                global.highlighted = id;
+                global.bard_editor_highlighted = id;
+				global.bard_editor_clicked = id; 
                 clickdepth = depth;
                 if draggable{
                     (other.id).dragging = id; (other.id).drag_x=mouse_x; (other.id).drag_y=mouse_y;
@@ -91,7 +94,7 @@ if search_update<=0{
 			}
 			
 		if alphabetical{
-			array_sort(browser,1);
+			array_sort(browser,true);
 		}
 			
 		}
@@ -114,8 +117,47 @@ if point_distance(mouse_x,mouse_y,hold_x,hold_y)>10 and grabbed!=-1{
     grabbed = -1;
     }
 }else{
-    if hold_x==-1 and hold_y==-1{dropped = holding;}
-    else{
+    if hold_x==-1 and hold_y==-1{
+		dropped = holding;
+		
+		/////////////////drag and drop params
+		var _prio = ds_priority_create();
+		with(objHighlightable){
+			if visible{
+				ds_priority_add(_prio,id,depth);	
+			}
+		}
+		repeat(ds_priority_size(_prio)){
+			var _found = false;
+			with(ds_priority_delete_min(_prio)){
+				if mouse_in_region(l,t,r,b){
+					if object_index==objTextfield{
+						if objAudioEditor.dropped!=-1 and objAudioEditor.holding_param and !istext{
+						    var pid = objAudioEditor.dropped;
+							if container_edit{ 
+								param_ref = param_name(pid);
+							    text = param_ref;
+							    param_new_connection(pid,objAudioEditor.editing,param);
+							}else if effect_edit{
+								param_ref = param_name(pid);
+							    text = param_ref;
+							    param_new_effect_connection(pid,effect_editing,param);	
+							}
+						    objAudioEditor.dropped = -1;
+						    draggable = false;
+						}	
+					}
+					
+					_found = true;
+					break;
+				}
+			}
+			if _found{
+				break;	
+			}
+		}
+		ds_priority_destroy(_prio);
+	}else{
         holding_copy = false;
         holding_move = false;
         }

@@ -23,8 +23,8 @@ delay_sounds = []; //souns that are waiting to play
 delayout_sounds = []; //sounds that are waiting to stop?
 fadeout_sounds = [];
 
-audio_busses = []; //busses that are relevant to me
-bus_update = []; //busses that are updated each frame
+//audio_busses = []; //busses that are relevant to me
+//bus_update = []; //busses that are updated each frame
 
 randomed = false;
 auto_play = false;
@@ -95,6 +95,8 @@ fading_out = 0;
 emitter = -1; //these are made and maintained by props, but this lets us know if we have one
 made_emitter = false;
 
+effect_bus = undefined;
+
 pitch = 1+(container.pitch/100);
 
 paused = false;
@@ -106,18 +108,12 @@ DELETED = false;
 
 array_push(global.audio_players,self); //track me!
 
+set_default_effects();
+
 static param_update = function(param){
 	 if (!parameters_updated and array_find_index(parameters,param)!=-1){
 	    parameters_updated = 1; //queue my containers to be recalculated in the next update cycle
 	 }	
-}
-
-static bus_updated = function(bus_name){
-	                if array_find_index(audio_busses,bus_name)!=-1{
-						if array_find_index(bus_update,bus_name)==-1{
-							array_push(bus_update,bus_name);
-						}
-	                }
 }
 
 static pause = function(){
@@ -205,12 +201,6 @@ static play_instance = function(inst,option=false,_volumeMultiply=1, _pitchMulti
 	    }else{
 	        array_push(delay_sounds,inst);
 	    }	
-}
-
-static bus_track = function(busID){
-	if array_find_index(audio_busses,busID)==-1{
-		array_push(audio_busses,busID)	
-	}
 }
 
 static get_emitter = function(){
@@ -582,6 +572,8 @@ static update_params = function(){
 }	
 }
 	
+//deprecated. game maker has busses built in now with volume settings, so we don't need to auto-update ours anymore.
+/*
 static update_bus = function(){
 		var bn = array_length(bus_update);
 		if bn{
@@ -605,8 +597,21 @@ static update_bus = function(){
 
 		bus_update = [];
 		}
-	
 	}
+	
+static bus_updated = function(bus_name){
+	                if array_find_index(audio_busses,bus_name)!=-1{
+						if array_find_index(bus_update,bus_name)==-1{
+							array_push(bus_update,bus_name);
+						}
+	                }
+}
+static bus_track = function(busID){
+	if array_find_index(audio_busses,busID)==-1{
+		array_push(audio_busses,busID)	
+	}
+}
+*/
 	
 static update_delayin = function(){
 	var dn = array_length(delay_sounds);
@@ -708,7 +713,8 @@ static update = function(){
 		update_params();
 
 		//update bus volumes
-		update_bus();
+		//deprecated, now we use game maker's builtin audio busses to manage volume!
+		//update_bus();
 
 		//update fadeout, potentially destroy
 		if fading_out>0{
@@ -820,8 +826,83 @@ static stop = function(sid=-1,option=false){
 	return 1;
 }
 
+#region audio effects
+
+
+static has_effect = function(_name){
+	return container.has_effect(_name);
+}
+
+static has_effect_class = function(_effect){
+	return has_audio_effect(_effect.effect);
+}
+
+static has_audio_effect = function(_effect){
+	return !is_undefined(effect_bus) and effect_bus.has_audio_effect(_effect);
+}
+
+static set_effect = function(_name,_enabled){
+	container.set_effect(_name,_enabled);
+}
+
+static set_effect_class = function(_effect,_enabled){
+	var _bus = get_effect_bus();
+	if audio_in_editor{
+		if array_find_index(_bus.effects,_effect)==-1{
+			array_push(_bus.effects,_effect);	
+		}	
+	}
+	_bus.set_effect_class(_effect,_enabled);
+}
+
+static set_audio_effect = function(_effect,_enabled){
+	get_effect_bus().set_audio_effect(_effect,_enabled);
+}
+
+static has_any_effects = function(){
+	return (container.has_any_effects());	
+}
+
+static get_effect_bus = function(){
+	if is_undefined(effect_bus){
+		effect_bus = new class_audio_bus(container.bus+":"+name+":"+string(get_timer())).inherit_from(container.bus).track();
+		array_copy(get_effect_bus().effects,0,container.effects,0,array_length(container.effects));	
+		//i just decided i have effects mid-play! tell everyone to jump on the new bus!
+		if am_playing{
+			var i = 0;
+			repeat(array_length(playing)){
+				var s = playing[i];
+				audio_emitter_bus(s.emitter,effect_bus.struct);
+			}
+		}
+	}
+	return effect_bus;
+}
+
+static get_effect_emitter = function(){
+	return get_effect_bus().get_emitter();	
+}
+
+static set_default_effects = function(){
+	container.set_default_effects();	
+}
+
+static clear_effects = function(){
+	if !is_undefined(effect_bus){
+		effect_bus.clear_effects();	
+	}
+}
+#endregion
+
 static destroy = function(_hard_stop = false){
 	if !DELETED{
+		if !is_undefined(effect_bus){
+			effect_bus.destroy();	
+		}
+		
+		if made_emitter{
+			audio_emitter_free(emitter);	
+		}
 		//stop all sounds that marked as looping
 		var _i=0;
 		repeat(array_length(playing)){

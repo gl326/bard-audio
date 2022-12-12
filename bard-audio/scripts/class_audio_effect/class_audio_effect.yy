@@ -1,11 +1,11 @@
 {
   "resourceType": "GMScript",
   "resourceVersion": "1.0",
-  "name": "draw_blendregion",
+  "name": "class_audio_effect",
   "isDnD": false,
   "isCompatibility": false,
   "parent": {
-    "name": "draw",
-    "path": "folders/Libraries/Bard/editor/scripts/draw.yy",
+    "name": "_classes",
+    "path": "folders/Libraries/Bard/engine/_classes.yy",
   },
 }

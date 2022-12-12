@@ -1,4 +1,4 @@
-if am_highlighted(){
+if am_bard_editor_highlighted(){
  depth = minHighlightableDepth()-1;
  /////////////dragging//////////
  if (mouse_check_button(mb_left) and mouse_in_region(l,t,r,t+24)) or (tbar_grab_x!=-1 or tbar_grab_y!=-1){
@@ -24,7 +24,7 @@ if am_highlighted(){
 }else{
     for(var i=0;i<ds_list_size(children);i+=1){
         var c = ds_list_find_value(children,i);
-        if global.highlighted==c{
+        if global.bard_editor_highlighted==c{
             depth = minHighlightableDepth()-1;
             break;
         }   

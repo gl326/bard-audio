@@ -7,11 +7,15 @@ b = 36;
 
 text = "";
 container_edit = false;
+effect_edit = false;
+effect_editing = undefined;
+
 param = "";
 editing = -1;
 param_ref = "";
 istext = false;
 dB = false;
+dB_100 = true;
 
 force_update = 0;
 
@@ -38,3 +42,8 @@ slide_setup = false;
 butt_w = 20;
 
 update_func = undefined;
+
+highlight_text = "";
+highlight_text_format = false;
+title = ""
+panel_slider = false;;

@@ -22,9 +22,10 @@ function drawParamList(list,xx,yy) {
 					draw_text(xx,yy,(item.name+" ("+string(item.default_value)+")"));
 				#endregion
 				#region interact
-					if mouse_in_region(8,yy,(room_width/3)-8,yy+(24)){
+					var can_interact = (global.bard_editor_highlighted==noone and global.bard_editor_clicked==noone);
+					if mouse_in_region(8,yy,(room_width/3)-8,yy+(24)) and can_interact{
 				        draw_rectangle(2,yy,(room_width/3)-8,yy+(24),true);
-				        if mouse_check_button_pressed(mb_left) and global.highlighted==noone{
+				        if mouse_check_button_pressed(mb_left){
 				            holding = item.name;
 				            grabbed = item.name;
 				            holding_audio = false;

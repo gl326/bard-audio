@@ -1,11 +1,11 @@
 {
   "resourceType": "GMScript",
   "resourceVersion": "1.0",
-  "name": "draw_blendregion",
+  "name": "bus_effect_scripts",
   "isDnD": false,
   "isCompatibility": false,
   "parent": {
-    "name": "draw",
-    "path": "folders/Libraries/Bard/editor/scripts/draw.yy",
+    "name": "busses",
+    "path": "folders/Libraries/Bard/gameplay/busses.yy",
   },
 }

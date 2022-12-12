@@ -18,4 +18,6 @@ h=0;
 top_h = 24;
 
 title = "";
+struct = undefined;
 
+parent_window = noone;

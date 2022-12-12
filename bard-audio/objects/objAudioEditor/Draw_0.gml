@@ -104,7 +104,7 @@ if editing!=-1{
                 name = (c>=0)?audio_asset_name(c):"<MISSING SOUND>";
                 draw_set_color(color_fg2)}
             var yy = t+(i*24);
-            if mouse_in_region(l,yy,r,yy+24) and global.highlighted==noone{
+            if mouse_in_region(l,yy,r,yy+24) and global.bard_editor_highlighted==noone{
                 draw_rectangle(l,yy,r,yy+24,true);
                 //if ds_list_find_index(locked_containers,container_name(editing))==-1
                 {
@@ -204,21 +204,5 @@ if editing!=-1{
     }
 }
 
-if holding!=-1{
-    if hold_x==-1 and hold_y==-1{
-    var name;
-        if holding_audio{
-            draw_set_color(color_fg2);
-            name = audio_asset_name(holding);
-            }
-        else{
-            draw_set_color(color_fg);
-            name = holding;
-            }
-        if holding_copy{name+=":COPYING"}
-        else{if holding_move{name+=":MOVING"}
-            else{name+=":REFERENCING";}}
-        draw_text(mouse_x,mouse_y,(name));
-    }
-}
+
 

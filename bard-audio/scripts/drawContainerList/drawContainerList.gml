@@ -58,7 +58,8 @@ function drawContainerList(list,xx,yy,parent=undefined) {
 				draw_text(xx,yy,_name);
 				
 				///////interaction.......
-				if mouse_in_region(0,yy,(room_width/3)-4,yy+(line_h)){
+				var can_interact = (global.bard_editor_highlighted==noone and global.bard_editor_clicked==noone);
+				if mouse_in_region(0,yy,(room_width/3)-4,yy+(line_h)) and can_interact{
 		            draw_rectangle(2,yy,(room_width/3)-8,yy+(line_h),true);
 		            if holding!=-1{ 
 						if fold{
@@ -73,7 +74,7 @@ function drawContainerList(list,xx,yy,parent=undefined) {
 		                }
 						}
 		            }
-		            if mouse_check_button_pressed(mb_left) and global.highlighted==noone{
+		            if mouse_check_button_pressed(mb_left){
 		                grabbed = item;
 		                holding_audio = !fold;
 		                if fold{
@@ -219,7 +220,7 @@ function drawContainerList(list,xx,yy,parent=undefined) {
 	                    }
 	                }
 	            }
-	            if mouse_check_button_pressed(mb_left) and global.highlighted==noone{
+	            if mouse_check_button_pressed(mb_left) and global.bard_editor_highlighted==noone{
 	                grabbed = cid;
 	                holding_audio = !fold;
 	                if fold{

@@ -18,6 +18,8 @@ function param_destroy(name) {
 				_i ++;
 			}
 			
+			//effects aren't strictly tracked, so they cant be iterated thru to delete these... but they will delete the connections once they realize they arent valid anymore
+			
 			aeBrowserUpdate();
 			///ok done
 			return 1;

@@ -14,3 +14,11 @@ function bus_gain_current(bus_name) {
 		return 0;
 	}
 }
+
+function bus_emitter(bus_name){
+	if ds_map_exists(global.audio_busses,bus_name){
+	    return ds_map_find_value(global.audio_busses,bus_name).get_emitter();
+	}else{
+		return -1;
+	}	
+}

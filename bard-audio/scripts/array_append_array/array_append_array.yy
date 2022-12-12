@@ -1,11 +1,11 @@
 {
   "resourceType": "GMScript",
   "resourceVersion": "1.0",
-  "name": "draw_blendregion",
+  "name": "array_append_array",
   "isDnD": false,
   "isCompatibility": false,
   "parent": {
-    "name": "draw",
-    "path": "folders/Libraries/Bard/editor/scripts/draw.yy",
+    "name": "general scripts",
+    "path": "folders/Libraries/Bard/general scripts.yy",
   },
 }

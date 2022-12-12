@@ -22,7 +22,8 @@ function drawBusList(list,xx,yy) {
 				#region draw
 				////////draw
 				draw_set_color(color_fg);
-			    var blend = color_fg;
+			    var blend = color_fg,
+					open = -1;
 			    var gain = data.default_gain/100;
 				if gain>-1{
 					gain = PercentToDB(gain);
@@ -34,7 +35,8 @@ function drawBusList(list,xx,yy) {
 				#endregion
 				#region interact
 				/////interact
-				if mouse_in_region(8,yy,(room_width/3)-8,yy+(24)){
+				var can_interact = (global.bard_editor_highlighted==noone and global.bard_editor_clicked==noone);
+				if mouse_in_region(8,yy,(room_width/3)-8,yy+(24)) and can_interact{
 		            draw_rectangle(2,yy,(room_width/3)-8,yy+(24),true);
 		            if holding!=-1{ 
 		                if hold_hover_id!=data.name{
@@ -49,9 +51,10 @@ function drawBusList(list,xx,yy) {
 		                    }
 		                }
 		            }
-		            if mouse_check_button_pressed(mb_left) and global.highlighted==noone{
+		            if mouse_check_button_pressed(mb_left){
 		                grabbed = data.name;
 		                holding_bus = true;
+						holding_audio = false;
 		                if keyboard_check(vk_alt){holding_copy = true;}
 		                else{
 		                        holding_move = true;
@@ -64,7 +67,7 @@ function drawBusList(list,xx,yy) {
 		                    //var pw = 300,ph=128,px=max(0,mouse_x-(pw/2)),py=mouse_y-(py/2);
 		                    //var pan = aeNewEditorpanel(objEditorpanel,px,py,pw,ph);
 		                    clicked = -1;
-		                    var pw=400, ph=124, px = max(0,mouse_x-(pw/2)), py = mouse_y-(ph/2);
+		                    var pw=400, ph=124+40, px = max(0,mouse_x-(pw/2)), py = mouse_y-(ph/2);
 		                    var pan = aeNewEditorpanel(objEditorpanel,px,py,pw,ph);
 		                        pan.title = data.name;
 		                    var stf = newHighlightable(objTextfield,px+16,py+16+24,px+pw-16,py+24+(50)-8);
@@ -78,9 +81,13 @@ function drawBusList(list,xx,yy) {
 		                            text = "-144";
 		                        }
 		                        stf.text = text; stf.plusmin = true; //stf.percent = true;
-		                    var deb = newHighlightable(objaeButton,px+16,py+24+(50)+8,px+pw-16,py+ph-16);
-		                        deb.script = aeDeleteBus; deb.name="DELETE"; deb.args[0] = data;
-		                    list_Add(pan.children,stf,deb);
+								
+							 var eff = newHighlightable(objaeButton,px+16,py+ph-26-8-55,px+pw-16,py+ph-36-8);
+		                        eff.script = aeCreateEffectsPanel; eff.name="EFFECTS ("+string(array_length(data.effects))+")"; eff.args[0] = data;
+								
+		                    var deb = newHighlightable(objaeButton,px+16,py+ph-36,px+pw-16,py+ph-8);
+		                        deb.script = aeDeleteBus; deb.name="DELETE"; deb.args[0] = data.name;
+		                    list_Add(pan.children,stf,deb,eff);
 		                }
 		            else{
 		                clicked = data.name;

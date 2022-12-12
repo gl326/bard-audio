@@ -4,11 +4,7 @@ function audio_param_tween(param,tweenTo,timeInSeconds=1,curve=1){
 	if ds_map_exists(global.audio_params,param){
 		with(global.audio_params[?param]){
 			return tween_audio("val",tweenTo,timeInSeconds,curve).on_update(function(){
-					var _i = 0;
-					repeat(array_length(global.audio_players)){
-						global.audio_players[_i].param_update(name);
-						_i ++;
-					}	
+					trigger_update();
 				});	
 		}
 	}

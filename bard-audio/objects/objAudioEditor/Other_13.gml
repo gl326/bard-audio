@@ -112,22 +112,29 @@ testbut = newHighlightable(objaeButton,(room_width/3)+16,8+48+8,(room_width/3)+(
 testbut.script = aePlayEditingSound;
 testbut.name = "TEST";
 
-namebut = newHighlightable(objaeButton,(room_width/3)+(room_width*3/9)+8,8+48+8,(room_width/3)+(room_width*4.5/9)-8,8+butt_h+8+butt_h+butt_h);
+effectbut = newHighlightable(objaeButton,(room_width/3)+(room_width*3/9)+8,8+48+8,(room_width/3)+(room_width*4.5/9)-8,8+butt_h+8+butt_h+butt_h);
+effectbut.script = aeCreateEffectsPanel;
+effectbut.name = "EFFECTS";
+ds_list_add(container_buttons,effectbut);
+
+namebut = newHighlightable(objaeButton,(room_width/3)+(room_width*4.5/9)+8,8+48+8,(room_width/3)+(room_width*5.25/9)-8,8+butt_h+8+butt_h+butt_h);
 namebut.script = aeRenameEditingSound;
 namebut.name = "RENAME";
 ds_list_add(container_buttons,namebut);
 
 assetgainbut = newHighlightable(objTextfield,(room_width/3)+(room_width*3/9)+8,8+48+8,(room_width/3)+(room_width*4.5/9)-8,8+48+butt_h+8);
 //assetgainbut.editing = global.audio_asset_vol; assetgainbut.param = -1;
+assetgainbut.param = "gain";
 assetgainbut.draggable = true; assetgainbut.dB = true; assetgainbut.plusmin = true;
 ds_list_add(asset_buttons,assetgainbut);
 
 assetbusbut = newHighlightable(objTextfield,(room_width/3)+(room_width*4.5/9)+8,8+48+8,(room_width/3)+(room_width*6/9)-8,8+48+butt_h+8);
 //assetbusbut.editing = global.audio_asset_bus; assetbusbut.param = -1;
+assetbusbut.param = "bus";
 assetbusbut.istext = true; assetbusbut.percent = false; assetbusbut.plusmin = false;
 ds_list_add(asset_buttons,assetbusbut);
 
-delbut = newHighlightable(objaeButton,(room_width/3)+(room_width*4.5/9)+8,8+48+8,room_width-16,(8*2)+(butt_h*3));
+delbut = newHighlightable(objaeButton,(room_width/3)+(room_width*5.25/9)+8,8+48+8,room_width-16,(8*2)+(butt_h*3));
 delbut.script = aeDeleteEditingSound;
 delbut.name = "DELETE";
 ds_list_add(container_buttons,delbut);

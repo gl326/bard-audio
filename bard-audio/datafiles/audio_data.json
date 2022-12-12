@@ -177,7 +177,7 @@
 			"name" : "test_choice_sfx",
 			"parameters" : [],
 			"parent" : "test_sfx",
-			"threed" : true
+			"threed" : 1
 		}
 	],
 	[

@@ -38,6 +38,7 @@ function bard_audio_data_load(){
 				_i = 0;
 			repeat(array_length(_busses)){
 				_busses[_i].recalculate();
+				_busses[_i].default_effects();
 				_i ++;
 			}
         }

@@ -11,7 +11,7 @@ function class_audio_instance(_container,_sound=-1,_loops=false,_gain=0,_pitch=0
 	
 	currentvol = 0;
 	
-	emitter = -1;
+	emitter = -1; //for debug tracking
 	
 	sync = false;
 	aud = -1;
@@ -32,7 +32,7 @@ function class_audio_instance(_container,_sound=-1,_loops=false,_gain=0,_pitch=0
 	blend = 0;
 	
 	bus = audio_asset_bus(file);
-	bus_vol = 0;
+	//bus_vol = 0;
 	owner = -1;
 	
 	starttime = 0;
@@ -51,9 +51,10 @@ function class_audio_instance(_container,_sound=-1,_loops=false,_gain=0,_pitch=0
 	    var aud_playing = -1,
 	        looping = (loop or (typ!=CONTAINER_TYPE.HLT and container.loop));
 		var bus_id = bus;
-	    player.bus_track(bus);
-	
-	    if container.spacerand{
+	    //player.bus_track(bus);
+		var _emitter = -1;
+		
+	    if container.spacerand{ //i play at a random spatial position, and manage my own emitter
 				threed = true;
 				var space_emitter = player.get_emitter();
 			
@@ -76,6 +77,8 @@ function class_audio_instance(_container,_sound=-1,_loops=false,_gain=0,_pitch=0
 		            global.listener_x + lengthdir_x(dist,dir),
 		            global.listener_y + lengthdir_y(dist,dir),
 					global.listener_z);
+					
+				_emitter = space_emitter;
 	    }else{
 			if !instance_exists(player.owner){
 					if player.owner!=noone{
@@ -117,7 +120,7 @@ function class_audio_instance(_container,_sound=-1,_loops=false,_gain=0,_pitch=0
 							var old_emitter = audio_emitter[i];
 							if audio_emitter_exists(old_emitter){
 								player.emitter = old_emitter;
-								other.emitter = old_emitter;
+								_emitter = old_emitter;
 								has_emitter = true;
 							}else{
 								array_delete(audio_emitter,i,1);	
@@ -137,7 +140,7 @@ function class_audio_instance(_container,_sound=-1,_loops=false,_gain=0,_pitch=0
 		            audio_emitter_gain(new_emitter,1);
 					audio_emitter_position(new_emitter,x,y,AUDIO_USES_Z?z: 0);
 					player.emitter = new_emitter;
-					other.emitter = new_emitter;
+					_emitter = new_emitter;
 					array_push(audio_emitter,new_emitter);
 					array_push(audio_emitter_size,emitter_size);
 					audio_emitter_n += 1;
@@ -149,32 +152,52 @@ function class_audio_instance(_container,_sound=-1,_loops=false,_gain=0,_pitch=0
 			}
 		}
 		}
-	    
-	
-		if fadein>0{
-			audio_sound_gain(file,0,0); //HACK: to make sure fading in sounds are not audible at the start, 
-				//we set the file volume to nil before playing this instance.
-				//maybe someday we'll be able to set audio parameteres on an instance before it starts playing.
-		}
-		
+
 		var file_vol = audio_asset_gain(file); 
 		
-	    bus_vol = bus_gain_current(bus_id);
+	    //bus_vol = bus_gain_current(bus_id);
 	    var blend_vol = 1+blend;
         
-	    current_vol = (vol+1)*(file_vol+1)*(bus_vol+1);
+	    current_vol = (vol+1)*(file_vol+1);//*(bus_vol+1);
 	    if is_undefined(current_vol) or is_real(current_vol)==0 {current_vol = 0;}
 
 	   var finalvolumecalc = clamp(current_vol,0,1)*max(0,player.volume*blend_vol);
-	
+		var _set_gain = finalvolumecalc;
+		if fadein>0{
+			_set_gain = 0;	
+		}
+		
+		var start_offset = 0;
+		if randstart{
+			start_offset = random(audio_sound_length(aud_playing));
+		}else{
+			if starttime>0{
+				start_offset = starttime;
+			}
+		}
+
 	    if typ==0 and container.contin{looping = false;}
 	    loop = looping;
 
 	    if !sync{
-			if !threed or player.emitter==-1{
-	            aud_playing = audio_asset_play(file,0,looping);
+			if _emitter==-1{
+				if player.has_any_effects(){
+					_emitter = player.get_effect_emitter();
+				}else if bus_id!=""{
+					_emitter = bus_emitter(bus_id); //nobody tried to assign an emitter, so let's go to my bus
+				}
+			}
+		
+			if _emitter==-1{ //i must not be on a bus! 
+	            aud_playing = audio_asset_play(file,0,looping, _set_gain, 1+pitch, start_offset);
 	        }else{
-	            aud_playing = audio_asset_play_on(player.emitter,file,looping,0);
+				if player.has_any_effects(){
+					audio_emitter_bus(_emitter,player.get_effect_bus().struct); 
+				}else if bus_id!=""{
+					audio_emitter_bus(_emitter,bus_getdata(bus_id).struct); //make sure whatever emitter i'm using is assigned to my bus
+				}
+	            aud_playing = audio_asset_play_on(_emitter,file,looping,0, _set_gain, 1+pitch, start_offset);
+				emitter = _emitter; //for debug tracking
 	        }
 	    }else{
 	        aud_playing = audio_play_in_sync_group(player.group,file);
@@ -194,35 +217,10 @@ function class_audio_instance(_container,_sound=-1,_loops=false,_gain=0,_pitch=0
 		}
 		
 	    if fadein>0{
-	        audio_sound_gain(aud_playing,0,0);
 	        audio_sound_gain(aud_playing,finalvolumecalc,fadein*1000);
-			audio_sound_gain(file,1,0); ///HACK: set back to 1 after previously setting to 0
-	    }else{
-	        audio_sound_gain(aud_playing,finalvolumecalc,0);
 	    }
-    
-	    update_current_pitch();
-	
-		if randstart{
-			audio_sound_set_track_position(aud_playing,random(audio_sound_length(aud_playing)));
-		}else{
-			if starttime>0{
-				audio_sound_set_track_position(aud_playing,starttime);
-			}
-		}
-		
-		
+
 		array_push(player.playing,self); //track me!
-		/*
-		//questionable old ideas
-	    if !ds_map_Find_value(s,"tail"){ //tails dont get tracked or updated
-	        //ds_map_add(s,"aud",aud_playing);
-	        ds_list_add(player.playing, s); //once was list_add_map but it was janky between updates
-	        //show_message(string(s)+": "+string(ds_exists(s,ds_type_map)));
-	    }else{
-	        ds_map_destroy(s);
-	    }
-		*/
 	}
 	}
 	
@@ -238,8 +236,7 @@ function class_audio_instance(_container,_sound=-1,_loops=false,_gain=0,_pitch=0
 		if sync{snd = file;}
         var file_vol = audio_asset_gain(file); 
 
-            current_vol = (vol+1)*(file_vol+1)*(bus_vol+1);
-                            //ds_map_replace(s,"current_vol",ds_map_find_value(s,"current_vol")*(ng+1)/(bp+1)); //old (bad) way
+            current_vol = (vol+1)*(file_vol+1);//*(bus_vol+1);
 			var newFinalVol = lerp(0,clamp(current_vol,0,1),QuadInOut(parentVolume)*(1+blend));
             audio_sound_gain(snd,newFinalVol,0);
 	}

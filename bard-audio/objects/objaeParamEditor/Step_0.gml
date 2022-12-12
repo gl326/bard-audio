@@ -4,10 +4,13 @@ if !firstframe{
 	
 	if attribute=="gain"{
 		dB = true;
-		ymax = 25;	
+		if dB_100{
+			ymax = 25;	
+		}
 	}
 	
 
+if am_bard_editor_highlighted(){
 /* curve editing *//////////////////////////////////////
 if is_struct(curves) and blend_param_drag==""{
 	var points = curves.points;
@@ -16,20 +19,24 @@ if is_struct(curves) and blend_param_drag==""{
 	        xf.editing = points[grabbed];
 	        yf.editing = points[grabbed];
 	        //pf.editing = grabbed;
-	    global.highlighted = -1; //NOT noone
+	    global.bard_editor_highlighted = id; //NOT noone
 	    if !mouse_check_button(mb_left){
-	        grabbed = -1; global.highlighted=noone;
+	        grabbed = -1; //global.bard_editor_highlighted=noone;
 	        }
 	    else{
 	        var p = points[grabbed],
 	            xx = clamp(remap_value(mouse_x+grab_x,gl,gr,0,100),0,100),
-	            yy = clamp(remap_value(mouse_y+grab_y,gt,gb,gmax,gmin),-100,100);
+	            yy = clamp(remap_value(mouse_y+grab_y,gt,gb,gmax,gmin),ymin,ymax);
 	        p.x = xx;
 	        p.y = yy;
 	        xf.text = string(xx);
-			yf.dB = dB;
+			yf.dB = dB; yf.dB_100 = dB_100;
 			if dB{
-				yf.text = string(PercentToDB(yy/100));
+				var _num = PercentToDB(dB_100?(yy/100):(yy-1));
+				if _num<-144{
+					_num = -144; //going into negative infinity breaks number serializing	
+				}
+				yf.text = string(_num);
 			}else{
 				yf.text = string(yy);
 			}
@@ -198,6 +205,7 @@ if is_array(blend){
     }
 }
 
+}
 }
 firstframe = false;
 

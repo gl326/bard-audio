@@ -16,7 +16,7 @@ function bus_destroy(argument0) {
 		}
 		
 		array_delete(serial, array_find_index(serial,bus), 1);
-	    ds_map_delete(global.audio_busses,name);
+	    bus.destroy();
 	    return 1;
 	}
 	else{
