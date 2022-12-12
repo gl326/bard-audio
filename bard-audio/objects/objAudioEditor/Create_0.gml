@@ -53,6 +53,7 @@ drag_x = -1; drag_y = -1;
 	
 	browser = [];
 	browser_scroll = array_create(3,0);
+	browser_length = 0;
     
     //container_search = [];//ds_list_create(); //current display list of container
     editing_history = ds_list_create(); //list of visited containers

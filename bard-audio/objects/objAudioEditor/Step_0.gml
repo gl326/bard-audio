@@ -172,7 +172,7 @@ if keyboard_check_pressed(vk_up) or mouse_wheel_up(){
     //}
     }
 if keyboard_check_pressed(vk_down) or mouse_wheel_down(){
-	browser_scroll[tab] = min(max(0,array_length(browser)-10),browser_scroll[tab]+3);
+	browser_scroll[tab] = min(max(0,browser_length-10),browser_scroll[tab]+3);
     //switch(tab){
     //case 1: param_scroll = min(max(0,ds_list_size(param_search)-3),param_scroll+3); break;
     //default: container_scroll = min(container_scroll+3); break;

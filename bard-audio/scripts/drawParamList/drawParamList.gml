@@ -6,6 +6,7 @@ function drawParamList(list,xx,yy) {
 	draw_set_halign(fa_left);
 	draw_set_valign(fa_top);
 	draw_set_font(-1);
+	browser_length += array_length(list);
 	
 	var y_top = list_top_y,
 		y_bottom = room_height;

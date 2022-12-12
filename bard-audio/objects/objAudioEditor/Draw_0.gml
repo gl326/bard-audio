@@ -23,6 +23,7 @@ draw_set_halign(fa_left);
 list_top_y = 24+72+36;
 
 var yy = list_top_y - (browser_scroll[tab]*24);
+browser_length = 0;
 
 switch(tab){
 case 2:
