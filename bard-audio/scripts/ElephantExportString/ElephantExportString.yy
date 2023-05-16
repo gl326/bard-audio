@@ -1,12 +1,11 @@
 {
-  "isDnD": false,
+  "resourceType": "GMScript",
+  "resourceVersion": "1.0",
+  "name": "ElephantExportString",
   "isCompatibility": false,
+  "isDnD": false,
   "parent": {
     "name": "Elephant",
     "path": "folders/Libraries/Elephant.yy",
   },
-  "resourceVersion": "1.0",
-  "name": "ElephantExportString",
-  "tags": [],
-  "resourceType": "GMScript",
 }

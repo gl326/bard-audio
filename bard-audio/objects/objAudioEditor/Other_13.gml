@@ -287,6 +287,11 @@ b.percent=false; b.plusmin = false;
 ds_list_add(container_buttons,b);
     
 //////////CHOICE STACK
+specstartbut = newStackedHighlightable(objaeButton,1);
+specstartbut.script = aeToggleSoundAttribute; specstartbut.name="IMMEDIATE";
+specstartbut.args[0] = "specstart";
+ds_list_add(choice_buttons,specstartbut);
+
 continbut = newStackedHighlightable(objaeButton,2);
 continbut.script = aeToggleSoundAttribute; continbut.name="ONGOING";
 continbut.args[0] = "contin";

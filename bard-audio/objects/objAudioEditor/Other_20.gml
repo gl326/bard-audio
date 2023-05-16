@@ -46,7 +46,7 @@ repeat(folder_n){
 	var path = folder.folderPath;
 	if string_copy(path,1,15)=="folders/Sounds/"{
 		//found a sound folder!
-		container_from_project(folder.name,parent_from_path(path),folder.order);
+		container_from_project(folder.name,parent_from_path(path),(variable_struct_exists(folder,"order")?folder.order:0));
 	}
 	_i ++;	
 }
@@ -67,7 +67,7 @@ repeat(resource_n){
 		if !is_undefined(parent_data){
 			//create or get matching class
 			var asset = audio_asset_create(asset_get_index(_name));
-			asset.editor_order = resource.order;
+			if variable_struct_exists(resource,"order"){asset.editor_order = resource.order;}
 			asset.audio_group_id = array_find_index(audio_group_names,resource_data.audioGroupId.name);
 			
 			var _j = 0;
@@ -79,7 +79,7 @@ repeat(resource_n){
 					_cdata = container_getdata(_cdata); //a container
 				}
 				
-				if _cdata.editor_order<asset.editor_order{
+				if _cdata.editor_order<=asset.editor_order{
 					_j ++;	
 				}else{
 					break;	

@@ -9,6 +9,11 @@ function aeTypeEditingSound(argument0) {
 	    }
 	    (other.id).lit = true;
 	    editing.type = argument0;
+		if editing.type==2{
+			if !variable_struct_exists(editing,"blend_map") or array_length(editing.blend_map)!=array_length(editing.contents){
+				editing.blend_setup();	
+			}
+		}
     
 	    var l = -1;
 	    switch(argument0){
