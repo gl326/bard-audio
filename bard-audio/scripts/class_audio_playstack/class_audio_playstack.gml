@@ -122,12 +122,18 @@ function class_audio_playstack(_name="", layers=1, _overlaps = false) constructo
 				if debug_on{
 					show_debug_message("AUDIO PLAYSTACK: new queue item was already playing at lower tier");	
 				}
-				
+
 				if old_tier>=0{
 					current[old_tier] = -1;
 				}
 				current[tier] = playing;
 				queue[tier] = -4;
+				
+				//cancel fade out!!
+				with(container_player(playing)){
+					fading_out = 0;
+					tween_audio("volume",1,.5);
+				}
 				return self;
 			}
 			
@@ -171,7 +177,7 @@ function class_audio_playstack(_name="", layers=1, _overlaps = false) constructo
 			//look at queued instructions
 			var firstqueue = true,
 				queue_waiting = false;
-			for(var i=array_length(queue)-1;i>=0;i-=1){ //start from the highest tier queued item and work our way down
+			for(var i=array_length(queue)-1;i>=max(0,get_playing_tier());i-=1){ //start from the highest tier queued item and work our way down
 				if !(is_real(queue[i]) and queue[i]==-4){ //we have a queued item waiting to start!
 					if overlaps or !firstqueue or !container_is_playing(current[i]){
 						gap[i] = max(0,gap[i]-(ms_passed/1000)); //update the playback gap

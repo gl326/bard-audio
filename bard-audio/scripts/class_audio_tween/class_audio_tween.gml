@@ -23,8 +23,17 @@ function class_audio_tween(_variable_string_name, _dest=1, _length=1, _curve=1,_
 	paused = false;
 	paused_time = -1;
 	paused_length = -1;
+	deleted = false;
+	
+	if _length==0{
+		update();	
+	}
 	
 	static update = function(){
+		if deleted{
+			return false;	
+		}
+		
 		if paused{
 			if paused_length<0 or ((current_time-paused_time)<paused_length){
 				return true;	
@@ -68,11 +77,15 @@ function class_audio_tween(_variable_string_name, _dest=1, _length=1, _curve=1,_
 			}
 		}
 		
+		deleted = true;
 		return false; //this means it's done and can stopped being tracked
 	}
 	
 	static on_update = function(func){
 		update_function =  method(owner_struct? owner.ref:owner,func);
+		if length<=0{ //skipped to end already
+			update_function();	
+		}
 		return self;
 	}
 	

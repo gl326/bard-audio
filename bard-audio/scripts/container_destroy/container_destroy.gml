@@ -29,7 +29,7 @@ function container_destroy(name,manual=true) {
 			serial = global.bard_audio_data[bard_audio_class.parameter];
 			var _i = 0;
 			repeat(array_length(serial)){
-				serial[_i].hook_delete_container(name);
+				serial[_i].hook_delete(name);
 				_i ++;
 			}
 			

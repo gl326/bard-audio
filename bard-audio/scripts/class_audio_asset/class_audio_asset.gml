@@ -117,28 +117,28 @@ function class_audio_asset(_name="",_external=false,_project = "") constructor{
 		}
 	}
 	
-	static play = function(prio=0,looping=0,gain=1,pitch=1,offset=1){
+	static play = function(prio=0,looping=0,gain=1,pitch=1,offset=0){
 		if load(){
 			var _emitter = bus_emitter(bus);
 			if _emitter!=-1{
-				return play_on(_emitter,prio,looping);
+				return play_on(_emitter,looping,prio,gain,pitch,offset);
 			}else{
-				if !external{
-					return audio_play_sound(_soundid,prio,looping,gain,offset,pitch);	
-				}else{
-					return audio_play_sound(loaded_audio,prio,looping,gain,offset,pitch);
-				}
+				return audio_play_sound(asset_id(),prio,looping,gain,offset,pitch);
 			}
 		}
 	}
 	
-	static play_on = function(emitterID,looping,prio=0,gain=1,pitch=1,offset=1){
+	static play_on = function(emitterID,looping,prio=0,gain=1,pitch=1,offset=0){
 		if load(){
-			if !external{
-				return audio_play_sound_on(emitterID,index,looping,prio,gain,offset,pitch);	
-			}else{
-				return audio_play_sound_on(emitterID,loaded_audio,looping,prio,gain,offset,pitch);	
-			}
+			return audio_play_sound_on(emitterID,asset_id(),looping,prio,gain,offset,pitch);
+		}
+	}
+	
+	static asset_id = function(){
+		if !external{
+			return index;	
+		}else{
+			return loaded_audio;	
 		}
 	}
 	

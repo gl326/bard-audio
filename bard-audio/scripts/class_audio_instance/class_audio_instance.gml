@@ -56,7 +56,14 @@ function class_audio_instance(_container,_sound=-1,_loops=false,_gain=0,_pitch=0
 		
 	    if container.spacerand{ //i play at a random spatial position, and manage my own emitter
 				threed = true;
-				var space_emitter = player.get_emitter();
+				
+				var _emitter_id = 0;
+				if container.specmin>0{
+					var _needed_emitters = min(4, max(1, player.made_emitter, audio_sound_length(audio_asset_id(file))/max(.25,container.specmin)));	
+					_emitter_id = (player.spec_id mod _needed_emitters);
+					player.spec_id += 1;
+				}
+				var space_emitter = player.get_emitter(_emitter_id);
 			
 				var ref_dist = container.threed_sound_size,
 		            max_dist = container.threed_sound_falloff;
@@ -169,7 +176,8 @@ function class_audio_instance(_container,_sound=-1,_loops=false,_gain=0,_pitch=0
 		
 		var start_offset = 0;
 		if randstart{
-			start_offset = random(audio_sound_length(aud_playing));
+			var _file_length = audio_sound_length(audio_asset_id(file));
+			start_offset = random(_file_length);
 		}else{
 			if starttime>0{
 				start_offset = starttime;
@@ -191,10 +199,17 @@ function class_audio_instance(_container,_sound=-1,_loops=false,_gain=0,_pitch=0
 			if _emitter==-1{ //i must not be on a bus! 
 	            aud_playing = audio_asset_play(file,0,looping, _set_gain, 1+pitch, start_offset);
 	        }else{
+				var _bus_struct = undefined;
 				if player.has_any_effects(){
-					audio_emitter_bus(_emitter,player.get_effect_bus().struct); 
+					_bus_struct = player.get_effect_bus().struct; 
 				}else if bus_id!=""{
-					audio_emitter_bus(_emitter,bus_getdata(bus_id).struct); //make sure whatever emitter i'm using is assigned to my bus
+					_bus_struct = bus_getdata(bus_id).struct; //make sure whatever emitter i'm using is assigned to my bus
+				}
+				if is_struct(_bus_struct){
+					//temp check to see if this is a bug??
+					if !TEMP_DISABLE_GM_AUDIO_BUSSES{
+						audio_emitter_bus(_emitter,_bus_struct); 	
+					}
 				}
 	            aud_playing = audio_asset_play_on(_emitter,file,looping,0, _set_gain, 1+pitch, start_offset);
 				emitter = _emitter; //for debug tracking

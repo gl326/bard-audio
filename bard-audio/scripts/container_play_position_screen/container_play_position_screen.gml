@@ -4,9 +4,8 @@
 /// @param y = 0 is screen top edge, 1 is screen bottom edge
 function container_play_position_screen(container,_x,_y) {
 	var spos = container_screen_position_to_listener(_x,_y);
-	var obj = instance_create_depth(spos.x,spos.y,0,objLocationsound);
+	var obj = location_sound_create(_x,_y, spos.z);
 	obj.container = container;
-	obj.z = spos.z;
 	with(obj){event_user(0);}
 	return obj;//.soundobj;
 }

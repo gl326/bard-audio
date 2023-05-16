@@ -15,6 +15,7 @@ function bard_audio_effects_setup(){ //get all the intenral effects and identify
 				AudioEffectType.LPF2,"lpf",
 				AudioEffectType.HPF2,"hpf",
 				AudioEffectType.Gain,"gain",
+				//AudioEffectType.Tremolo,"tremolo",
 			);
 	global.bard_audio_effect_parameters = array_setup(
 				AudioEffectType.Reverb1,
@@ -56,6 +57,14 @@ function bard_audio_effects_setup(){ //get all the intenral effects and identify
 					gain: bard_effect_param(1, [0,2], "The gain value applied to the input signal.", true),
 					bypass: bard_effect_param(0),
 				},
+				/*AudioEffectType.Tremolo,
+				{
+					rate: bard_effect_param(10, [0,20], "The frequency of the LFO modulating the gain (0.0-20.0 Hz)", true),
+					intensity: bard_effect_param(1, [0,1], "The proportion of the input signal which should be modulated by the LFO (0.0-1.0). Put differently, it is the proportion (or fraction) of the signal's/sample's amplitude that is affected by the LFO.", true),
+					offset: bard_effect_param(0.5, [0,1], "The proportion of a waveform's period that the right-hand channel's LFO should be offset by compared to the left-hand channel (0.0-1.0) At a value of 0.0 and 1.0 the left-hand and right-hand channel's LFO waveforms coincide (because the shape is periodic, i.e. repeats)", true),
+					shape: bard_effect_param(0, [0,4], "Set to 0, 1, 2, 3, or 4 to get different LFO shapes", true),
+					bypass: bard_effect_param(0),
+				},*/
 			);
 }
 		
@@ -171,6 +180,10 @@ function class_audio_effect() constructor{
 			case "q":			effect.q			= _set; break;	
 			case "gain":		effect.gain			= _set; break;	
 			case "bypass":		effect.bypass		= _set; break;	
+			case "rate":		effect.rate		= _set; break;	
+			case "offset":		effect.offset		= _set; break;	
+			case "intensity":	effect.intensity		= _set; break;	
+			case "shape":		effect.shape		= _set; break;	
 			default: 
 				show_message("Attempting to set undefined value "+_name+" for audio effect "+type+" ("+name+") (need to edit class_audio_effect to accomodate the new parameter)"); 
 			break;

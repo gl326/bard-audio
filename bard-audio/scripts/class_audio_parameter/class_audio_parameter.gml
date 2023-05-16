@@ -82,7 +82,7 @@ function class_audio_parameter(_name="",_default=0) constructor{
 	}
 	
 	static container_hook_copy = function(_containerFrom,_containerTo){
-		hook_delete_container(_containerTo.name);
+		hook_delete(_containerTo.name);
 		if hooks.Exists(_containerFrom){
 			return hooks.Add(_containerTo.name,ElephantDuplicate(container_hook(_containerFrom)));
 		}else{
@@ -114,7 +114,12 @@ function class_audio_parameter(_name="",_default=0) constructor{
 		var hook = get_hook(_name,_container_var);
 
 		if is_undefined(hook){
-			hook = new class_audio_hook(_container_var);
+			var _start = 0,
+				_end = 0;
+			if _container_var=="blend"{
+				_end = 100;	
+			}
+			hook = new class_audio_hook(_container_var,_start,_end);
 			array_push(get_hooks_for(_name),hook);
 		}
 		return hook;
@@ -200,19 +205,19 @@ function class_audio_parameter(_name="",_default=0) constructor{
 	}
 }
 
-function class_audio_hook(_variableName) constructor{
+function class_audio_hook(_variableName,_start=0,_end=0) constructor{
 	variable = _variableName;
-	curve = new class_audio_hook_curve();
+	curve = new class_audio_hook_curve(_start,_end);
 	
 	static eval = function(state){
 		return curve.eval(state);	
 	}
 }
 
-function class_audio_hook_curve() constructor{
+function class_audio_hook_curve(_start=0,_end=0) constructor{
 	points = [
-		new class_audio_hook_curve_point(0,0),
-		new class_audio_hook_curve_point(100,0)
+		new class_audio_hook_curve_point(0,_start),
+		new class_audio_hook_curve_point(100,_end)
 	];
 	sorted = true;
 	

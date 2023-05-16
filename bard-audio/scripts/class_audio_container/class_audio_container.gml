@@ -28,6 +28,7 @@ function class_audio_container(_name = "", fromProject = false) constructor{
 	
 	specmax = 0;
 	specmin = 0;
+	specstart = 0;
 	contin = false;
 	spacerand = false;
 	
@@ -477,7 +478,9 @@ function class_audio_container(_name = "", fromProject = false) constructor{
 		    }
 		if specsnd{
 			inst.playstart = current_time;
-			inst.delayin = random_range(specmin,specmax);
+			if !specstart or option{
+				inst.delayin = random_range(specmin,specmax);
+			}
 		}
     
 		if is_string(ret){

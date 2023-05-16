@@ -52,9 +52,8 @@ beats = beat_start;
 measures = floor(beats/beats_per_measure);
 time_in_beats = 0;
 
-spec_snd = (container.specmax>0 or container.specmin>0);
-
-space_rand = false;
+spec_snd = (container.type==CONTAINER_TYPE.CHOICE and (container.specmax>0 or container.specmin>0));
+spec_start = container.specstart;
 
 threed = false;
 
@@ -93,7 +92,9 @@ volume_p = 1;
 fading_out = 0;
 
 emitter = -1; //these are made and maintained by props, but this lets us know if we have one
-made_emitter = false;
+made_emitter = 0;
+created_emitters = [];
+spec_id = 0;
 
 effect_bus = undefined;
 
@@ -154,6 +155,9 @@ static play = function(option=false,_playedBy=noone,_volumeMultiply=1, _pitchMul
 	seed = random_get_seed();
 	am_playing = true;
 	
+	auto_play = (container.type==CONTAINER_TYPE.CHOICE and container.contin);
+	spec_snd = (container.type==CONTAINER_TYPE.CHOICE and (container.specmax>0 or container.specmin>0));
+	
 	if !is_struct(_playedBy) and _playedBy!=noone{owner = _playedBy;}
 
 	var playlist = container.create_instances(option);
@@ -174,7 +178,6 @@ static play = function(option=false,_playedBy=noone,_volumeMultiply=1, _pitchMul
 		play_instance(playlist[i],option,_volumeMultiply,_pitchMultiply);
 		i ++;
 	}
-	auto_play = (container.type==CONTAINER_TYPE.CHOICE and container.contin);
 	
 	if group!=-1 and group_delay{
 	    audio_start_sync_group(group);
@@ -185,6 +188,10 @@ static play = function(option=false,_playedBy=noone,_volumeMultiply=1, _pitchMul
 	start_time = current_time;
 	//first_beat = true; //?
 	firstplay = true;
+	
+	if spec_snd and spec_start and !option{
+		play(1,_playedBy,_volumeMultiply,_pitchMultiply);
+	}
 	
 	return self;
 }
@@ -203,10 +210,19 @@ static play_instance = function(inst,option=false,_volumeMultiply=1, _pitchMulti
 	    }	
 }
 
-static get_emitter = function(){
-	if emitter==-1 or !audio_emitter_exists(emitter){
-		made_emitter = true;
-		emitter = audio_emitter_Create();	
+static get_emitter = function(_id = undefined){
+	if !is_undefined(_id){
+		while(made_emitter<=_id){
+			created_emitters[made_emitter] = audio_emitter_Create();
+			made_emitter +=1;
+		}
+		emitter = created_emitters[_id];
+	}else{
+		if emitter==-1 or !audio_emitter_exists(emitter){
+			created_emitters[made_emitter] = audio_emitter_Create()
+			emitter = created_emitters[made_emitter];	
+			made_emitter +=1;
+		}
 	}
 	
 	return emitter;
@@ -900,8 +916,10 @@ static destroy = function(_hard_stop = false){
 			effect_bus.destroy();	
 		}
 		
-		if made_emitter{
-			audio_emitter_free(emitter);	
+		var _i = 0;
+		repeat(array_length(created_emitters)){
+			audio_emitter_free(created_emitters[_i]);
+			_i ++;
 		}
 		//stop all sounds that marked as looping
 		var _i=0;
