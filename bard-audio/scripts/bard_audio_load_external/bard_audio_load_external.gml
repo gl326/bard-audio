@@ -20,13 +20,15 @@ function bard_audio_load_external(_directory,_project = global.__bard_project_di
             _directories[@ array_length(_directories)] = _path + "\\";
 			
 			//create a container
-			var _container_name = _file;
-			 _directory_containers[@ array_length(_directory_containers)] = container_getdata(_container_name,true,true);
-			 _directory_containers[@ array_length(_directory_containers)-1].from_project = true;
+			var _container_name = _file,
+				_directory_index = array_length(_directory_containers);
+			 _directory_containers[@ _directory_index] = container_getdata(_container_name,true,true);
+			 _directory_containers[@ _directory_index].from_project = true;
 			  
 			 if !is_undefined(_parent){
 				 //add to parent contents
 				 array_push(_parent.contents_serialize,_file);
+				 _directory_containers[@ _directory_index].parent = _parent.name;
 			 }
         }
         else 

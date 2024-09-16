@@ -1,9 +1,9 @@
 /// only for use inside the editor. there's no reason for containers to change during gameplay!
-function container_destroy(name,manual=true) {
+function container_destroy(name,manual=true,force=false) {
 	name = container_getdata(name).name;
 	if ds_map_exists(global.audio_containers,name){
 		var class = global.audio_containers[?name];
-		if class.from_project{
+		if class.from_project and !force{
 			if manual{show_message("if you want to delete "+name+", delete the folder from your gamemaker project first!");}
 		}else{
 		if !manual or show_question("delete "+name+"?"){
@@ -53,7 +53,7 @@ function container_destroy(name,manual=true) {
 					var _i = 0;
 					repeat(array_length(class.contents)){
 						if is_string(class.contents[_i]){
-							container_destroy(class.contents[_i],false);
+							container_destroy(class.contents[_i],false,force);
 						}
 						_i ++;	
 					}

@@ -53,6 +53,7 @@ function class_audio_instance(_container,_sound=-1,_loops=false,_gain=0,_pitch=0
 		var bus_id = bus;
 	    //player.bus_track(bus);
 		var _emitter = -1;
+		var _has_owner = false;
 		
 	    if container.spacerand{ //i play at a random spatial position, and manage my own emitter
 				threed = true;
@@ -96,7 +97,7 @@ function class_audio_instance(_container,_sound=-1,_loops=false,_gain=0,_pitch=0
 			else{
 				if owner<=0{owner = player.owner;}
 			if object_is_ancestor((owner).object_index,objSpatialObject) or (owner).object_index==objSpatialObject{
-
+			_has_owner = true;
 		    if threed{ //dlay spunds need to know this player
 				with(owner){
 					var ref_dist = other.container.threed_sound_size,
@@ -136,6 +137,7 @@ function class_audio_instance(_container,_sound=-1,_loops=false,_gain=0,_pitch=0
 							}
 							break;
 						}
+						i ++;
 					}
 				}else{
 					audio_emitter = [];	
@@ -168,7 +170,7 @@ function class_audio_instance(_container,_sound=-1,_loops=false,_gain=0,_pitch=0
 	    current_vol = (vol+1)*(file_vol+1);//*(bus_vol+1);
 	    if is_undefined(current_vol) or is_real(current_vol)==0 {current_vol = 0;}
 
-	   var finalvolumecalc = clamp(current_vol,0,1)*max(0,player.volume*blend_vol);
+	   var finalvolumecalc = max(current_vol,0)*max(0,player.volume*blend_vol);
 		var _set_gain = finalvolumecalc;
 		if fadein>0{
 			_set_gain = 0;	
@@ -200,18 +202,28 @@ function class_audio_instance(_container,_sound=-1,_loops=false,_gain=0,_pitch=0
 	            aud_playing = audio_asset_play(file,0,looping, _set_gain, 1+pitch, start_offset);
 	        }else{
 				var _bus_struct = undefined;
-				if player.has_any_effects(){
+				if _has_owner and is_struct(owner.audio_emitter_effect_bus){
+					_bus_struct = owner.audio_emitter_effect_bus.struct;
+				}else if player.has_any_effects(){
 					_bus_struct = player.get_effect_bus().struct; 
 				}else if bus_id!=""{
 					_bus_struct = bus_getdata(bus_id).struct; //make sure whatever emitter i'm using is assigned to my bus
 				}
+				//show_debug_message(">>>>>>>> container "+name);
+				
 				if is_struct(_bus_struct){
 					//temp check to see if this is a bug??
 					if !TEMP_DISABLE_GM_AUDIO_BUSSES{
-						audio_emitter_bus(_emitter,_bus_struct); 	
+						//runner 2022.11.0.73: audio_emitter_bus seemingly crashes 1 in every 10,000 times or so here with no apparent cause
+						//so, we try to do it only very rarely 
+						if audio_emitter_get_bus(_emitter)!=_bus_struct{
+							//show_debug_message("TEST 1 > setting emitter bus. emitter: "+string(_emitter)+" | bus: "+string(_bus_struct));
+							audio_emitter_bus(_emitter,_bus_struct); 	
+						}
 					}
 				}
 	            aud_playing = audio_asset_play_on(_emitter,file,looping,0, _set_gain, 1+pitch, start_offset);
+				
 				emitter = _emitter; //for debug tracking
 	        }
 	    }else{
@@ -252,7 +264,7 @@ function class_audio_instance(_container,_sound=-1,_loops=false,_gain=0,_pitch=0
         var file_vol = audio_asset_gain(file); 
 
             current_vol = (vol+1)*(file_vol+1);//*(bus_vol+1);
-			var newFinalVol = lerp(0,clamp(current_vol,0,1),QuadInOut(parentVolume)*(1+blend));
+			var newFinalVol = lerp(0,max(current_vol,0),QuadInOut(parentVolume)*(1+blend));
             audio_sound_gain(snd,newFinalVol,0);
 	}
 	

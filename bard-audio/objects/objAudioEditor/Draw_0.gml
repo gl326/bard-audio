@@ -159,6 +159,8 @@ if editing!=-1{
                                 if holding_move{
                                     if cont==holding_list and i>holding_ind{i -= 1;}
                                     aeDeleteDropped();
+									//reassign
+									container_getdata(dropped).parent = editing.name; 
                                 }
                                 array_insert(cont,i,string(dropped));
 								array_insert(editing.contents_serialize,i,container_content_serialize(dropped));
@@ -183,6 +185,9 @@ if editing!=-1{
                     if holding_audio{
                         if holding_move{
                             aeDeleteDropped();
+							//if container_getdata(dropped).parent==ROOT_SOUND_FOLDER{ //reassign parent away form the root sound folder
+								container_getdata(dropped).parent = editing.name; 
+							//}
                         }
                         array_push(cont,dropped);
 						array_push(editing.contents_serialize,container_content_serialize(dropped));
@@ -192,6 +197,9 @@ if editing!=-1{
                     else{if dropped!=editing{
                         if holding_move{
                             aeDeleteDropped();
+							//if container_getdata(dropped).parent==ROOT_SOUND_FOLDER{ //reassign parent away form the root sound folder
+								container_getdata(dropped).parent = editing.name; 
+							//}
                         }
                         array_push(cont,string(dropped));
 						array_push(editing.contents_serialize,container_content_serialize(dropped));

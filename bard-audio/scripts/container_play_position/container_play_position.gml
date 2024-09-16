@@ -2,10 +2,16 @@
 /// @param container
 /// @param x
 /// @param y
-function container_play_position(container,_x,_y,_z=0) {
+function container_play_position(container,_x,_y,_z=0,_volumeMultiply=1,_pitchMultiply=1,_effect_struct = undefined) {
 	var obj = location_sound_create(_x,_y,_z);
 	obj.container = container;
-
+	obj.volumeMultiply = _volumeMultiply;
+	obj.pitchMultiply = _pitchMultiply;
+	
+	if !is_undefined(_effect_struct){
+		container_object_set_custom_effect(container, obj, _effect_struct);	
+	}
+	
 	with(obj){event_user(0);}
 	return obj;//.soundobj;
 }
@@ -34,6 +40,37 @@ function location_sound_create(_x, _y, _z = 0){
 }
 
 function location_sound_destroy(_obj){
+	with(_obj){
+		if is_struct(audio_emitter_effect_bus){
+			audio_emitter_effect_bus.destroy();
+			audio_emitter_effect_bus = undefined;
+		}	
+	}
 	ds_queue_enqueue(global.location_sounds_pool,_obj);
 	instance_deactivate_object(_obj);
+}
+
+function container_object_set_custom_effect(_container, _object, _effect_struct, _enabled = true){
+	//object needs to be an objSpatialObject or child of it to have the audio emitter effects variables
+	with(_object){
+		if !is_struct(audio_emitter_effect_bus){
+			audio_emitter_effect_bus = container_player(_container,true).new_effect_bus();	
+		}
+		
+		audio_emitter_effect_bus.set_audio_effect(_effect_struct,_enabled);
+		
+			if audio_emitter!=-1{
+				for(var i=0;i<audio_emitter_n;i+=1){
+					audio_emitter_bus(audio_emitter[i], audio_emitter_effect_bus.struct);
+				}
+			}
+		}	
+}
+
+function container_object_has_custom_effect(_object){
+	with(_object){
+		return is_struct(audio_emitter_effect_bus);	
+	}
+	
+	return false;
 }

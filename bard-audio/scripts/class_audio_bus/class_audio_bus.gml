@@ -33,6 +33,19 @@ function class_audio_bus(_name="",_gain=0,_parent=undefined) constructor{
         ],
     }
 	
+	ELEPHANT_PRE_WRITE_METHOD
+	{
+		var _i = 0;
+		repeat(array_length(children)){
+			if !is_string(children[_i]){
+				show_debug_message("NOTE: temporary bus "+children[_i].name+" deleted from children of "+name+" for export");
+				children[_i].destroy();
+			}else{
+				_i ++;	
+			}
+		}
+	}
+	
 	ELEPHANT_POST_READ_METHOD
     {
 		gain = default_gain;
@@ -52,9 +65,12 @@ function class_audio_bus(_name="",_gain=0,_parent=undefined) constructor{
 	static inherit_from = function(_bus_name){
 		parent_disconnect();
 		
-		if is_struct(bus_getdata(_bus_name)){
+		var _pstruct = bus_getdata(_bus_name);
+		if is_struct(_pstruct){
 			parent = _bus_name;
 			parent_connect();
+			recalculate(_pstruct.calc);
+			inherit_effects(_pstruct);
 		}else{
 			parent = undefined;	
 		}
@@ -74,9 +90,10 @@ function class_audio_bus(_name="",_gain=0,_parent=undefined) constructor{
 	}
 	
 	static volume_update = function(){
+			if is_struct(struct){
 			//set the associated game maker bus volume
-			struct.gain = calc+1;
-			
+				struct.gain = calc+1;
+			}
 			//the new bus system updates audio for everyone, so we don't need to track this part anymore
 			/*
 			i = 0;
@@ -135,17 +152,22 @@ function class_audio_bus(_name="",_gain=0,_parent=undefined) constructor{
 	static default_effects = function(){
 		var _i = 0;
 		repeat(array_length(effects)){
-			if effects[_i].default_on{
-				set_effect_class(effects[_i]);	
+			if !is_struct(effects[_i]){
+				show_debug_message("SOMETHING BROKE UHOH");
+				array_delete(effects,_i,1);
+			}else{
+				if effects[_i].default_on{
+					set_effect_class(effects[_i]);	
+				}
+				_i++;	
 			}
-			_i++;	
 		}
 	}
 	
 	static find_effect = function(_name){
 		var _i = 0;
 		repeat(array_length(effects)){
-			if effects[_i].name==name{
+			if effects[_i].name==_name{
 				return effects[_i];
 			}
 			_i ++;
@@ -156,7 +178,7 @@ function class_audio_bus(_name="",_gain=0,_parent=undefined) constructor{
 	
 	//enable or disable a named child effect
 	static set_effect = function(name,enabled,recursive){
-		var _i = 0, _found = false;;
+		var _i = 0, _found = false;
 		repeat(array_length(effects)){
 			if effects[_i].name==name{
 				set_effect_class(effects[_i],enabled,recursive);
@@ -169,11 +191,15 @@ function class_audio_bus(_name="",_gain=0,_parent=undefined) constructor{
 			show_debug_message("AUDIO WARNING! Couldn't find effect with name ("+name+") on bus "+self.name);
 		}
 	}
+
+	static get_gm_effects = function(){
+		return struct.effects;
+	}
 	
 	//enable or disable an effect class. this should only happen if the class is one i'm tracking in my personal list of effects
 	static set_effect_class = function(effect,enabled=true,recursive=true){
 		effect.update(); //make sure the effect's state matches up with parameter states
-		if set_audio_effect(effect.effect,enabled,recursive){ //if the effect was successfully applied
+		if set_audio_effect(effect.effect,enabled,recursive){ //if the effect was successfully applied/unapplied
 			//watch or unwatch parameters
 			if enabled{
 				array_append_array(effect.parameters,parameters);
@@ -207,12 +233,20 @@ function class_audio_bus(_name="",_gain=0,_parent=undefined) constructor{
 	//assign an actual GM effect to my actual GM bus
 	static GM_EFFECT_LIMIT = 8;
 	static set_audio_effect = function(_effect,enabled=true,recursive=true){
+		if TEMP_DISABLE_GM_AUDIO_BUSSES{
+			return false; //stop!!	
+		}
+		
 		var _return  = true;
 		if enabled{
 			var _i = 0;
 			repeat(GM_EFFECT_LIMIT){
 				if is_undefined(struct.effects[_i]){
 					struct.effects[_i] = _effect;
+					break;
+				}else if struct.effects[_i]==_effect{
+					_return = false;
+					show_debug_message("AUDIO WARNING! tried to apply the same effect multiple times. don't do that it's pretty risky");	
 					break;
 				}
 				_i ++;
@@ -244,6 +278,18 @@ function class_audio_bus(_name="",_gain=0,_parent=undefined) constructor{
 		}
 		
 		return _return;
+	}
+	
+	static inherit_effects = function(_source){
+		var _i = 0;
+		var _j = 0;
+		repeat(GM_EFFECT_LIMIT){
+			if is_undefined(struct.effects[_j]){
+				struct.effects[_j] = _source.struct.effects[_i];
+				_i ++;
+			}
+			_j ++;
+		}
 	}
 	
 	static has_effect = function(_name){
@@ -312,6 +358,9 @@ function class_audio_bus(_name="",_gain=0,_parent=undefined) constructor{
 				var _parent = bus_getdata(parent);
 			if !is_undefined(_parent){
 				var _ind = array_find_index(_parent.children,name);
+				if _ind==-1{
+					_ind = array_find_index(_parent.children,self);	
+				}
 				if _ind!=-1{
 					array_delete(_parent.children,_ind,1);	
 				}

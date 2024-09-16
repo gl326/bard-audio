@@ -8,8 +8,15 @@ function file_read_string(_filename,_compressed = false)
 			_buffer = buffer_decompress(_oldbuffer);
 			buffer_delete(_oldbuffer);
 		}
-	
-	    var str = buffer_read(_buffer,buffer_string);
+		
+		var str = "";
+		
+	    try{
+			str = buffer_read(_buffer,buffer_string);
+		}catch(_exception){
+			str = "";
+		}
+		
 		//?
 	    buffer_delete(_buffer);
 		return str;

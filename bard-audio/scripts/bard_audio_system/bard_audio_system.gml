@@ -8,6 +8,7 @@
 has variables called "x" and "y." if you arent using a z variable then leave this off.
 */
 
+#macro BARD_EDITOR_MODE (debug_mode and os_type==os_windows)
 #macro AUDIO_EDITOR_CAN_LOAD_DATA true
 /* this should be set to false or debug_mode when making any public build releases. 
 when true, this allows the game to look for project files & audio editor data on the user's file system. 
@@ -30,6 +31,10 @@ gameplay! that way you can edit sounds, test them in-game, and then go back to a
 #macro EXTERN_SOUND_FOLDER "audio/" 
 /* folder for any external audio files, should be located in your project datafiles
 *DO include the final slash* */
+
+#macro BARD_AUDIO_DATA_FILE "audio_data.json"
+#macro DEMO:BARD_AUDIO_DATA_FILE EXT_FILE_PREFIX+"audio_data.json"
+#macro AREA01:BARD_AUDIO_DATA_FILE EXT_FILE_PREFIX+"audio_data.json"
 
 #macro DISABLE_SYNCGROUPS true 
 /* game maker has a "sync group" feature but it had some weird issues on some platforms right when we were trying to ship wandersong so we rerouted all the logic to avoid using them
@@ -56,7 +61,7 @@ audio_falloff_set_model(audio_falloff_linear_distance); //_clamped?
 
 global.default_sound_size = 800;// //if sounds are within this distance of the listener, theyre full volume
 global.default_sound_atten = 2500;// //at this distance, sounds are inaudible
-global.listener_distance = 1250;//50 //how far the listener is from the screen
+global.listener_distance = 0;// 1250;//50 //how far the listener is from the screen
 global.max_listener_distance = 1500; //farthest the listener can be from the screen - the distance is alered based on the view scale
 
 ////////// if you want to add music keys, add them in *bard_audio_system_music_keys* //////////
@@ -102,6 +107,16 @@ function bard_audio_clear(clearPersistent = false){
 			_i ++;	
 		}
 	}
+	
+	if clearPersistent{
+		_i = 0;
+		repeat(array_length(global.audio_playstacks)){
+			global.audio_playstacks[_i].reset();
+			_i ++;
+		}
+	}
+	
+	global.audio_tweens = [];
 }
 
 //this sets where the audio listener is
@@ -124,7 +139,8 @@ function bard_audio_listener_update(_x,_y,_z = 0,_view_zoom_scale=1){
 	//it would be neat if someday gamemaker adds a way for some emitters to not be 3D, since they're the only way to get audio effects.
 	var _i = 0;
 	repeat(array_length(global.bard_audio_data[bard_audio_class.bus])){
-		var _emitter = global.bard_audio_data[bard_audio_class.bus][_i].default_emitter;
+		var bus_id = global.bard_audio_data[bard_audio_class.bus][_i].name;//default_emitter
+		var _emitter = bus_emitter_if_exists(bus_id);
 		if _emitter!=-1{
 			audio_emitter_position(
 				_emitter,
@@ -187,8 +203,52 @@ function bard_audio_debug_gui(){
 	draw_set_halign(fa_left);
 	draw_set_valign(fa_top);
 	draw_set_font(-1);
-	var yy=20,
-		_i = 0;
+	var yy=20;
+
+	//if false
+	{ // Bus display. Only shows buses with emitters assigned to them.
+		var yyy = 0;
+		var str = "";
+		var busses = ds_map_values_to_array(global.audio_busses);
+		var bus_index = 0;
+		repeat(array_length(busses)){
+		    with(busses[bus_index]){
+		    	var emitters = audio_bus_get_emitters(struct);
+		    	var emitter_count = string(array_length(emitters));
+		    	if(emitter_count > 0){
+					str+="\naudio bus[" + name + "] has [" + string(array_length(emitters)) + "] emitter(s)";
+					yyy+=20;
+			    	
+			    	var gm_effects = struct.effects;
+					for(var gm_effect_index=0;gm_effect_index<8;gm_effect_index+=1){
+						var cur_effect = gm_effects[gm_effect_index];
+						if (!is_undefined(cur_effect)){
+							yyy+=20;
+							if (cur_effect.type == AudioEffectType.Reverb1){
+								str+="\n  Active effect[reverb1]";
+								str+=" bypass: " + string(cur_effect.bypass);
+								str+=" size: " + string(cur_effect.size);
+								str+=" damp: " + string(cur_effect.damp);
+								str+=" mix: " + string(cur_effect.mix);
+							} else {
+								str+="\n  There is an effect[" + string(cur_effect.type) + "] is here that we could describe...";
+							}
+						}
+					}
+                }
+		    }
+		    bus_index++;
+		}
+
+		draw_set_color(text_bcolor);
+		draw_text(20,yy+2,str);
+
+		draw_set_color(text_color);
+		draw_text(20,yy,str);
+		yy+=40+yyy;
+	}
+
+	var _i = 0;
 	repeat(array_length(global.audio_players)){
 		with(global.audio_players[_i]){
 	    if array_length(playing){
@@ -232,8 +292,24 @@ function bard_audio_debug_gui(){
 						}else{
 							str+=" gain "+string(egain)+")";	
 						}
+
+					var gm_effects = bus_get_gm_effects(s.bus);
+	        		for(var gm_effect_index=0;gm_effect_index<8;gm_effect_index+=1){
+	        			var cur_effect = gm_effects[gm_effect_index];
+	        			if (!is_undefined(cur_effect)){
+							yyy+=20;
+							if (cur_effect.type == AudioEffectType.Reverb1){
+								str+="\n  Active effect[reverb1]";
+								str+=" bypass: " + string(cur_effect.bypass);
+								str+=" size: " + string(cur_effect.size);
+								str+=" damp: " + string(cur_effect.damp);
+								str+=" mix: " + string(cur_effect.mix);
+							} else {
+								str+="\n  There is an effect is here that we could describe...";
+							}
+	        			}
+	        		}
 				}
-				
             
 	            draw_set_color(text_bcolor);
 	            draw_text(20,yy+4,str);
@@ -295,6 +371,7 @@ function bard_audio_debug_gui(){
 	}
 		_i ++;
 	}
+
 	debug_h = yy;
 
 	draw_set_halign(fa_right);
@@ -392,4 +469,4 @@ global.ambience_player = new class_audio_playstack("ambience", 4, true);
 global.ambience_player.set_fade_in(2);
 
 global.__bard_project_datafiles = undefined;
-bard_audio_data_load();
+//bard_audio_data_load();

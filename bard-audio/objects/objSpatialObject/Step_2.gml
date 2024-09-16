@@ -17,6 +17,6 @@ if audio_emitter!=-1{
 		//ex = audio_emitter_pan*((camera_get_view_x(the_scenemanager.camera)+(camera_get_view_width(the_scenemanager.camera)/2))-x);
 	}
 	for(var i=0;i<audio_emitter_n;i+=1){
-		audio_emitter_position(audio_emitter[i],x+ex,y+ey,ez);
+		audio_emitter_position(audio_emitter[i],x+ex,y+ey,(AUDIO_USES_Z?z:0)+ ez);
 	}
 }

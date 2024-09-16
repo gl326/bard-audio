@@ -1,5 +1,6 @@
 /// @description RELOAD ALL FILES
 if AUDIO_EDITOR_CAN_LOAD_DATA{
+
 #region project
 var project_data = json_parse(file_read_string(project_file)); //get data from project
 var _i = 0,

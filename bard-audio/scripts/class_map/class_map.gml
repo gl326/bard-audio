@@ -21,6 +21,10 @@ function class_map() constructor{
 	static Set = function(key,value){
 		variable_struct_set(self,key,value);
 	}
+	
+	static Append = function(key, value){
+		return Set(key, Is(key) + value);	
+	}
 
 	static Get = function(key){
 		return variable_struct_get(self,key);

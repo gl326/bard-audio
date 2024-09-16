@@ -21,6 +21,12 @@ function bard_audio_load_queue_update(){
 			global.audio_loading = global.audio_load_queue[0];
 			array_delete(global.audio_load_queue,0,1);
 			
+			if !is_struct(global.audio_loading) or instanceof(global.audio_loading)!="class_audio_load_item"{
+				//...error?!
+				global.audio_loading = undefined;
+				return false;
+			}
+			
 			if is_string(global.audio_loading.item){
 				global.audio_loading.buffer = buffer_create(1, buffer_grow, 1)
 				global.audio_loading.id = buffer_load_async(global.audio_loading.buffer,global.audio_loading.item,0,-1);	

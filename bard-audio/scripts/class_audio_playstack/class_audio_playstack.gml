@@ -53,6 +53,19 @@ function class_audio_playstack(_name="", layers=1, _overlaps = false) constructo
 		}
 		return -1;
 	}
+	static get_playing_bpm = function(){
+		var _playing = get_playing();
+		if !is_string(_playing){
+			return 120;
+		}else{
+			var _bpm = container_getdata(_playing).bpm;	
+			if _bpm<=0{
+				return 120;	
+			}else{
+				return _bpm;	
+			}
+		}
+	}
 	
 	static get_playing_tier = function(){
 		for(var i=array_length(current)-1;i>=0;i-=1){
@@ -75,7 +88,7 @@ function class_audio_playstack(_name="", layers=1, _overlaps = false) constructo
 			}
 			
 			if debug_on{
-				show_debug_message("======= AUDIO PLAYSTACK: trying to add new queue item "+string(_container_name));	
+				show_debug_message("======= AUDIO PLAYSTACK: trying to add new queue item "+string(_container_name)+" at tier "+string(tier));	
 			}
 		
 			//chekc if we like this input
@@ -106,16 +119,26 @@ function class_audio_playstack(_name="", layers=1, _overlaps = false) constructo
 			queue_add(_container_name,tier);
 			
 			//get the tier of the currently active audio
-			var old_tier = get_playing_tier();
+			var old_tier = max(0,get_playing_tier());
 			
 			if old_tier>tier{
+				if debug_on{
+					show_debug_message("AUDIO PLAYSTACK: new queue item is at a lower inactive tier, so we're slotting the sound in for later.");	
+				}
 				//music at a higher tier is currently active, so we can hot swap this new track in wihout incurring any interruption
-				dequeue(tier);
+				//dequeue(tier);
+				
+				if is_string(current[tier]){
+					//play and pause so that we're in a holding pattern waiting for higher tier stuff to clear
+					//container_play(current[tier]);
+					//container_set_persistent(current[tier],true); //mark is persistent
+					//container_pause(current[tier]);
+				}
 				return self;
 			}
 	
 			//get what we're trying to replace
-			var playing = get_playing();
+			var playing = current[old_tier];//get_playing();
 			
 			//oh, it's what we were already trying to play. let's just move the reference up? to the tier we requested and move on then.
 			if is_string(playing)==is_string(_container_name) and playing==_container_name{
@@ -137,37 +160,78 @@ function class_audio_playstack(_name="", layers=1, _overlaps = false) constructo
 				return self;
 			}
 			
+			//i'm nullifying some instruction and it isnt the one currently playing, so no need to stop anything for this.
+			if (!is_string(_container_name) and _container_name==-1 and old_tier!=tier){
+				return self;	
+			}
+			
 			//start the process of ending the current playing music so that our newly queued item can slot in
 			if is_string(playing){
-				if old_tier==tier{ //we're replacing the current tier, so it must stop and be replaced - can't leave it paused
-					if debug_on{
-						show_debug_message("AUDIO PLAYSTACK: fading out "+playing+" for "+string(fadeOutTime)+"s to replace with new item at same tier");	
-					}
-					if fadeOutTime>0{
-						container_fadeout(playing,fadeOutTime);
-					}else{
-						container_stop(playing);	//fade out current music
-					}
-				}else{ //we're playing music at a higher tier than what was previously active
+				if old_tier<tier{ //we're replacing the current tier, so it must stop and be replaced - can't leave it paused
 					if debug_on{
 						show_debug_message("AUDIO PLAYSTACK: fading out "+playing+" for "+string(fadeOutTime)+"s to replace with new item at a higher tier");	
 					}
-					
 					current[tier] = current[old_tier]; //duplicate the reference up to this higher tier
 							//this lets us track when it's ready to be overwritten
-					
-					//we'll be playing 'over' the old tier, so check if we wanted to leave it paused
-					var tween;
-					with(container_player(playing)){tween = tween_audio("volume",0,fadeOutTime);}
-					if leaveOldPaused{
-						tween.callback(function(){pause(); volume = 1;}); //set volume back to 1 for when we resume
-					}else{
-						tween.callback(function(){destroy();});	
+				}else{
+					if debug_on{
+						show_debug_message("AUDIO PLAYSTACK: fading out "+playing+" for "+string(fadeOutTime)+"s to replace with new item at same tier");	
 					}
 				}
+				
+				track_end(tier, fadeOutTime, (leaveOldPaused and old_tier!=tier) );
+
+				/*
+					//we'll be playing 'over' the old tier, so check if we wanted to leave it paused
+					var _tween = undefined,
+						_player = container_player(playing);
+					if !is_undefined(_player){
+						with(_player){
+							_tween = tween_audio("volume",0,fadeOutTime);
+						}
+						if is_struct(_tween){
+							if leaveOldPaused and old_tier!=tier{
+								_tween.callback(function(){pause(); volume = 1;}); //set volume back to 1 for when we resume
+							}else{
+								_tween.callback(function(){destroy();});	
+							}
+						}
+					}
+					*/
+
 			}
 			
 			return self;
+	}
+	
+	static track_end = function(tier = get_playing_tier(), fadeOutTime = 2, canPause = false){
+				var playing = current[tier];
+				if fadeOutTime<=0{
+					if canPause{
+						container_pause(playing);
+					}else{
+						container_stop(playing);
+					}
+				}
+				
+					var _tween = undefined,
+						_player = container_player(playing);
+					if !is_undefined(_player){
+						with(_player){
+							_tween = tween_audio("volume",0,fadeOutTime);
+						}
+						if is_struct(_tween){
+							if canPause{
+								_tween.callback(function(){pause(); volume = 1;}); //set volume back to 1 for when we resume
+							}else{
+								_tween.callback(function(){destroy();});	
+							}
+						}
+					}
+					
+					if debug_on{
+						show_debug_message("AUDIO PLAYSTACK: fadeout triggered for "+playing+string_sub(" (tier = {0}, time = {1}, pause = {2})",tier,fadeOutTime,canPause));	
+					}
 	}
 	
 	static update = function(){
@@ -187,7 +251,11 @@ function class_audio_playstack(_name="", layers=1, _overlaps = false) constructo
 								if debug_on{
 									show_debug_message("AUDIO PLAYSTACK: queue item "+string(current[i])+" ("+string(i)+") is NOW STARTING TO PLAY!");	
 								}
-								container_play(current[i]);	//start playing the queued item
+								if container_is_paused(current[i]){
+									container_unpause(current[i]);	
+								}else{
+									container_play(current[i]);	//start playing the queued item
+								}
 								container_set_persistent(current[i],true); //mark is persistent
 								
 								if fade_in{
@@ -199,13 +267,26 @@ function class_audio_playstack(_name="", layers=1, _overlaps = false) constructo
 							}
 						}else{
 							if debug_on{
-								show_debug_message("AUDIO PLAYSTACK: queue item "+string(current[i])+" ("+string(i)+") is waiting through a silence gap before it starts...");	
+								show_debug_message("AUDIO PLAYSTACK: queue item "+string(queue[i])+" ("+string(i)+") is waiting through a silence gap before it starts...");	
 							}
 							queue_waiting = true;	
 						}
 					}else{
 						if debug_on{
-							show_debug_message("AUDIO PLAYSTACK: queue item "+string(current[i])+" ("+string(i)+") is waiting to start");	
+							show_debug_message("AUDIO PLAYSTACK: queue item "+string(queue[i])+" is waiting for "+string(current[i])+" to end (@tier "+string(i)+")");	
+						}
+						
+						var player = container_player(current[i]);
+						with(player){
+							if !audio_is_tweening("volume"){										
+								with(other){
+									if debug_on{
+										show_debug_message("AUDIO PLAYSTACK: item "+string(current[i])+" wasn't actually ending, so we're starting a fadeout (@tier "+string(i)+")");	
+									}
+								
+									track_end(i, 0);
+								}
+							}
 						}
 						queue_waiting = true;	
 					}
@@ -230,12 +311,25 @@ function class_audio_playstack(_name="", layers=1, _overlaps = false) constructo
 								}
 								container_unpause(current[i]);
 							}else if !container_is_running(current[i]){ //this container has stopped for some other reason
+								var _data = container_getdata(current[i]);
+								
 								if debug_on{
 									show_debug_message("AUDIO PLAYSTACK: playing item "+string(current[i])+" ("+string(i)+") has stopped, so we are clearing this tier");	
 								}
 								//it might have been halted by something external, or maybe the sound wasn't set to loop...
 								//let's treat it as though this layer has now become null and let lower instructions carry the torch in following updates
 								current[i] = -1;
+								
+								if is_struct(_data){
+									if _data.type == CONTAINER_TYPE.HLT
+									or _data.loop{
+										//this sound is meant to be looping, so unless the music player is told to stop it then we assume it's meant to be playing
+										if debug_on{
+											show_debug_message("AUDIO PLAYSTACK: "+string(current[i])+" ("+string(i)+") is a looping sound, so we're going to re-qeue it");	
+										}
+										queue_add(_data.name, i);
+									}
+								}
 							}
 					
 					}
@@ -251,7 +345,7 @@ function class_audio_playstack(_name="", layers=1, _overlaps = false) constructo
 				container_stop_hard(current[tier]);	
 			}
 						if debug_on{
-							show_debug_message("AUDIO PLAYSTACK: tier "+string(tier)+": "+string(current[tier])+" >>> "+string(queue[tier]));	
+							show_debug_message("AUDIO PLAYSTACK: [tier "+string(tier)+"] "+string(current[tier])+" >>> "+string(queue[tier]));	
 						}
 			current[tier] = queue[tier];
 			queue[tier] = -4;
@@ -284,11 +378,11 @@ function class_audio_playstack(_name="", layers=1, _overlaps = false) constructo
 	
 	static queue_add = function(_instr,_tier,_gap = playback_gap){
 			queue[_tier] = _instr;
-			if is_string(_instr){
+			//if is_string(_instr){
 				gap[_tier] = _gap; //introduce a playback gap before we start this audio
-			}else{
-				gap[_tier] = 0; //it's silence or empty, so no gap needed
-			}
+			//}else{
+			//	gap[_tier] = 0; //it's silence or empty, so no gap needed
+			//}
 			if debug_on{
 				show_debug_message("AUDIO PLAYSTACK: "+string(_instr)+" queued to play at tier "+string(_tier)+" with playback gap "+string(_gap));	
 			}

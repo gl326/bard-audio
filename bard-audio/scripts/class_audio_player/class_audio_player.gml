@@ -147,6 +147,7 @@ static unpause = function(){
 				
 				i++;
 			}
+			start_time += (current_time - paused_time);
 	}
 }
 
@@ -186,6 +187,7 @@ static play = function(option=false,_playedBy=noone,_volumeMultiply=1, _pitchMul
 	    }
 		
 	start_time = current_time;
+	beats = beat_start;
 	//first_beat = true; //?
 	firstplay = true;
 	
@@ -350,6 +352,7 @@ static update_bpm = function(ms_passed = (current_time - time_p)){
 				
 				beatcalc = group_track_pos/(60/bpm);
 		    }else{
+				
 			    var snd = playing[0],
 			        aud = snd.aud;
 					
@@ -363,7 +366,8 @@ static update_bpm = function(ms_passed = (current_time - time_p)){
 							}
 						}
 					}
-		
+					
+					/*
 					if abs(group_pos-group_track_pos)<2{
 						group_track_pos = max(group_pos,group_track_pos);
 					}else{
@@ -371,6 +375,9 @@ static update_bpm = function(ms_passed = (current_time - time_p)){
 					}
 					group_track_pos += snd.delayin;
 					beatcalc = group_track_pos/(60/bpm);
+					*/
+					var secs_since_start = ((current_time-start_time) / 1000);
+					beatcalc = (secs_since_start) * (bpm/60);
 		    }
 			
 			beatcalc += beat_start;
@@ -751,6 +758,15 @@ static update = function(){
         
 		///end faded out sounds
 		update_fadeout();
+		
+		//update non-3d emitter
+		if !threed and has_any_effects(){
+			var _emitter = get_effect_emitter();
+			audio_emitter_position(
+				_emitter,
+				global.listener_x,global.listener_y,global.listener_z
+			);	
+		}
 
 		if persistent and (audio_in_editor or (!am_playing and !array_length(delayout_sounds))){
 			return destroy(); //nothing playing, so clean me up
@@ -785,7 +801,7 @@ static stop = function(sid=-1,option=false){
 	            }
 	            if option and s.loop==0{
 					if option<2{
-						audio_sound_gain(s.aud,clamp(s.current_vol,0,1)/2,100); //!
+						audio_sound_gain(s.aud,max(s.current_vol,0)/2,100); //!
 		                i ++;
 		                continue;
 					}else{
@@ -863,11 +879,17 @@ static set_effect = function(_name,_enabled){
 
 static set_effect_class = function(_effect,_enabled){
 	var _bus = get_effect_bus();
-	if audio_in_editor{
+	//if audio_in_editor{ 
+	/*
+		OK SO
+		I think this was enabled only when in the editor to prohibit the game from adding temp effects to actual busses that then got tracked and serialized into saved audio data settings
+		But this made it so parametered effects didn't actually work when in game because the chain of param messages goes param -> bus - > effect, so busses always need a reference to the effect...
+		i think this is actually safe and necessary to allow on "Effect busses" since they are always a custom new temp bus afaik
+	*/
 		if array_find_index(_bus.effects,_effect)==-1{
 			array_push(_bus.effects,_effect);	
 		}	
-	}
+	//}
 	_bus.set_effect_class(_effect,_enabled);
 }
 
@@ -881,18 +903,23 @@ static has_any_effects = function(){
 
 static get_effect_bus = function(){
 	if is_undefined(effect_bus){
-		effect_bus = new class_audio_bus(container.bus+":"+name+":"+string(get_timer())).inherit_from(container.bus).track();
-		array_copy(get_effect_bus().effects,0,container.effects,0,array_length(container.effects));	
+		effect_bus = new_effect_bus();
 		//i just decided i have effects mid-play! tell everyone to jump on the new bus!
 		if am_playing{
 			var i = 0;
 			repeat(array_length(playing)){
 				var s = playing[i];
-				audio_emitter_bus(s.emitter,effect_bus.struct);
+				audio_emitter_bus(s.emitter, effect_bus.struct);
 			}
 		}
 	}
 	return effect_bus;
+}
+
+static new_effect_bus = function(){
+	var _new = new class_audio_bus(container.bus+":"+name+":"+string(get_timer())).track().inherit_from(container.bus);
+	//array_copy(_new.effects,0,container.effects,0,array_length(container.effects));	//effects are copied in the inheritence step...
+	return _new;
 }
 
 static get_effect_emitter = function(){

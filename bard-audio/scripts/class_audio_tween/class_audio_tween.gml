@@ -160,9 +160,42 @@ function class_audio_tween(_variable_string_name, _dest=1, _length=1, _curve=1,_
 }
 
 function tween_audio(variable_string_name,dest,timeInSeconds=1,curve=1,isColor=false){
+	if is_string(variable_string_name){
+		tween_audio_destroy(variable_string_name);
+	}
+	
 	var _t = new class_audio_tween(variable_string_name,dest,timeInSeconds,curve,isColor);
 	array_push(global.audio_tweens,_t);
 	return _t;
+}
+
+function tween_audio_destroy(variable_string_name){
+	var _old = audio_get_tween(variable_string_name);
+	if !is_undefined(_old){
+		_old.destroy();
+		return true;
+	}	
+	
+	return false;
+}
+
+function audio_get_tween(variable_string_name){
+	var _i = 0;
+	repeat(array_length(global.audio_tweens)){
+		var _t = global.audio_tweens[_i];
+		if (is_struct(self) and _t.owner_struct and _t.owner.ref==self)
+		or (!is_struct(self) and _t.owner==self){
+			if _t.variable==variable_string_name{
+				return _t;	
+			}
+		}
+		_i ++;	
+	}
+	return undefined;
+}
+
+function audio_is_tweening(variable_string_name){
+	return !is_undefined(audio_get_tween(variable_string_name));
 }
 
 function audio_tweens_update(){

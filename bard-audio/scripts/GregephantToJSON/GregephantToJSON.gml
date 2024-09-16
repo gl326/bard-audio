@@ -12,6 +12,8 @@ function GregephantToJSON(_target)
     
     ELEPHANT_IS_DESERIALIZING = false;
     ELEPHANT_SCHEMA_VERSION   = undefined;
+	
+	//global.__elephantFoundSource = ds_map_create_pooled(); 
     
     var _duplicate = __GregephantToJSONInner(_target);
     
@@ -24,7 +26,7 @@ function GregephantToJSON(_target)
     return _duplicate;
 }
 
-function __GregephantToJSONInner(_target)
+function __GregephantToJSONInner(_target)//,_debug = "")
 {
     if (is_struct(_target))
     {
@@ -43,7 +45,7 @@ function __GregephantToJSONInner(_target)
 			var _hastemplate = false,
 				_template = undefined;
             var _instanceof = instanceof(_target);
-            if (_instanceof == "struct")
+            if _INSTANCEOF_STRUCT
             {
                 var _names = variable_struct_get_names(_target);
                 var _verbose = true;
@@ -71,8 +73,10 @@ function __GregephantToJSONInner(_target)
                 
                 //Record the constructor and version
                 _duplicate[$ __ELEPHANT_JSON_CONSTRUCTOR   ] = _instanceof;
-                _duplicate[$ __ELEPHANT_JSON_SCHEMA_VERSION] = _latestVersion;
-                
+				if ELEPHANT_WRITE_VERSION{
+					_duplicate[$ __ELEPHANT_JSON_SCHEMA_VERSION] = _latestVersion;
+				}
+				
                 //Execute the pre-write callback if we can
                 ELEPHANT_SCHEMA_VERSION = _latestVersion;
                 var _callback = _target[$ __ELEPHANT_PRE_WRITE_METHOD_NAME];
@@ -114,12 +118,12 @@ function __GregephantToJSONInner(_target)
                 var _name = _names[_i];
 				//GREGEPHANT: serialize this entry only if it differs from the template
 				if !_hastemplate or (_target[$ _name]!=_template[$ _name]){
-					_duplicate[$ _name] = __GregephantToJSONInner(_target[$ _name]);
+					_duplicate[$ _name] = __GregephantToJSONInner(_target[$ _name]);//,_debug+":"+_name);
 				}
                 ++_i;
             }
             
-            if (_instanceof != "struct")
+            if !_INSTANCEOF_STRUCT
             {
                 //Execute the post-write callback if we can
                 ELEPHANT_SCHEMA_VERSION = _latestVersion;
@@ -135,19 +139,20 @@ function __GregephantToJSONInner(_target)
         var _circularRef = global.__elephantFound[? _target];
         if (_circularRef != undefined)
         {
+			//var _source = global.__elephantFoundSource[? _target]
             var _duplicate = {};
             _duplicate[$ __ELEPHANT_JSON_CIRCULAR_REF] = _circularRef;
         }
         else
         {
             global.__elephantFound[? _target] = ds_map_size(global.__elephantFound);
-            
+            //global.__elephantFoundSource[? _target] = _debug;
             var _length = array_length(_target);
             var _duplicate = array_create(_length);
             var _i = 0;
             repeat(_length)
             {
-                _duplicate[@ _i] = __GregephantToJSONInner(_target[_i]);
+                _duplicate[@ _i] = __GregephantToJSONInner(_target[_i]);//,_debug+"["+string(_i));
                 ++_i;
             }
         }

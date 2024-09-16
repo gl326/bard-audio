@@ -8,6 +8,10 @@ function bus_set_effect(bus_name,effect_name,enabled=true,recursive=true){
 	bus_getdata(bus_name).set_effect(effect_name,enabled,recursive);
 }
 
+function bus_get_gm_effects(bus_name){
+	return bus_getdata(bus_name).get_gm_effects();
+}
+
 function bus_clear_effects(bus_name,recursive=true){
 	bus_getdata(bus_name).clear_effects(recursive);	
 }

@@ -2,9 +2,11 @@
 /// @param container
 /// @param x = 0 is screen left edge, 1 is screen right edge
 /// @param y = 0 is screen top edge, 1 is screen bottom edge
-function container_play_position_screen(container,_x,_y) {
+function container_play_position_screen(container,_x,_y,_volumeMultiply=1,_pitchMultiply=1) {
 	var spos = container_screen_position_to_listener(_x,_y);
 	var obj = location_sound_create(_x,_y, spos.z);
+	obj.volumeMultiply = _volumeMultiply;
+	obj.pitchMultiply = _pitchMultiply;
 	obj.container = container;
 	with(obj){event_user(0);}
 	return obj;//.soundobj;

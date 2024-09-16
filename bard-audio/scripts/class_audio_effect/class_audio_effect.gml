@@ -251,11 +251,11 @@ function class_audio_effect() constructor{
 				if global.audio_params[?parameters[_i]].set_effect_values(self){
 					_i ++;
 				}else{
-					//show_debug_message("warning! container "+string(name)+" referenced audio parameter "+string(parameters[_i])+" but the parameter didn't have any matching hooks");
+					show_debug_message("warning! audio effect "+string(name)+" referenced audio parameter "+string(parameters[_i])+" but the parameter didn't have any matching hooks");
 					array_delete(parameters,_i,1);	
 				}
 			}else{
-				//show_debug_message("warning! container "+string(name)+" references nonexistent audio parameter "+string(parameters[_i]));	
+				show_debug_message("warning! container "+string(name)+" references nonexistent audio parameter "+string(parameters[_i]));	
 				array_delete(parameters,_i,1);	
 			}
 		}

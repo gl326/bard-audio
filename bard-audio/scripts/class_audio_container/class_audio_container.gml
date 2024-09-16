@@ -142,9 +142,7 @@ function class_audio_container(_name = "", fromProject = false) constructor{
 	static deserialize_contents = function(){
 		var n = array_length(contents_serialize);
 		contents = array_create(n);
-		if name=="ui_hover"{
-			var checkme = true;	
-		}
+
 		var _i = 0;
 		repeat(n){
 			var item = contents_serialize[_i];
@@ -198,11 +196,11 @@ function class_audio_container(_name = "", fromProject = false) constructor{
 				if global.audio_params[?parameters[_i]].set_container_values(self){
 					_i ++;
 				}else{
-					//show_debug_message("warning! container "+string(name)+" referenced audio parameter "+string(parameters[_i])+" but the parameter didn't have any matching hooks");
+					show_debug_message("warning! container "+string(name)+" referenced audio parameter "+string(parameters[_i])+" but the parameter didn't have any matching hooks");
 					array_delete(parameters,_i,1);	
 				}
 			}else{
-				//show_debug_message("warning! container "+string(name)+" references nonexistent audio parameter "+string(parameters[_i]));	
+				show_debug_message("warning! container "+string(name)+" references nonexistent audio parameter "+string(parameters[_i]));	
 				array_delete(parameters,_i,1);	
 			}
 		}
@@ -234,7 +232,7 @@ function class_audio_container(_name = "", fromProject = false) constructor{
 			if ds_map_exists(global.audio_params,parameters[_i]){
 				var param = global.audio_params[?parameters[_i]],
 					attrs = param.hooks.Get(name);
-				if !is_undefined(param.hook_find_variable(attrs,variable_name)){
+				if !is_undefined(attrs) and !is_undefined(param.hook_find_variable(attrs,variable_name)){
 					return param.name;	
 				}
 			}

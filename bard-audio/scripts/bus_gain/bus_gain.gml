@@ -22,3 +22,11 @@ function bus_emitter(bus_name){
 		return -1;
 	}	
 }
+
+function bus_emitter_if_exists(bus_name){
+	if ds_map_exists(global.audio_busses,bus_name){
+	    return ds_map_find_value(global.audio_busses,bus_name).default_emitter;
+	}else{
+		return -1;
+	}	
+}

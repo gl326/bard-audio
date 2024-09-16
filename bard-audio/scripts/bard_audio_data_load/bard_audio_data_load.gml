@@ -1,7 +1,6 @@
 // Script assets have changed for v2.3.0 see
 // https://help.yoyogames.com/hc/en-us/articles/360005277377 for more information
-function bard_audio_data_load(){
-		var _filename = "audio_data.json";
+function bard_audio_data_load(_filename = BARD_AUDIO_DATA_FILE){
         var _path = _filename;
         
         if (file_exists(_path))
@@ -42,6 +41,31 @@ function bard_audio_data_load(){
 				_i ++;
 			}
         }
-        
-        
+}
+
+function bard_audio_verify_pointers(){
+	var _i = 0;
+	repeat(bard_audio_class._num){
+		var _map = -1;
+		switch(_i){
+			case bard_audio_class.container: _map = global.audio_containers; break;	
+			case bard_audio_class.bus: _map = global.audio_busses; break;	
+			case bard_audio_class.parameter: _map = global.audio_params; break;	
+			case bard_audio_class.asset: _map = global.audio_assets; break;	
+		}
+		
+		var _items = global.bard_audio_data[_i],
+			_j = 0;
+		repeat(array_length(_items)){
+			var _item = _items[_j];
+			var _pointer = _map[? ((_i==3)? _item.index : _item.name)];
+			
+			if _pointer!=_item{
+				//show_debug_message("ehhh?");	
+			}
+			_j ++;
+		}
+		
+		_i ++;	
+	}
 }
