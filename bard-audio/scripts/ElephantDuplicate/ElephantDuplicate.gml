@@ -173,7 +173,7 @@ function __ElephantDuplicateInner(_target, _datatype)
                     {
                         var _name = _names[_i];
 						if _name!=""{
-							_copy[$ _name] = __ElephantDuplicateInner(variable_struct_get_errorcheck(_target, _name), buffer_any); //_target[$ _name]
+							_copy[$ _name] = __ElephantDuplicateInner(variable_struct_get(_target, _name), buffer_any); //_target[$ _name]
 						}
                         ++_i;
                     }

@@ -80,7 +80,7 @@ function class_audio_asset(_name="",_external=false,_project = "") constructor{
 			if file_exists(project+path){
 				_exists = true;
 			}else{
-				if BARD_EDITOR_MODE{
+				if AUDIO_EDITOR_CAN_LOAD_DATA{
 						var all_files = gumshoe(EXTERN_SOUND_FOLDER,filename_ext(path), false),
 							found = -1,
 							_i = 0,

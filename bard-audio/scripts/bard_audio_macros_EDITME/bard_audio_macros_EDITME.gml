@@ -1,6 +1,9 @@
 // macros are moved to here now as of 2022/12/12
 // this should hopefully simplify version control for folks who have custom macro settings
 
+#macro TEMP_DISABLE_GM_AUDIO_BUSSES false 
+/*temp gm audio bus disable to stop crashing */
+
 #macro AUDIO_USES_Z false 
 /*if TRUE, then we will assume every spatial object has an internal variable called "z," the same as every game maker object 
 has variables called "x" and "y." if you arent using a z variable then leave this off.
@@ -17,7 +20,7 @@ i prefer to leave this as debug_mode at all times for safety, and only use the a
 /*The GameMaker room used as the audio editor. it can be named anything, just make sure its a room that contains objAudioEditor.
 */
 
-#macro EDITOR_PLAY_ROOM rmAudioDemo 
+#macro EDITOR_PLAY_ROOM rmAudioDemo
 /* When you hit CTRL+ENTER in the editor, it will go to this room. make it a room that could be a reasonable entrypoint to begin
 gameplay! that way you can edit sounds, test them in-game, and then go back to adjust.
 */
@@ -28,6 +31,8 @@ gameplay! that way you can edit sounds, test them in-game, and then go back to a
 #macro EXTERN_SOUND_FOLDER "audio/" 
 /* folder for any external audio files, should be located in your project datafiles
 *DO include the final slash* */
+
+#macro BARD_AUDIO_DATA_FILE "audio_data.json"
 
 #macro DISABLE_SYNCGROUPS true 
 /* game maker has a "sync group" feature but it had some weird issues on some platforms right when we were trying to ship wandersong so we rerouted all the logic to avoid using them
@@ -45,6 +50,8 @@ gameplay! that way you can edit sounds, test them in-game, and then go back to a
 
 #macro MUSIC_DEFAULT_GAP 0
 /*when using the music_* functions to change from one track to another, this is the default gap of silence starting the next song (this time always follows the previous song fading out) */
+
+#macro AUDIO_EDITOR_KEY_SHORTCUT [vk_control,vk_enter]
 
 //////////default values for spatial audio//////////
 audio_listener_orientation(0,0,1,0,-1,0);
