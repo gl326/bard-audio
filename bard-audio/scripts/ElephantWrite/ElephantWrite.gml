@@ -145,7 +145,7 @@ function __ElephantBufferInner(_buffer, _target, _datatype)
             
             //Check to see if this is a normal struct
             var _instanceof = instanceof(_target);
-            if (_instanceof == "struct")
+            if _INSTANCEOF_STRUCT
             {
                 //...if so, we want to serialize all variables for this struct (using buffer_any)
                 var _names = variable_struct_get_names(_target);

@@ -58,7 +58,7 @@ function __ElephantDuplicateInner(_target, _datatype)
 {
     if (_datatype == buffer_array)
     {
-        if (!is_array(_target)) __ElephantError("Target isn't an array");
+        if (!is_array(_target)) __ElephantError("Target isn't an array: "+string(_target));
         
         //Check to see if we've seen this array before
         var _foundCopy = global.__elephantFoundDuplicate[? _target];
@@ -85,7 +85,7 @@ function __ElephantDuplicateInner(_target, _datatype)
     }
     else if (_datatype == buffer_struct)
     {
-        if (!is_struct(_target)) __ElephantError("Target isn't a struct");
+        if (!is_struct(_target)) __ElephantError("Target isn't a struct: "+string(_target));
         
         //Check to see if we've seen this struct before
         var _foundCopy = global.__elephantFoundDuplicate[? _target];
@@ -97,7 +97,7 @@ function __ElephantDuplicateInner(_target, _datatype)
         {
             //Check to see if this is a normal struct
             var _instanceof = instanceof(_target);
-            if (_instanceof == "struct")
+            if _INSTANCEOF_STRUCT
             {
                 var _copy = {};
                 global.__elephantFoundDuplicate[? _target] = _copy;
@@ -172,7 +172,9 @@ function __ElephantDuplicateInner(_target, _datatype)
                     repeat(array_length(_names))
                     {
                         var _name = _names[_i];
-                        _copy[$ _name] = __ElephantDuplicateInner(_target[$ _name], buffer_any);
+						if _name!=""{
+							_copy[$ _name] = __ElephantDuplicateInner(variable_struct_get_errorcheck(_target, _name), buffer_any); //_target[$ _name]
+						}
                         ++_i;
                     }
                 }

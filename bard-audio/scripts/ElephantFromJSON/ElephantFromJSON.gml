@@ -10,7 +10,9 @@ function ElephantFromJSON(_target)
     global.__elephantFoundCount = 0;
     
     global.__elephantPostReadCallbackOrder   = ds_list_create();
-    global.__elephantPostReadCallbackVersion = ds_list_create();
+	if ELEPHANT_WRITE_VERSION{
+		global.__elephantPostReadCallbackVersion = ds_list_create();
+	}
     
     ELEPHANT_IS_DESERIALIZING = true;
     ELEPHANT_SCHEMA_VERSION   = undefined;
@@ -26,7 +28,9 @@ function ElephantFromJSON(_target)
             //Execute the post-read callback if we can
             if (variable_struct_exists(self, __ELEPHANT_POST_READ_METHOD_NAME))
             {
-                ELEPHANT_SCHEMA_VERSION = global.__elephantPostReadCallbackVersion[| _i];
+				if ELEPHANT_WRITE_VERSION{
+					ELEPHANT_SCHEMA_VERSION = global.__elephantPostReadCallbackVersion[| _i];
+				}
                 self[$ __ELEPHANT_POST_READ_METHOD_NAME]();
             }
         }
@@ -37,7 +41,9 @@ function ElephantFromJSON(_target)
     ds_map_destroy(global.__elephantFound);
     
     ds_list_destroy(global.__elephantPostReadCallbackOrder);
-    ds_list_destroy(global.__elephantPostReadCallbackVersion);
+	if ELEPHANT_WRITE_VERSION{
+		ds_list_destroy(global.__elephantPostReadCallbackVersion);
+	}
     
     ELEPHANT_IS_DESERIALIZING = undefined;
     ELEPHANT_SCHEMA_VERSION   = undefined;
@@ -53,43 +59,62 @@ function __ElephantFromJSONInner(_target)
         {
             return global.__elephantFound[? _target[$ __ELEPHANT_JSON_CIRCULAR_REF]];
         }
-        else if (variable_struct_exists(_target, __ELEPHANT_JSON_CONSTRUCTOR))
-        {
-            var _instanceof = _target[$ __ELEPHANT_JSON_CONSTRUCTOR   ];
-            var _version    = _target[$ __ELEPHANT_JSON_SCHEMA_VERSION];
+        else{
+			var _constructor_name = __ELEPHANT_JSON_CONSTRUCTOR;
+			if !variable_struct_exists(_target, _constructor_name){
+				_constructor_name = __ELEPHANT_JSON_CONSTRUCTOR_PREV;
+			}
+			
+			if (variable_struct_exists(_target, _constructor_name))
+	        {
+	            var _instanceof = _target[$ _constructor_name   ];
+				if _INSTANCEOF_STRUCT{
+					//Generic struct
+		            var _struct  = {};
+		            var _version = undefined;
+				}else{
+					if ELEPHANT_WRITE_VERSION{
+				       var _version    = _target[$ __ELEPHANT_JSON_SCHEMA_VERSION];
             
-            if (_version == undefined) __ElephantError("No schema version found");
+				       if (_version == undefined) __ElephantError("No schema version found");
+					}
             
-            var _constructorFunction = asset_get_index(_instanceof);
-            if (is_method(_constructorFunction))
-            {
-                //Is a method
-                var _struct = new _constructorFunction();
-            }
-            else if (is_numeric(_constructorFunction) && script_exists(_constructorFunction))
-            {
-                //Is a script
-                var _struct = new _constructorFunction();
-            }
-            else
-            {
-                __ElephantError("Could not resolve constructor function \"", _instanceof, "\"");
-            }
+		            var _constructorFunction = asset_get_index(_instanceof);
+		            if (is_method(_constructorFunction))
+		            {
+		                //Is a method
+		                var _struct = new _constructorFunction();
+		            }
+		            else if (is_numeric(_constructorFunction) && script_exists(_constructorFunction))
+		            {
+		                //Is a script
+		                var _struct = new _constructorFunction();
+		            }
+		            else
+		            {
+		                __ElephantError("Could not resolve constructor function \"", _instanceof, "\"");
+		            }
             
-            //Execute the pre-read callback if we can
-            ELEPHANT_SCHEMA_VERSION = _version;
-            var _callback = _struct[$ __ELEPHANT_PRE_READ_METHOD_NAME];
-            if (is_method(_callback)) method(_struct, _callback)();
+		            //Execute the pre-read callback if we can
+					if ELEPHANT_WRITE_VERSION{
+						ELEPHANT_SCHEMA_VERSION = _version;
+					}
+		            var _callback = _struct[$ __ELEPHANT_PRE_READ_METHOD_NAME];
+		            if (is_method(_callback)) method(_struct, _callback)();
             
-            ds_list_add(global.__elephantPostReadCallbackOrder,   _struct);
-            ds_list_add(global.__elephantPostReadCallbackVersion, _version);
-        }
-        else
-        {
-            //Generic struct
-            var _struct  = {};
-            var _version = undefined;
-        }
+		            ds_list_add(global.__elephantPostReadCallbackOrder,   _struct);
+					if ELEPHANT_WRITE_VERSION{
+						ds_list_add(global.__elephantPostReadCallbackVersion, _version);
+					}
+				}
+	        }
+	        else
+	        {
+	            //Generic struct
+	            var _struct  = {};
+	            var _version = undefined;
+	        }
+		}
         
         global.__elephantFound[? global.__elephantFoundCount] = _struct;
         global.__elephantFoundCount++;
@@ -104,7 +129,7 @@ function __ElephantFromJSONInner(_target)
         repeat(array_length(_names))
         {
             var _name = _names[_i];
-            if ((_name != __ELEPHANT_JSON_CONSTRUCTOR) && (_name != __ELEPHANT_JSON_SCHEMA_VERSION))
+            if ((_name != __ELEPHANT_JSON_CONSTRUCTOR) && (_name != __ELEPHANT_JSON_CONSTRUCTOR_PREV) && (_name != __ELEPHANT_JSON_SCHEMA_VERSION))
             {
                 _struct[$ _name] = __ElephantFromJSONInner(_target[$ _name]);
             }

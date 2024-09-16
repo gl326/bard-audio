@@ -39,7 +39,7 @@ function __ElephantToJSONInner(_target)
             global.__elephantFoundCount++;
             
             var _instanceof = instanceof(_target);
-            if (_instanceof == "struct")
+            if _INSTANCEOF_STRUCT
             {
                 var _names = variable_struct_get_names(_target);
                 var _verbose = true;
@@ -67,7 +67,9 @@ function __ElephantToJSONInner(_target)
                 
                 //Record the constructor and version
                 _duplicate[$ __ELEPHANT_JSON_CONSTRUCTOR   ] = _instanceof;
-                _duplicate[$ __ELEPHANT_JSON_SCHEMA_VERSION] = _latestVersion;
+				if ELEPHANT_WRITE_VERSION{
+					_duplicate[$ __ELEPHANT_JSON_SCHEMA_VERSION] = _latestVersion;
+				}
                 
                 //Execute the pre-write callback if we can
                 ELEPHANT_SCHEMA_VERSION = _latestVersion;
@@ -91,7 +93,7 @@ function __ElephantToJSONInner(_target)
                 ++_i;
             }
             
-            if (_instanceof != "struct")
+            if !_INSTANCEOF_STRUCT
             {
                 //Execute the post-write callback if we can
                 ELEPHANT_SCHEMA_VERSION = _latestVersion;
