@@ -9,6 +9,8 @@ has variables called "x" and "y." if you arent using a z variable then leave thi
 */
 
 #macro BARD_EDITOR_MODE (debug_mode and os_type==os_windows)
+/*whether we're in a mode that can/should modify local project files (ie, you don't want players' games to modify their audio data when they launch the game, usually...*/
+
 #macro AUDIO_EDITOR_CAN_LOAD_DATA true
 /* this should be set to false or debug_mode when making any public build releases. 
 when true, this allows the game to look for project files & audio editor data on the user's file system. 
@@ -33,8 +35,6 @@ gameplay! that way you can edit sounds, test them in-game, and then go back to a
 *DO include the final slash* */
 
 #macro BARD_AUDIO_DATA_FILE "audio_data.json"
-#macro DEMO:BARD_AUDIO_DATA_FILE EXT_FILE_PREFIX+"audio_data.json"
-#macro AREA01:BARD_AUDIO_DATA_FILE EXT_FILE_PREFIX+"audio_data.json"
 
 #macro DISABLE_SYNCGROUPS true 
 /* game maker has a "sync group" feature but it had some weird issues on some platforms right when we were trying to ship wandersong so we rerouted all the logic to avoid using them
